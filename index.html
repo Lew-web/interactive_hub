@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Onboarding Guide | LEW CREATIONS</title>
+<style>
+:root {
+--slate-dark: #2F3538;
+--slate-medium: #4A5155;
+--slate-light: #F4F6F7;
+--border-color: #D1D5DB;
+--accent-green: #2E7D32;
+--text-dark: #1F2326;
+--text-light: #FFFFFF;
+}
+* {
+box-sizing: border-color;
+margin: 0;
+padding: 0;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+body {
+background-color: var(--slate-light);
+color: var(--text-dark);
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+header {
+background-color: var(--slate-dark);
+color: var(--text-light);
+padding: 1.5rem 2rem;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+header h1 {
+font-size: 1.5rem;
+font-weight: 600;
+letter-spacing: -0.5px;
+}
+header p {
+font-size: 0.875rem;
+color: #A0AEC0;
+margin-top: 0.25rem;
+}
+.main-container {
+display: flex;
+flex: 1;
+max-width: 1400px;
+width: 100%;
+margin: 2rem auto;
+padding: 0 1rem;
+gap: 2rem;
+}
+/* Interactive Sidebar Navigation */
+.sidebar {
+width: 320px;
+background: var(--text-light);
+border: 1px solid var(--border-color);
+border-radius: 6px;
+padding: 1.5rem;
+height: fit-content;
+}
+.sidebar h2 {
+font-size: 1.1rem;
+color: var(--slate-dark);
+margin-bottom: 1rem;
+padding-bottom: 0.5rem;
+border-bottom: 2px solid var(--slate-light);
+}
+.step-list {
+list-style: none;
+}
+.step-item {
+display: flex;
+align-items: center;
+padding: 0.75rem 1rem;
+margin-bottom: 0.5rem;
+border-radius: 4px;
+cursor: pointer;
+transition: all 0.2s ease;
+font-weight: 500;
+color: var(--slate-medium);
+border-left: 4px solid transparent;
+}
+.step-item:hover {
+background-color: var(--slate-light);
+}
+.step-item.active {
+background-color: #EBF4ED;
+color: var(--accent-green);
+border-left-color: var(--accent-green);
+}
+.step-number {
+background-color: var(--slate-light);
+color: var(--slate-medium);
+width: 24px;
+height: 24px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.75rem;
+margin-right: 0.75rem;
+flex-shrink: 0;
+}
+.step-item.active .step-number {
+background-color: var(--accent-green);
+color: var(--text-light);
+}
+/* Content Viewer Panel */
+.content-viewer {
+flex: 1;
+background: var(--text-light);
+border: 1px solid var(--border-color);
+border-radius: 6px;
+padding: 2.5rem;
+display: flex;
+flex-direction: column;
+box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.guide-step {
+display: none;
+animation: fadeIn 0.3s ease-in-out;
+}
+.guide-step.active {
+display: block;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(4px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.guide-step h2 {
+font-size: 1.75rem;
+color: var(--slate-dark);
+margin-bottom: 1rem;
+}
+.guide-step p {
+font-size: 1.05rem;
+line-height: 1.6;
+color: var(--slate-medium);
+margin-bottom: 1.5rem;
+}
+/* Highlighted Instructions Callout */
+.callout-box {
+background-color: var(--slate-light);
+border-left: 4px solid var(--slate-dark);
+padding: 1.25rem;
+margin: 1.5rem 0;
+border-radius: 0 4px 4px 0;
+}
+.callout-box h4 {
+color: var(--slate-dark);
+margin-bottom: 0.25rem;
+font-size: 1rem;
+}
+.callout-box p {
+margin-bottom: 0;
+font-size: 0.95rem;
+}
+/* Visual Representation of Grid UI */
+.ui-mockup {
+background: #FFFFFF;
+border: 1px solid var(--border-color);
+border-radius: 4px;
+padding: 1rem;
+margin-top: 1.5rem;
+font-family: monospace;
+font-size: 0.85rem;
+color: #4B5563;
+}
+.ui-header-row {
+background-color: #374151;
+color: white;
+padding: 0.5rem;
+font-weight: bold;
+display: flex;
+gap: 1rem;
+}
+.ui-row {
+border-bottom: 1px solid #E5E7EB;
+padding: 0.5rem;
+display: flex;
+gap: 1rem;
+}
+.nav-buttons {
+margin-top: auto;
+padding-top: 2rem;
+display: flex;
+justify-content: space-between;
+border-top: 1px solid var(--slate-light);
+}
+button {
+padding: 0.75rem 1.5rem;
+border-radius: 4px;
+font-size: 0.95rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+.btn-secondary {
+background: transparent;
+border: 1px solid var(--border-color);
+color: var(--slate-medium);
+}
+.btn-secondary:hover {
+background-color: var(--slate-light);
+}
+.btn-primary {
+background-color: var(--slate-dark);
+border: 1px solid var(--slate-dark);
+color: var(--text-light);
+}
+.btn-primary:hover {
+background-color: #1F2326;
+}
+button:disabled {
+opacity: 0.4;
+cursor: not-allowed;
+}
+footer {
+background-color: var(--slate-dark);
+color: #A0AEC0;
+text-align: center;
+padding: 1.5rem;
+font-size: 0.85rem;
+margin-top: auto;
+border-top: 1px solid #4A5155;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>LEW CREATIONS</h1>
+<p>Interactive Workspace Onboarding & System Verification</p>
+</header>
+<div class="main-container">
+<!-- Interactive Sidebar -->
+<div class="sidebar">
+<h2>System Steps</h2>
+<ul class="step-list">
+<li class="step-item active" onclick="goToStep(1)">
+<div class="step-number">1</div> Import System
+</li>
+<li class="step-item" onclick="goToStep(2)">
+<div class="step-number">2</div> Verify Layout
+</li>
+<li class="step-item" onclick="goToStep(3)">
+<div class="step-number">3</div> Live Automation
+</li>
+</ul>
+</div>
+<!-- Content Viewer Panel -->
+<div class="content-viewer">
+<!-- Step 1 -->
+<div class="guide-step active" id="step-1">
+<h2>Step 1: Save System to Your Local Google Drive</h2>
+<p>Welcome to your new operational workspace. Before entering data or tracking records, you must safely provision a private, encrypted version of this framework within your own agency's Google Workspace environment.</p>
+
+<div class="callout-box">
+<h4>Action Required:</h4>
+<p>Navigate to the top-left menu bar of your provided template link, click <strong>File</strong>, and select <strong>Make a Copy</strong>. Name the copy relative to your current programmatic or region requirements.</p>
+</div>
+<p>This action safely severs the master distribution mirror link, spinning up an unshared database structure that complies fully with standard sector information-sharing limitations and privacy frameworks.</p>
+</div>
+<!-- Step 2 -->
+<div class="guide-step" id="step-2">
+<h2>Step 2: Understanding Layout & Risk Matrix Overlays</h2>
+<p>Your database features a high-contrast layout designed for maximum scannability during busy client reviews or statutory compliance audits.</p>
+
+<div class="ui-mockup">
+<div class="ui-header-row">
+<div style="width: 30%">[ Staff Member Name ]</div>
+<div style="width: 40%">[ Compliance Check Status ]</div>
+<div style="width: 30%">[ Next Review Date ]</div>
+</div>
+<div class="ui-row">
+<div style="width: 30%">J. Caseworker</div>
+<div style="width: 40%; color: #DC2626; font-weight: bold;">⚠️ EXPIRED (WWCC)</div>
+<div style="width: 30%">14 Nov 2026</div>
+</div>
+</div>
+<div class="callout-box" style="border-left-color: var(--accent-green);">
+<h4>Pro-Tip:</h4>

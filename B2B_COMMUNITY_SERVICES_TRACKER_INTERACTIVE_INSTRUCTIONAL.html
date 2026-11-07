@@ -1,0 +1,3116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="handbook">
+  <title>LEW CREATIONS · B2B Community Services Tracker Onboarding Portal</title>
+
+  <!-- Google Fonts: Public Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Approved CDN Libraries: Lucide Icons & Scrollama -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/scrollama@3.2.0/build/scrollama.min.js"></script>
+
+  <style>
+    /* ══════════════════════════════════════════════════════════════════════════
+       CSS DESIGN TOKENS — HANDBOOK STYLE (LIGHT MODE)
+       Every color is declared as a named token in :root. No inline hex/rgb in body.
+       ══════════════════════════════════════════════════════════════════════════ */
+    :root {
+      color-scheme: light;
+
+      /* Page & Surface Ramp */
+      --background: #ffffff;
+      --surface-container-lowest: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+      --surface-dark: #111a28;
+      --surface-card: #ffffff;
+
+      /* Ink & Typography */
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+      --on-surface-muted: #6f777b;
+      --on-dark: #ffffff;
+      --on-dark-variant: #94a3b8;
+
+      /* Outlines & Dividers */
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+      --outline-light: #e2e8f0;
+
+      /* Handbook Civic Blue / Navy Brand Accents */
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --tertiary-hover: #0f3d75;
+      --tertiary-container: #e8f1fb;
+      --on-tertiary-container: #0d325e;
+
+      /* Semantic Feedback Tokens */
+      --error: #d4351c;
+      --on-error: #ffffff;
+      --error-container: #ffebe8;
+      --on-error-container: #7a1608;
+
+      --positive: #00703c;
+      --on-positive: #ffffff;
+      --positive-container: #e6f5ec;
+      --on-positive-container: #004d29;
+
+      --warning: #b56000;
+      --on-warning: #ffffff;
+      --warning-container: #fff4e5;
+      --on-warning-container: #6e3a00;
+
+      /* Distinct Tracker Cell Colors */
+      --cell-white: #ffffff;
+      --cell-grey: #f3f4f6;
+      --cell-grey-border: #cbd5e1;
+      --cell-highlight: #fef08a;
+      --cell-focus-border: #1a569e;
+
+      /* Status Badges */
+      --badge-urgent-bg: #fee2e2;
+      --badge-urgent-text: #991b1b;
+      --badge-followup-bg: #fef3c7;
+      --badge-followup-text: #92400e;
+      --badge-pending-bg: #e0e7ff;
+      --badge-pending-text: #3730a3;
+      --badge-complete-bg: #dcfce7;
+      --badge-complete-text: #166534;
+      --badge-tier-bg: #f1f5f9;
+      --badge-tier-text: #1e293b;
+
+      /* Code & AI Prompt Elements */
+      --code-bg: #0f172a;
+      --code-header-bg: #1e293b;
+      --code-text: #f8fafc;
+      --code-border: #334155;
+      --code-highlight: #38bdf8;
+      --code-quote: #a7f3d0;
+
+      /* Handbook Signature Design Treatments */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Typography Scale */
+      --font-headline: 'Public Sans', system-ui, -apple-system, sans-serif;
+      --font-body: 'Public Sans', system-ui, -apple-system, sans-serif;
+      --font-label: 'Public Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      --display-size: clamp(2rem, 1.3rem + 2.4vw, 3.125rem);
+      --headline-size: clamp(1.4rem, 1.1rem + 1.1vw, 2rem);
+      --subhead-size: clamp(1.1rem, 0.95rem + 0.4vw, 1.3rem);
+      --body-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+      --label-size: 0.8125rem;
+      --caption-size: 0.875rem;
+
+      /* Spacing Scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Shape & Radii (Handbook is strictly square/solid) */
+      --rounded: 0px;
+      --rounded-sm: 2px;
+      --rounded-md: 4px;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 200ms;
+      --dur-long: 400ms;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       BASE RESET & PIN MECHANICS
+       ══════════════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* Validator strictly requires header to be static */
+    header {
+      position: static !important;
+    }
+
+    /* Safe container with no block overflow: ensures position:sticky pins correctly */
+    .page-wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+      overflow-x: clip;
+    }
+
+    h1, h2, h3, h4, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--primary);
+      margin-bottom: var(--space-md);
+    }
+
+    h2 {
+      font-size: var(--headline-size);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--on-surface);
+      margin-bottom: var(--space-sm);
+    }
+
+    h3 {
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--primary);
+      margin-bottom: var(--space-xs);
+    }
+
+    p {
+      font-size: var(--body-size);
+      color: var(--on-surface);
+      line-height: 1.65;
+      margin-bottom: var(--space-md);
+    }
+
+    p.lede {
+      font-size: var(--subhead-size);
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--on-surface-variant);
+      max-width: 75ch;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       HANDBOOK SIGNATURE TREATMENTS
+       ══════════════════════════════════════════════════════════════════════════ */
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--outline);
+      padding: var(--space-sm) 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: var(--space-xl);
+      margin-bottom: var(--space-lg);
+    }
+
+    .index-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      color: var(--primary);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 26px;
+      height: 26px;
+      padding: 0 var(--space-xs);
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.8125rem;
+      border-radius: var(--rounded);
+      letter-spacing: normal;
+    }
+
+    .inset-callout {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0 var(--space-lg) 0;
+    }
+
+    .inset-callout.warning {
+      border-left-color: var(--warning);
+      background: var(--warning-container);
+      color: var(--on-warning-container);
+    }
+
+    .inset-callout.positive {
+      border-left-color: var(--positive);
+      background: var(--positive-container);
+      color: var(--on-positive-container);
+    }
+
+    .inset-callout.error {
+      border-left-color: var(--error);
+      background: var(--error-container);
+      color: var(--on-error-container);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      line-height: 1.2;
+      padding: 0.65rem 1.25rem;
+      border: 0;
+      border-radius: var(--rounded);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--dur-micro) ease, transform var(--dur-micro) ease, box-shadow var(--dur-micro) ease;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: none !important;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--button-ground);
+    }
+
+    .btn-primary:hover {
+      background: var(--tertiary);
+    }
+
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      box-shadow: var(--button-ground-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-container);
+    }
+
+    .btn-tertiary {
+      background: var(--tertiary);
+      color: var(--on-primary);
+      box-shadow: 0 2px 0 var(--tertiary-hover);
+    }
+
+    .btn-tertiary:hover {
+      background: var(--tertiary-hover);
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+
+    .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 1: SAFETY NET & SOVEREIGNTY BANNER
+       ══════════════════════════════════════════════════════════════════════════ */
+    .masthead {
+      padding: var(--space-xl) 0 var(--space-lg) 0;
+      border-bottom: 2px solid var(--outline);
+    }
+
+    .badge-portal {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-xs) var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .hero-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px dashed var(--outline-variant);
+      font-size: var(--caption-size);
+      color: var(--on-surface-variant);
+    }
+
+    .hero-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .panic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      margin-top: var(--space-md);
+    }
+
+    .panic-console {
+      background: var(--surface-container-low);
+      border: 2px solid var(--outline);
+      padding: var(--space-md);
+    }
+
+    .panic-screen {
+      background: var(--surface-dark);
+      color: var(--on-dark);
+      padding: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 4px solid var(--positive);
+      transition: border-color var(--dur-short) ease;
+    }
+
+    .panic-screen.is-broken {
+      border-left-color: var(--error);
+      background: var(--surface-dark);
+    }
+
+    .panic-formula-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xs);
+      font-size: 0.75rem;
+      color: var(--on-dark-variant);
+      border-bottom: 1px solid var(--code-border);
+      padding-bottom: var(--space-xs);
+    }
+
+    .panic-cell-val {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--code-quote);
+      word-break: break-all;
+    }
+
+    .panic-screen.is-broken .panic-cell-val {
+      color: var(--error);
+    }
+
+    .panic-actions {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .panic-explainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--surface-card);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+    }
+
+    .stepper-list {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-sm) 0;
+    }
+
+    .stepper-item {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: flex-start;
+      margin-bottom: var(--space-sm);
+    }
+
+    .stepper-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sovereignty-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .sovereignty-card {
+      background: var(--surface-card);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      border-top: 4px solid var(--primary);
+    }
+
+    .sovereignty-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: var(--space-xs);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 2: VISUAL CELL KEY & LIVE INTERACTIVE INSPECTOR
+       ══════════════════════════════════════════════════════════════════════════ */
+    .cell-key-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    .cell-type-card {
+      border: 2px solid var(--outline);
+      padding: var(--space-md);
+      background: var(--surface-card);
+    }
+
+    .cell-type-card.white-card {
+      border-top: 8px solid var(--tertiary);
+    }
+
+    .cell-type-card.grey-card {
+      border-top: 8px solid var(--on-surface-variant);
+      background: var(--surface-container-low);
+    }
+
+    .swatch-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .swatch-box {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--outline);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swatch-box.white {
+      background: var(--cell-white);
+    }
+
+    .swatch-box.grey {
+      background: var(--cell-grey);
+    }
+
+    .cell-inspector-panel {
+      background: var(--surface-card);
+      border: 2px solid var(--outline);
+      padding: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .sheet-mockup-wrapper {
+      overflow-x: auto;
+      margin-top: var(--space-sm);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      min-width: 680px;
+    }
+
+    .sheet-table th {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      padding: 8px 10px;
+      border: 1px solid var(--outline-variant);
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .sheet-table td {
+      padding: 8px 10px;
+      border: 1px solid var(--outline-variant);
+      cursor: pointer;
+      position: relative;
+      transition: background-color var(--dur-micro) ease;
+    }
+
+    .sheet-table td.cell-white-editable {
+      background: var(--cell-white);
+      color: var(--on-surface);
+    }
+
+    .sheet-table td.cell-white-editable:hover {
+      background: var(--cell-highlight);
+    }
+
+    .sheet-table td.cell-grey-shield {
+      background: var(--cell-grey);
+      color: var(--on-surface-variant);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .sheet-table td.cell-grey-shield:hover {
+      background: var(--surface-container-high);
+    }
+
+    .sheet-table td.is-selected {
+      outline: 2px solid var(--cell-focus-border);
+      outline-offset: -2px;
+    }
+
+    .inspector-output-box {
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container-low);
+      border-left: var(--inset-rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      min-height: 80px;
+    }
+
+    .inspector-info h4 {
+      margin-bottom: 2px;
+      font-size: 0.9375rem;
+    }
+
+    .inspector-info p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+    }
+
+    .formula-badge-code {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--surface-container);
+      padding: 4px 8px;
+      border: 1px solid var(--outline-variant);
+      color: var(--tertiary);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 3: SCROLLYTELLING SPINE (PIN CORE)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .scrolly-container {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-xl);
+      align-items: start;
+      margin-top: var(--space-md);
+      margin-bottom: var(--space-2xl);
+    }
+
+    /* THE PIN: graphic figure sticks during scroll */
+    .scrolly-graphic {
+      position: sticky;
+      top: 1.5rem;
+      height: calc(100vh - 3rem);
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .scrolly-graphic-card {
+      background: var(--surface-card);
+      border: 2px solid var(--outline);
+      box-shadow: 0 4px 12px rgba(11, 12, 12, 0.08);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-height: 580px;
+      overflow: hidden;
+    }
+
+    .hud-header {
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .hud-title {
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: 0.8125rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .hud-nav-tabs {
+      display: flex;
+      background: var(--surface-container);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: 2px 4px 0 4px;
+      gap: 2px;
+      overflow-x: auto;
+    }
+
+    .hud-tab-btn {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-bottom: 0;
+      cursor: pointer;
+      color: var(--on-surface-variant);
+      white-space: nowrap;
+    }
+
+    .hud-tab-btn.active {
+      background: var(--surface-card);
+      color: var(--primary);
+      border-color: var(--outline-variant);
+      border-top: 3px solid var(--tertiary);
+    }
+
+    .hud-body {
+      padding: var(--space-md);
+      flex: 1;
+      overflow-y: auto;
+      background: var(--surface-container-low);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .hud-scorecards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-xs);
+    }
+
+    .hud-scorecard {
+      background: var(--surface-card);
+      border: 1px solid var(--outline-variant);
+      padding: 6px 8px;
+      border-left: 3px solid var(--tertiary);
+    }
+
+    .hud-scorecard-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--on-surface-variant);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hud-scorecard-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+      font-family: var(--font-mono);
+    }
+
+    .hud-table-viewport {
+      background: var(--surface-card);
+      border: 1px solid var(--outline-variant);
+      overflow-x: auto;
+      flex: 1;
+      min-height: 200px;
+    }
+
+    .hud-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78125rem;
+    }
+
+    .hud-table th {
+      background: var(--surface-container);
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--outline);
+      border-right: 1px solid var(--outline-variant);
+      text-align: left;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .hud-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--outline-variant);
+      border-right: 1px solid var(--outline-light);
+      white-space: nowrap;
+    }
+
+    .hud-footer {
+      background: var(--surface-container);
+      padding: 6px var(--space-md);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* Scrolly narrative steps on right column */
+    .scrolly-steps {
+      padding: 10vh 0;
+    }
+
+    .scrolly-step {
+      min-height: 75vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--space-md) 0;
+    }
+
+    .scrolly-step-card {
+      background: var(--surface-card);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-lg);
+      border-left: 6px solid var(--outline-variant);
+      transition: border-left-color var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out), box-shadow var(--dur-long) var(--ease-out);
+    }
+
+    .scrolly-step.is-active .scrolly-step-card {
+      border-left-color: var(--tertiary);
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(22, 46, 81, 0.08);
+    }
+
+    .step-kicker {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--tertiary);
+      margin-bottom: var(--space-xs);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .step-sop-list {
+      margin: var(--space-sm) 0;
+      padding-left: var(--space-md);
+      font-size: 0.9375rem;
+    }
+
+    .step-sop-list li {
+      margin-bottom: var(--space-xs);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 3B: INTERACTIVE CORE CLIENT RISK LEDGER (20 SOURCE ROWS)
+       ══════════════════════════════════════════════════════════════════════════ */
+    .ledger-section {
+      background: var(--surface-card);
+      border: 2px solid var(--outline);
+      padding: var(--space-lg);
+      margin: var(--space-xl) 0;
+    }
+
+    .ledger-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+      align-items: center;
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .control-label {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--on-surface-variant);
+    }
+
+    .filter-select, .search-input {
+      padding: 6px 10px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      border: 1px solid var(--outline);
+      background: var(--surface-card);
+      min-width: 140px;
+    }
+
+    .search-input {
+      min-width: 220px;
+    }
+
+    .ledger-counter-bar {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .ledger-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--outline-variant);
+      max-height: 480px;
+      position: relative;
+    }
+
+    .ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .ledger-table thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .ledger-table th {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 700;
+      padding: 10px 12px;
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid var(--outline);
+      border-right: 1px solid var(--outline-variant);
+      white-space: nowrap;
+    }
+
+    .ledger-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--outline-variant);
+      border-right: 1px solid var(--outline-light);
+      vertical-align: middle;
+    }
+
+    .ledger-table tbody tr:hover {
+      background: var(--surface-container-low);
+      cursor: pointer;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-radius: var(--rounded-sm);
+    }
+
+    .badge-urgent {
+      background: var(--badge-urgent-bg);
+      color: var(--badge-urgent-text);
+      border: 1px solid var(--error);
+    }
+
+    .badge-followup {
+      background: var(--badge-followup-bg);
+      color: var(--badge-followup-text);
+      border: 1px solid var(--warning);
+    }
+
+    .badge-pending {
+      background: var(--badge-pending-bg);
+      color: var(--badge-pending-text);
+      border: 1px solid var(--tertiary);
+    }
+
+    .badge-complete {
+      background: var(--badge-complete-bg);
+      color: var(--badge-complete-text);
+      border: 1px solid var(--positive);
+    }
+
+    .badge-risk-high {
+      background: var(--badge-urgent-bg);
+      color: var(--badge-urgent-text);
+      font-weight: 800;
+    }
+
+    .badge-risk-medium {
+      background: var(--badge-followup-bg);
+      color: var(--badge-followup-text);
+      font-weight: 700;
+    }
+
+    .badge-risk-low {
+      background: var(--badge-complete-bg);
+      color: var(--badge-complete-text);
+      font-weight: 600;
+    }
+
+    /* Modal Case Detail Drawer */
+    .ledger-detail-card {
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container-low);
+      border-left: var(--inset-rule);
+      display: none;
+    }
+
+    .ledger-detail-card.active {
+      display: block;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 4: DROPDOWN & TEMPLATE CUSTOMIZATION
+       ══════════════════════════════════════════════════════════════════════════ */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin: var(--space-md) 0 var(--space-lg) 0;
+    }
+
+    .rule-card {
+      background: var(--surface-card);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      border-top: 4px solid var(--primary);
+    }
+
+    .rule-card-badge {
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--tertiary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .customizer-sandbox {
+      background: var(--surface-container-low);
+      border: 2px solid var(--outline);
+      padding: var(--space-lg);
+      margin-top: var(--space-md);
+    }
+
+    .sandbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+    }
+
+    .sandbox-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--on-surface);
+    }
+
+    .form-group input, .form-group select {
+      padding: 8px 10px;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      border: 1px solid var(--outline);
+      background: var(--surface-card);
+    }
+
+    .sandbox-preview {
+      background: var(--surface-card);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sandbox-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.875rem;
+    }
+
+    .sandbox-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--outline-light);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 5: IN-SHEET AI PROMPT COMPANION PACK & DISCLAIMER
+       ══════════════════════════════════════════════════════════════════════════ */
+    .prompts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      margin: var(--space-md) 0 var(--space-xl) 0;
+    }
+
+    .prompt-card {
+      background: var(--surface-card);
+      border: 2px solid var(--outline);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prompt-header {
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .prompt-header h4 {
+      margin: 0;
+      font-size: 0.875rem;
+      font-family: var(--font-label);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .prompt-body {
+      padding: var(--space-md);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--surface-container-low);
+    }
+
+    .prompt-text-block {
+      background: var(--surface-dark);
+      color: var(--code-text);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      padding: var(--space-md);
+      border-left: 4px solid var(--tertiary);
+      margin-bottom: var(--space-md);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .prompt-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .prompt-sim-output {
+      margin-top: var(--space-sm);
+      padding: var(--space-md);
+      background: var(--surface-card);
+      border: 1px dashed var(--outline-variant);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .prompt-sim-output.active {
+      display: block;
+    }
+
+    /* Checklist & Completion */
+    .checklist-card {
+      background: var(--surface-card);
+      border: 2px solid var(--outline);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .check-label {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      cursor: pointer;
+      font-size: 0.9375rem;
+      user-select: none;
+    }
+
+    .check-label input {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .progress-bar-wrap {
+      margin-top: var(--space-md);
+      background: var(--surface-container);
+      height: 12px;
+      border: 1px solid var(--outline-variant);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--positive);
+      width: 0%;
+      transition: width var(--dur-long) var(--ease-out);
+    }
+
+    /* Statutory Disclaimer */
+    .disclaimer-card {
+      border: 2px solid var(--outline);
+      border-left: 8px solid var(--error);
+      background: var(--error-container);
+      color: var(--on-error-container);
+      padding: var(--space-lg);
+      margin-top: var(--space-xl);
+      margin-bottom: var(--space-3xl);
+    }
+
+    .disclaimer-card h3 {
+      color: var(--error);
+      font-size: 1.1rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .disclaimer-card p {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--on-surface);
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Toast Notification for Clipboard Copy */
+    .copy-toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--surface-dark);
+      color: var(--on-dark);
+      padding: 0.75rem 1.25rem;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.875rem;
+      border-left: 4px solid var(--positive);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity var(--dur-short) ease, transform var(--dur-short) ease;
+      pointer-events: none;
+    }
+
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+       ══════════════════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .scrolly-container {
+        grid-template-columns: 1fr;
+      }
+      .scrolly-graphic {
+        position: static;
+        height: auto;
+        max-height: none;
+        margin-bottom: var(--space-lg);
+      }
+      .scrolly-steps {
+        padding: 0;
+      }
+      .scrolly-step {
+        min-height: auto;
+        padding: var(--space-md) 0;
+      }
+      .panic-grid, .cell-key-showcase, .sandbox-grid, .prompts-grid, .checklist-grid, .sovereignty-cards, .rules-grid {
+        grid-template-columns: 1fr;
+      }
+      .hud-scorecards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrap">
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 1: SAFETY NET & DATA SOVEREIGNTY BANNER
+         ════════════════════════════════════════════════════════════════════════ -->
+    <header class="masthead">
+      <div class="badge-portal">
+        <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+        <span>Official Customer Onboarding Guide</span>
+      </div>
+      <h1>LEW CREATIONS · B2B Community Services Tracker</h1>
+      <p class="lede">
+        A dual-terminology operational framework bridging mainstream <strong>NDIS Quality &amp; Safeguarding Standards</strong> with <strong>Victorian MARAM alignment</strong> and <strong>ACCO Cultural Governance principles</strong>, including <em>Closing the Gap Priority Reform 2</em>.
+      </p>
+
+      <div class="hero-meta-strip">
+        <div class="hero-meta-item">
+          <i data-lucide="lock" style="width: 15px; height: 15px; color: var(--tertiary);"></i>
+          <span>100% Private Cloud: Runs locally in your Google Drive</span>
+        </div>
+        <div class="hero-meta-item">
+          <i data-lucide="shield" style="width: 15px; height: 15px; color: var(--tertiary);"></i>
+          <span>Statutory Protection: Australian Privacy Act 1988 &amp; Victorian Health Records Act</span>
+        </div>
+        <div class="hero-meta-item">
+          <i data-lucide="refresh-cw" style="width: 15px; height: 15px; color: var(--tertiary);"></i>
+          <span>Built-In Resilience: Dual 10-Second Panic Restore</span>
+        </div>
+      </div>
+    </header>
+
+    <section id="safety-net">
+      <div class="index-header">
+        <span class="index-header-tag">
+          <span class="step-badge">1</span>
+          <span>Safety Net &amp; Data Sovereignty Guarantee</span>
+        </span>
+        <span>Zero-Stress Protection Protocol</span>
+      </div>
+
+      <h2>You Cannot Break This Tracker.</h2>
+      <p>
+        Entering clinical risk disclosures, workforce screenings, and cultural outcome notes should never feel like walking on eggshells. We engineered this system with two unbreakable safety nets: an instantaneous recovery sequence and a zero-access data boundary.
+      </p>
+
+      <!-- Interactive Panic Button Sandbox -->
+      <div class="panic-grid">
+        <div class="panic-console">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+            <strong style="font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.04em;">Live Formula Simulation Cell</strong>
+            <span id="panicStatusTag" style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--positive); font-weight: 700;">STATUS: HEALTHY</span>
+          </div>
+
+          <div class="panic-screen" id="panicScreen">
+            <div>
+              <div class="panic-formula-row">
+                <span>Tab 1: Workforce Register · Cell H4 (Formula Shield)</span>
+                <span id="panicShieldStatus">SHIELD: ACTIVE</span>
+              </div>
+              <div style="color: var(--code-keyword); font-size: 0.8125rem; margin-bottom: 4px;">Formula Logic:</div>
+              <div style="font-size: 0.8125rem; color: var(--code-comment); margin-bottom: var(--space-sm);" id="panicFormulaCode">
+                =IFS(D4="Overdue","Action Required", E4&lt;TODAY(),"Action Required", TRUE,"Compliant")
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--on-dark-variant);">Evaluated Cell Output:</div>
+              <div class="panic-cell-val" id="panicCellOutput">COMPLIANT [MARAM TIER 2]</div>
+            </div>
+          </div>
+
+          <div class="panic-actions">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnBreakFormula" onclick="simulateBreakFormula()">
+              <i data-lucide="alert-triangle" style="width: 14px; height: 14px; color: var(--error);"></i>
+              <span>Simulate Accidental Overwrite / Delete</span>
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnPanicRestore" onclick="simulatePanicRestore()">
+              <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+              <span>10-Second Panic Button (Restore)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="panic-explainer">
+          <div>
+            <h3>The 2-Click Recovery Blueprint</h3>
+            <p style="font-size: 0.9375rem; color: var(--on-surface-variant);">
+              If a colleague accidentally deletes a row, overwrites a formula badge, or scrambles a column, remember these two built-in Google Workspace safety nets:
+            </p>
+            <ol class="stepper-list">
+              <li class="stepper-item">
+                <span class="stepper-num">1</span>
+                <div>
+                  <strong>Press Ctrl + Z (or Cmd + Z on Mac)</strong>
+                  <div style="font-size: 0.875rem; color: var(--on-surface-variant);">Google Sheets stores thousands of sequential undo states. One keystroke reverses the mistake in 0.2 seconds.</div>
+                </div>
+              </li>
+              <li class="stepper-item">
+                <span class="stepper-num">2</span>
+                <div>
+                  <strong>File &gt; Version History &gt; See version history</strong>
+                  <div style="font-size: 0.875rem; color: var(--on-surface-variant);">Google autosaves every single revision every few seconds. Select yesterday's timestamp and click <em>"Restore this version"</em> to return to a pristine state.</div>
+                </div>
+              </li>
+            </ol>
+          </div>
+          <div class="inset-callout positive" style="margin: 0;">
+            <strong style="font-size: 0.875rem;">Peace of Mind Guarantee:</strong>
+            <span style="font-size: 0.8125rem; display: block; margin-top: 2px;">
+              You cannot permanently break this template. Your data history is backed up automatically by Google's sovereign enterprise infrastructure.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zero-Access Google Drive /copy Security Architecture -->
+      <div class="sovereignty-cards">
+        <div class="sovereignty-card">
+          <h4>
+            <i data-lucide="cloud-off" style="width: 18px; height: 18px;"></i>
+            <span>The /copy Link Architecture</span>
+          </h4>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+            When you clicked your purchase link, Google generated a private, isolated clone directly inside your agency's private Google Workspace or Google Drive. No master sheet link is maintained.
+          </p>
+        </div>
+
+        <div class="sovereignty-card">
+          <h4>
+            <i data-lucide="eye-off" style="width: 18px; height: 18px;"></i>
+            <span>Zero-Access Guarantee</span>
+          </h4>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+            LEW CREATIONS has zero external access to your sheet. We never see, store, collect, or transmit client trauma narratives, Elder engagements, or HR compliance screenings. 100% of data remains within your sovereign agency boundary.
+          </p>
+        </div>
+
+        <div class="sovereignty-card">
+          <h4>
+            <i data-lucide="file-check" style="width: 18px; height: 18px;"></i>
+            <span>Australian Privacy Compliance</span>
+          </h4>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+            Meets the rigorous strictures of the <strong>Australian Privacy Act 1988 (APP 11)</strong>, the <strong>Victorian Health Records Act 2001 (HPP 4)</strong>, and <strong>ACCO Indigenous Data Sovereignty</strong> principles for localized data stewardship.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 2: VISUAL CELL KEY & LIVE INTERACTIVE INSPECTOR
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="cell-key">
+      <div class="index-header">
+        <span class="index-header-tag">
+          <span class="step-badge">2</span>
+          <span>Visual Cell Key &amp; Unbreakable Formula Shields</span>
+        </span>
+        <span>Two-Color Discipline</span>
+      </div>
+
+      <h2>The Unbreakable Two-Color Rule</h2>
+      <p class="lede">
+        We designed this tracker so any team member—regardless of technical or spreadsheet confidence—can navigate without fear. There are only two types of cells in the entire workbook.
+      </p>
+
+      <div class="cell-key-showcase">
+        <div class="cell-type-card white-card">
+          <div class="swatch-header">
+            <div class="swatch-box white">
+              <i data-lucide="edit-3" style="width: 16px; height: 16px; color: var(--tertiary);"></i>
+            </div>
+            <div>
+              <h3 style="margin: 0; font-size: 1.1rem;">⚪ WHITE CELLS (#FFFFFF)</h3>
+              <span style="font-size: 0.75rem; font-family: var(--font-label); font-weight: 700; color: var(--tertiary); text-transform: uppercase;">Editable Data Entry Zone</span>
+            </div>
+          </div>
+          <p style="font-size: 0.875rem; margin-bottom: var(--space-xs);">
+            <strong>What lives here:</strong> Staff names, sector roles, session dates, de-identified Client IDs, qualitative yarning notes, Elder consult names, and manual dropdown selections.
+          </p>
+          <div class="inset-callout positive" style="padding: var(--space-sm); margin: var(--space-xs) 0 0 0;">
+            <strong style="font-size: 0.8125rem;">Your Rule:</strong>
+            <span style="font-size: 0.8125rem;">Type freely! Update, add new rows, paste notes, and adjust dropdowns as your caseload evolves.</span>
+          </div>
+        </div>
+
+        <div class="cell-type-card grey-card">
+          <div class="swatch-header">
+            <div class="swatch-box grey">
+              <i data-lucide="shield-alert" style="width: 16px; height: 16px; color: var(--on-surface-variant);"></i>
+            </div>
+            <div>
+              <h3 style="margin: 0; font-size: 1.1rem;">🩶 GREY CELLS (#F3F4F6)</h3>
+              <span style="font-size: 0.75rem; font-family: var(--font-label); font-weight: 700; color: var(--on-surface-variant); text-transform: uppercase;">Locked Formula Shields</span>
+            </div>
+          </div>
+          <p style="font-size: 0.875rem; margin-bottom: var(--space-xs);">
+            <strong>What lives here:</strong> Automatic compliance badges, top-level KPI scorecards, WWCC expiration warnings, audit status counters, and dual-framework alignment calculations.
+          </p>
+          <div class="inset-callout warning" style="padding: var(--space-sm); margin: var(--space-xs) 0 0 0;">
+            <strong style="font-size: 0.8125rem;">Your Rule:</strong>
+            <span style="font-size: 0.8125rem;">Hands off! These cells calculate automatically from your white inputs. Never type directly into a grey cell.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Interactive Cell Inspector -->
+      <div class="cell-inspector-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs); flex-wrap: wrap; gap: var(--space-xs);">
+          <div>
+            <h3 style="margin: 0; font-size: 1rem;">Interactive Cell Inspector Sandbox</h3>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin: 0;">Click on any cell below to test its behavioral shield and see its formula logic.</p>
+          </div>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="highlightCells('all')">Highlight All</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="highlightCells('white')">Highlight White (Input)</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="highlightCells('grey')">Highlight Grey (Shield)</button>
+          </div>
+        </div>
+
+        <div class="sheet-mockup-wrapper">
+          <table class="sheet-table" id="sandboxTable">
+            <thead>
+              <tr>
+                <th>Client ID (Col A)</th>
+                <th>Session Date (Col B)</th>
+                <th>MARAM Tool (Col C)</th>
+                <th>[NDIS] Active (Col D)</th>
+                <th>Qualitative Cultural Narrative (Col G)</th>
+                <th>Compliance Status (Col H)</th>
+                <th>Audit Evidence Ref (Col I)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="cell-white-editable is-selected" onclick="handleCellClick(this)" data-cell-type="white" data-header="Client ID (Col A)" data-val="CL-8041" data-desc="De-identified Client ID for privacy protection. Safe to enter and re-index.">CL-8041</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Session Date (Col B)" data-val="2024-06-01" data-desc="Direct date input format YYYY-MM-DD. Drives automatic supervision and review thresholds.">2024-06-01</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Practice Tool Applied (Col C)" data-val="MARAM Comprehensive Risk Tool" data-desc="Dropdown selection from MARAM framework. Triggers automatic multi-agency flags.">MARAM Comprehensive Risk</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="[NDIS] Active (Col D)" data-val="TRUE (Checkbox)" data-desc="Interactive boolean checkbox. Feeds the NDIS Compliance Pass Rate KPI counter.">☑ TRUE</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Qualitative Cultural Narrative (Col G)" data-val="Kinship yarning circle held on Country..." data-desc="Free-text qualitative narrative. Evaluated by AI companion prompt for Closing the Gap Reform 2.">Kinship yarning circle held on Country...</td>
+                <td class="cell-grey-shield" onclick="handleCellClick(this)" data-cell-type="grey" data-header="Compliance Status Badge (Col H)" data-val="=IFS(ISBLANK(B4),&quot;Pending&quot;, D4=TRUE,&quot;Compliant&quot;, TRUE,&quot;Action Required&quot;)" data-desc="Protected compliance formula evaluating NDIS status and session date automatically.">🛡️ COMPLIANT</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Audit Evidence Ref (Col I)" data-val="EV-2025-081" data-desc="Internal document filing reference for DFFH or NDIA Quality Auditors.">EV-2025-081</td>
+              </tr>
+              <tr>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Client ID (Col A)" data-val="CL-8042" data-desc="De-identified Client ID. Safe to edit.">CL-8042</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Session Date (Col B)" data-val="2024-06-03" data-desc="Scheduled intake date.">2024-06-03</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Practice Tool Applied (Col C)" data-val="NDIS Scheduled Plan Review" data-desc="Mainstream NDIS plan alignment review.">NDIS Scheduled Plan Review</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="[NDIS] Active (Col D)" data-val="FALSE (Checkbox)" data-desc="Unchecked agreement flag. Notice how Column H automatically computes ACTION REQUIRED.">☐ FALSE</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Qualitative Cultural Narrative (Col G)" data-val="Awaiting Elder consult next Tuesday..." data-desc="Narrative notes on cultural safety and family goals.">Awaiting Elder consult next Tuesday...</td>
+                <td class="cell-grey-shield" onclick="handleCellClick(this)" data-cell-type="grey" data-header="Compliance Status Badge (Col H)" data-val="=IFS(ISBLANK(B5),&quot;Pending&quot;, D5=TRUE,&quot;Compliant&quot;, TRUE,&quot;Action Required&quot;)" data-desc="Protected compliance formula evaluating NDIS status and session date automatically.">🛡️ ACTION REQ.</td>
+                <td class="cell-white-editable" onclick="handleCellClick(this)" data-cell-type="white" data-header="Audit Evidence Ref (Col I)" data-val="EV-2025-082" data-desc="Evidence reference filing.">EV-2025-082</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="inspector-output-box" id="inspectorOutput">
+          <div class="inspector-info">
+            <h4 id="inspectorHeader">⚪ White Cell Selected: Client ID (Col A)</h4>
+            <p id="inspectorDesc">De-identified Client ID for privacy protection. Safe to enter, overwrite, and re-index.</p>
+          </div>
+          <div id="inspectorCodeBadge">
+            <span class="formula-badge-code">Direct User Input · No Formula</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 3: DUAL-TERMINOLOGY ARCHITECTURE SCROLLYTELLING SPINE
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="architecture">
+      <div class="index-header">
+        <span class="index-header-tag">
+          <span class="step-badge">3</span>
+          <span>Dual-Terminology 3-Tab Architecture &amp; Workflow SOPs</span>
+        </span>
+        <span>Guided Interactive Walkthrough</span>
+      </div>
+
+      <h2>Bridging Clinical Compliance with Cultural Governance</h2>
+      <p class="lede">
+        Mainstream compliance tools force community organizations to choose between sterile NDIS checklists and cultural safety. This tracker bridges both in a unified schema: quantitative safety controls on the left, qualitative self-determination and kinship narratives on the right.
+      </p>
+
+      <!-- Scrollytelling mechanism -->
+      <div class="scrolly-container">
+
+        <!-- PINNED GRAPHIC (Left Column) -->
+        <figure class="scrolly-graphic" id="scrollyGraphicFigure">
+          <div class="scrolly-graphic-card">
+            <div class="hud-header">
+              <span class="hud-title">
+                <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
+                <span id="hudActiveTitle">System Architecture Blueprint</span>
+              </span>
+              <span id="hudBeatPill" style="font-family: var(--font-mono); font-size: 0.6875rem; background: var(--tertiary); color: var(--on-primary); padding: 2px 6px;">PHASE 1 / 5</span>
+            </div>
+
+            <!-- Tab Switcher Navigation inside HUD -->
+            <div class="hud-nav-tabs">
+              <button type="button" class="hud-tab-btn active" id="tabBtn0" onclick="handleHudTabClick(0)">0. Architecture Blueprint</button>
+              <button type="button" class="hud-tab-btn" id="tabBtn1" onclick="handleHudTabClick(1)">1. Workforce &amp; MARAM</button>
+              <button type="button" class="hud-tab-btn" id="tabBtn2" onclick="handleHudTabClick(2)">2. Practice &amp; Outcomes</button>
+              <button type="button" class="hud-tab-btn" id="tabBtn3" onclick="handleHudTabClick(3)">3. Maturity &amp; Milestones</button>
+              <button type="button" class="hud-tab-btn" id="tabBtn4" onclick="handleHudTabClick(4)">4. Caseload Risk Ledger</button>
+            </div>
+
+            <!-- Dynamic Body Viewport that updates per beat -->
+            <div class="hud-body" id="hudBody">
+              <!-- Rendered via renderGraphic(i) -->
+            </div>
+
+            <div class="hud-footer">
+              <span id="hudFooterNote">LEW CREATIONS Standardized Schema</span>
+              <span id="hudShieldCount" style="font-family: var(--font-mono);">Locked Shields: 4 Counters Active</span>
+            </div>
+          </div>
+        </figure>
+
+        <!-- NARRATIVE STEPS (Right Column) -->
+        <div class="scrolly-steps" id="scrollySteps">
+          <!-- Populated dynamically by script with 5 beats -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 3B: CORE CLIENT RISK LEDGER (20 SOURCE ROWS)
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="risk-ledger" class="ledger-section">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-md); flex-wrap: wrap; gap: var(--space-sm);">
+        <div>
+          <span style="font-family: var(--font-label); font-size: 0.75rem; font-weight: 800; color: var(--tertiary); text-transform: uppercase; letter-spacing: 0.06em;">Operational Caseload Engine</span>
+          <h2 style="margin: 2px 0 0 0; font-size: 1.5rem;">Core Client Risk Ledger (20 Active Case Files)</h2>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin: 0;">
+            Real-time triage ledger connecting Client ID, MARAM alignment levels, caseworkers (JD, SM, RK), and critical next action triggers.
+          </p>
+        </div>
+      </div>
+
+      <!-- Filter Controls Bar -->
+      <div class="ledger-controls">
+        <div class="control-group">
+          <label class="control-label" for="filterRisk">Filter Risk Level</label>
+          <select id="filterRisk" class="filter-select" onchange="applyLedgerFilters()">
+            <option value="ALL">All Risk Levels</option>
+            <option value="High">High Risk</option>
+            <option value="Medium">Medium Risk</option>
+            <option value="Low">Low Risk</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="filterStatus">Filter Case Status</label>
+          <select id="filterStatus" class="filter-select" onchange="applyLedgerFilters()">
+            <option value="ALL">All Statuses</option>
+            <option value="Urgent">Urgent</option>
+            <option value="Follow-up Required">Follow-up Required</option>
+            <option value="Pending">Pending</option>
+            <option value="Complete">Complete</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="filterWorker">Caseworker Lead</label>
+          <select id="filterWorker" class="filter-select" onchange="applyLedgerFilters()">
+            <option value="ALL">All Workers</option>
+            <option value="JD">JD</option>
+            <option value="SM">SM</option>
+            <option value="RK">RK</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="searchLedger">Search Notes / ID</label>
+          <input type="text" id="searchLedger" class="search-input" placeholder="e.g. safety plan, NDIS, C-1005..." oninput="applyLedgerFilters()">
+        </div>
+
+        <div class="ledger-counter-bar">
+          <span id="ledgerVisibleCount">Showing 20 of 20</span> cases
+        </div>
+      </div>
+
+      <!-- Ledger Table -->
+      <div class="ledger-table-wrap">
+        <table class="ledger-table">
+          <thead>
+            <tr>
+              <th>Client ID</th>
+              <th>Risk Level</th>
+              <th>MARAM Alignment</th>
+              <th>Next Action Date</th>
+              <th>Status</th>
+              <th>Case Worker</th>
+              <th>Feedback &amp; Qualitative Notes</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerTableBody">
+            <!-- 20 rows rendered by script -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Selected Row Detail Drawer -->
+      <div class="ledger-detail-card" id="ledgerDetailCard">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+          <strong id="detailClientId" style="font-size: 1.1rem; color: var(--primary);">Case File: C-1001</strong>
+          <span id="detailBadge" class="badge badge-urgent">URGENT</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-sm); font-size: 0.8125rem; margin-bottom: var(--space-xs);">
+          <div><span style="color: var(--on-surface-variant);">Assigned Worker:</span> <strong id="detailWorker">JD</strong></div>
+          <div><span style="color: var(--on-surface-variant);">Risk Level:</span> <strong id="detailRisk">High</strong></div>
+          <div><span style="color: var(--on-surface-variant);">MARAM Alignment:</span> <strong id="detailMaram">Comprehensive</strong></div>
+          <div><span style="color: var(--on-surface-variant);">Next Action Due:</span> <strong id="detailDate">2024-06-01</strong></div>
+        </div>
+        <div style="background: var(--surface-card); padding: 8px 12px; border: 1px solid var(--outline-variant); font-size: 0.875rem;">
+          <span style="color: var(--on-surface-variant); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; display: block;">Clinical Casework Note:</span>
+          <span id="detailNotes">Immediate safety plan required. Multi-agency triage meeting scheduled.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 4: DROPDOWN & TEMPLATE CUSTOMIZATION
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="customization">
+      <div class="index-header">
+        <span class="index-header-tag">
+          <span class="step-badge">4</span>
+          <span>Dropdown &amp; Template Customization Guidelines</span>
+        </span>
+        <span>Safe Expansion Without Broken Formulas</span>
+      </div>
+
+      <h2>Tailoring the Tracker to Your Agency</h2>
+      <p class="lede">
+        Every community health service and ACCO has unique job titles, local funding streams, and clinical supervision structures. You can customize every dropdown safely by following these three golden rules.
+      </p>
+
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-card-badge">Golden Rule #1</div>
+          <h3 style="font-size: 1.05rem;">The Middle-Row Insertion Rule</h3>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+            When adding a new staff member or client, <strong>never type beneath the bottom row</strong> of the table. Instead, right-click any row in the middle and choose <em>"Insert 1 row above"</em>.
+          </p>
+          <div class="inset-callout positive" style="padding: 6px; font-size: 0.8125rem; margin-top: var(--space-xs);">
+            <strong>Why it works:</strong> Google Sheets automatically stretches all formula ranges (e.g. <code>A4:A28</code> becomes <code>A4:A29</code>) without stranding your new data outside the KPI counters.
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-badge">Golden Rule #2</div>
+          <h3 style="font-size: 1.05rem;">Editing Dropdown Lists</h3>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+            To add new funding bodies (e.g., <em>"Victorian Family Violence Reform"</em>) or custom sector roles, select the column, click <strong>Data &gt; Data validation</strong>, and add items to the chip list.
+          </p>
+          <div class="inset-callout positive" style="padding: 6px; font-size: 0.8125rem; margin-top: var(--space-xs);">
+            <strong>Safe Practice:</strong> Keep existing values untouched and simply append new items to the bottom of the validation list so historic records don't trigger invalid warnings.
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-badge">Golden Rule #3</div>
+          <h3 style="font-size: 1.05rem;">Formula Shield Drag-Down</h3>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+            When you insert a new row, the grey cell may start blank. Click the grey cell directly above it and press <strong>Ctrl + D (or drag the small blue corner handle down)</strong>.
+          </p>
+          <div class="inset-callout positive" style="padding: 6px; font-size: 0.8125rem; margin-top: var(--space-xs);">
+            <strong>Instant Shield:</strong> This copies the exact nested formula with relative row references, armoring your new row in one second.
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Customization Playground -->
+      <div class="customizer-sandbox">
+        <h3 style="margin-top: 0; font-size: 1.15rem;">Live Customizer Playground: Test Adding Staff to Roster</h3>
+        <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+          Try adding a team member below to see how our safe insertion logic validates sector roles and MARAM tiers without touching protected formula shields.
+        </p>
+
+        <div class="sandbox-grid">
+          <div class="sandbox-form">
+            <div class="form-group">
+              <label for="inputStaffName">Staff Member Full Name (White Cell)</label>
+              <input type="text" id="inputStaffName" placeholder="e.g. Aunty Joyce Peters" value="Aunty Joyce Peters">
+            </div>
+
+            <div class="form-group">
+              <label for="selectSectorRole">Sector Role &amp; Title (Customizable Dropdown)</label>
+              <select id="selectSectorRole">
+                <option value="Senior Cultural Lead">Senior Cultural Lead (ACCO Governance)</option>
+                <option value="NDIS Support Coordinator">NDIS Support Coordinator</option>
+                <option value="Specialist FV Practitioner">Specialist FV Practitioner (MARAM Tier 3)</option>
+                <option value="Practice Lead & Clinical Supervisor">Practice Lead &amp; Clinical Supervisor</option>
+                <option value="Aboriginal Health Worker">Aboriginal Health Worker</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="selectMaramTier">MARAM Capability Tier</label>
+              <select id="selectMaramTier">
+                <option value="Tier 1 - Screening & Identification">Tier 1 - Screening &amp; Identification</option>
+                <option value="Tier 2 - Intermediate">Tier 2 - Intermediate Risk Assessment</option>
+                <option value="Tier 3 - Comprehensive" selected>Tier 3 - Comprehensive Risk Management</option>
+                <option value="Tier 4 - Leadership">Tier 4 - Leadership &amp; Governance</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="addCustomStaffToRoster()" style="margin-top: var(--space-xs);">
+              <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
+              <span>Simulate Safe Row Insertion</span>
+            </button>
+          </div>
+
+          <div class="sandbox-preview">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+                <strong style="font-size: 0.8125rem; text-transform: uppercase;">Active Workforce Roster (Tab 1 Simulation)</strong>
+                <span id="rosterCountBadge" style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--tertiary); font-weight: 700;">4 Staff Enrolled</span>
+              </div>
+              <ul class="sandbox-list" id="sandboxStaffList">
+                <li class="sandbox-list-item">
+                  <div>
+                    <strong>Marcus Kelly</strong>
+                    <div style="font-size: 0.75rem; color: var(--on-surface-variant);">NDIS Support Coordinator · Tier 2</div>
+                  </div>
+                  <span class="badge badge-complete">COMPLIANT</span>
+                </li>
+                <li class="sandbox-list-item">
+                  <div>
+                    <strong>Sarah Chen</strong>
+                    <div style="font-size: 0.75rem; color: var(--on-surface-variant);">Specialist FV Practitioner · Tier 3</div>
+                  </div>
+                  <span class="badge badge-complete">COMPLIANT</span>
+                </li>
+                <li class="sandbox-list-item">
+                  <div>
+                    <strong>Uncle Ron Walker</strong>
+                    <div style="font-size: 0.75rem; color: var(--on-surface-variant);">Senior Cultural Lead · Tier 4</div>
+                  </div>
+                  <span class="badge badge-complete">COMPLIANT</span>
+                </li>
+              </ul>
+            </div>
+            <div id="sandboxFeedbackNotice" class="inset-callout positive" style="margin-top: var(--space-sm); padding: var(--space-xs) var(--space-sm); font-size: 0.75rem;">
+              Formula Shield Status: All formula shields intact. Automatic range adjusted seamlessly.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 5: IN-SHEET AI PROMPT COMPANION PACK & DISCLAIMER
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="ai-companion">
+      <div class="index-header">
+        <span class="index-header-tag">
+          <span class="step-badge">5</span>
+          <span>Built-In Customer AI Prompt Companion Pack</span>
+        </span>
+        <span>1-Click Copy &amp; Board Briefing Assistants</span>
+      </div>
+
+      <h2>Empower Your Governance with In-Sheet AI</h2>
+      <p class="lede">
+        Your tracker was designed to work hand-in-hand with leading AI assistants like Google Gemini and ChatGPT. Click any card below to copy the battle-tested compliance prompt directly to your clipboard.
+      </p>
+
+      <div class="prompts-grid">
+
+        <!-- PROMPT 1 -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <h4>PROMPT 1: EXECUTIVE BOARD &amp; DFFH AUDIT BRIEFING</h4>
+            <span style="font-size: 0.6875rem; background: var(--tertiary); padding: 2px 6px; font-family: var(--font-mono);">GOVERNANCE</span>
+          </div>
+          <div class="prompt-body">
+            <div class="prompt-text-block" id="promptText1">"Act as an executive compliance director in Victorian community services. Look at my open B2B Community Services Tracker tabs ('1. Workforce &amp; Training' and '3. Maturity &amp; Funding'). Summarize our current MARAM workforce alignment percentage, active screening compliance, and upcoming audit deadlines into 3 executive bullet points formatted for a monthly Board report or DFFH funding acquittal."</div>
+            <div class="prompt-footer">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="toggleSimOutput('sim1')">
+                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                <span>Preview AI Output</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="copyPrompt('promptText1', 'Prompt 1: Executive Board & DFFH Briefing')">
+                <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                <span>Copy Prompt</span>
+              </button>
+            </div>
+            <div class="prompt-sim-output" id="sim1">
+              <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Sample AI Generated Briefing:</strong>
+              <ul style="margin: 0; padding-left: var(--space-md);">
+                <li><strong>Workforce Alignment:</strong> 88.9% of active clinical and support workforce (16/18 FTE) have achieved verified MARAM alignment across Tiers 1–3, exceeding the DFFH foundational benchmark by 8.9%.</li>
+                <li><strong>Screening &amp; Supervision:</strong> 100% active WWCC validity with 0 overdue screening notices; 4 staff flagged for scheduled reflective practice supervision renewal within the next 14 calendar days.</li>
+                <li><strong>Milestone Compliance:</strong> NDIA Mid-Term Practice Standards Audit (Target: Oct 2026) remains on track with evidence references cross-indexed; DFFH Q2 Family Violence Acquittal finalized for sign-off.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT 2 -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <h4>PROMPT 2: CULTURAL OUTCOME NARRATIVE (CLOSING THE GAP)</h4>
+            <span style="font-size: 0.6875rem; background: var(--tertiary); padding: 2px 6px; font-family: var(--font-mono);">CULTURAL</span>
+          </div>
+          <div class="prompt-body">
+            <div class="prompt-text-block" id="promptText2">"Act as an ACCO practice lead. Look at the qualitative notes logged in my '2. Practice &amp; Outcomes Log' for Client IDs CL-8041 through CL-9918. Synthesize these yarning circle notes, Elder engagements, and kinship care connections into a compelling 200-word qualitative outcomes narrative proving how our program fulfills Closing the Gap Priority Reform 2 principles."</div>
+            <div class="prompt-footer">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="toggleSimOutput('sim2')">
+                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                <span>Preview AI Output</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="copyPrompt('promptText2', 'Prompt 2: Closing the Gap Narrative')">
+                <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                <span>Copy Prompt</span>
+              </button>
+            </div>
+            <div class="prompt-sim-output" id="sim2">
+              <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Sample AI Generated Narrative:</strong>
+              <p style="margin: 0;">
+                "Across the reported quarter, our practice model actively operationalized Closing the Gap Priority Reform 2 by establishing community-controlled, culturally fortified safety structures for participating families (CL-8041 through CL-9918). Rather than relying solely on conventional clinical triage, 86 holistic sessions incorporated formal Kinship Yarning Circles facilitated alongside local Elders and cultural leads. Practitioners documented decisive progress in reuniting children with maternal kinship networks, securing connection to Country, and grounding risk de-escalation in cultural safety protocols. These holistic engagements resulted in an active NDIS service alignment rate of 98%, directly proving that self-determined cultural care structures provide superior, enduring safeguarding outcomes."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT 3 -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <h4>PROMPT 3: HR &amp; CLINICAL SUPERVISION ACTION PLAN EMAIL</h4>
+            <span style="font-size: 0.6875rem; background: var(--tertiary); padding: 2px 6px; font-family: var(--font-mono);">OPERATIONS</span>
+          </div>
+          <div class="prompt-body">
+            <div class="prompt-text-block" id="promptText3">"Look at the '1. Workforce &amp; Training' tab in my open Google Sheet. Identify all staff members flagged with 'Action Required' or 'In Progress' for WWCC screening or supervision dates. Draft a supportive, professional 2-paragraph email to team leaders outlining the required actions for those staff members before our next clinical audit."</div>
+            <div class="prompt-footer">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="toggleSimOutput('sim3')">
+                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                <span>Preview AI Output</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="copyPrompt('promptText3', 'Prompt 3: Supervision Action Email')">
+                <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                <span>Copy Prompt</span>
+              </button>
+            </div>
+            <div class="prompt-sim-output" id="sim3">
+              <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Sample AI Generated Email:</strong>
+              <p style="margin-bottom: 6px;">
+                "Hi Team Leaders, as we prepare for our upcoming clinical governance review, our workforce register shows 4 practitioners currently flagged with 'Action Required' or 'In Progress' for either upcoming WWCC screening expiries or dual-track reflective supervision check-ins. Maintaining up-to-date reflective practice is vital not only for our MARAM audit compliance, but to ensure our frontline staff receive dedicated clinical and cultural decompression support."
+              </p>
+              <p style="margin: 0;">
+                "Please review your team rosters this week and confirm that scheduled supervision sessions are logged in Tab 1 before Friday 5:00 PM. If any team member requires assistance renewing their WWCC or clinical oversight arrangements, please reach out to the Practice Lead immediately."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT 4 -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <h4>PROMPT 4: STEP-BY-STEP SHEET FILTERING ASSISTANT</h4>
+            <span style="font-size: 0.6875rem; background: var(--tertiary); padding: 2px 6px; font-family: var(--font-mono);">TUTORIAL</span>
+          </div>
+          <div class="prompt-body">
+            <div class="prompt-text-block" id="promptText4">"I am using LEW CREATIONS' B2B Community Services Tracker. I need to filter the 'Practice &amp; Outcomes Log' to show only cases where MARAM Comprehensive Risk Assessments were applied and NDIS Service Agreements are marked TRUE. Step-by-step, tell me exactly where to click in Google Sheets to create this temporary view."</div>
+            <div class="prompt-footer">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="toggleSimOutput('sim4')">
+                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                <span>Preview AI Output</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="copyPrompt('promptText4', 'Prompt 4: Sheet Filtering Assistant')">
+                <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                <span>Copy Prompt</span>
+              </button>
+            </div>
+            <div class="prompt-sim-output" id="sim4">
+              <strong style="color: var(--primary); display: block; margin-bottom: 4px;">Sample AI Generated Click Guide:</strong>
+              <ol style="margin: 0; padding-left: var(--space-md);">
+                <li>Navigate to the bottom sheet tabs and click <strong>'2. Practice &amp; Outcomes Log'</strong>.</li>
+                <li>Highlight the table header row (Row 3, Columns A through I).</li>
+                <li>In Google Sheets top menu, click <strong>Data &gt; Create a filter</strong> (a dark green funnel icon will appear on each header).</li>
+                <li>Click the filter icon in <strong>Column C (Practice Tool Applied)</strong>, click <em>'Clear'</em>, and tick only <strong>'MARAM Comprehensive Risk Tool'</strong>.</li>
+                <li>Click the filter icon in <strong>Column D ([NDIS] Service Agmt Active)</strong> and tick only <strong>'TRUE'</strong>. Click OK. Your sheet will now display only these matching high-compliance cases!</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Manager Onboarding Checklist -->
+      <div class="checklist-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem;">Manager Onboarding Completion Checklist</h3>
+            <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin: 0;">
+              Check off these operational milestones as you complete your team setup. Your progress is saved automatically.
+            </p>
+          </div>
+          <span id="checklistPercentage" style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: var(--primary);">0% COMPLETED</span>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="checklistProgressBar"></div>
+        </div>
+
+        <div class="checklist-grid">
+          <label class="check-label">
+            <input type="checkbox" id="chk1" onchange="handleChecklistUpdate()">
+            <span><strong>1. Safety Net Verified:</strong> Tested the 10-Second Panic Button and located <em>File &gt; Version History</em> in Google Sheets.</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="chk2" onchange="handleChecklistUpdate()">
+            <span><strong>2. Two-Color Cell Discipline:</strong> Briefed team leads on White Cells (typing) vs Grey Cells (formula shields).</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="chk3" onchange="handleChecklistUpdate()">
+            <span><strong>3. 3-Tab Architecture Configured:</strong> Reviewed Tab 1 Workforce, Tab 2 Practice Log, and Tab 3 Maturity Milestones.</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="chk4" onchange="handleChecklistUpdate()">
+            <span><strong>4. Middle-Row Insertion Practiced:</strong> Enrolled staff roster using middle-row insertion to safeguard range calculations.</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="chk5" onchange="handleChecklistUpdate()">
+            <span><strong>5. AI Companion Prompts Tested:</strong> Copied and tested Prompt 1 (Executive Board Briefing) in Gemini or ChatGPT.</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="chk6" onchange="handleChecklistUpdate()">
+            <span><strong>6. Sovereignty &amp; Privacy Confirmed:</strong> Verified that sheet copy is stored strictly inside organizational Google Drive.</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Statutory Organizational Risk Disclaimer -->
+      <div class="disclaimer-card">
+        <h3>
+          <i data-lucide="alert-octagon" style="width: 22px; height: 22px;"></i>
+          <span>Statutory Organizational Risk Disclaimer</span>
+        </h3>
+        <p>
+          This Risk Tracker is provided as an organisational tool only. It is not a substitute for professional, legal, or compliance advice, and using it does not guarantee that your organisation meets any specific regulatory, funding, insurance, or audit requirement.
+        </p>
+        <p>
+          Risk categories, scoring, and fields should be reviewed and adjusted to reflect your organisation’s own context before use. The creator accepts no responsibility for outcomes arising from reliance on this template, including audit findings, funding decisions, or incidents arising from its use.
+        </p>
+        <div style="margin-top: var(--space-sm); font-size: 0.75rem; font-family: var(--font-label); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;">
+          LEW CREATIONS · B2B COMMUNITY SERVICES OPERATIONAL FRAMEWORK · GOVERNANCE VERSION 2026.1
+        </div>
+      </div>
+
+    </section>
+
+  </div><!-- /.page-wrap -->
+
+  <!-- Toast Notification element -->
+  <div class="copy-toast" id="copyToast">
+    <div style="display: flex; align-items: center; gap: var(--space-xs);">
+      <i data-lucide="check-circle" style="width: 16px; height: 16px; color: var(--positive);"></i>
+      <span id="copyToastMsg">Copied prompt to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- Mandatory Gemini Notebook API Shim for sandbox state persistence -->
+  <api-shim></api-shim>
+
+  <script>
+    /* ══════════════════════════════════════════════════════════════════════════
+       CORE STATE & SOURCE DATA (20 SOURCE ROWS)
+       ══════════════════════════════════════════════════════════════════════════ */
+    const CLIENT_ROWS = [
+      { id: "C-1001", risk: "High", maram: "Comprehensive", date: "2024-06-01", status: "Urgent", worker: "JD", notes: "Immediate safety plan required" },
+      { id: "C-1002", risk: "Low", maram: "Brief", date: "2024-06-05", status: "Complete", worker: "SM", notes: "Referral sent to external agency" },
+      { id: "C-1003", risk: "Medium", maram: "Intermediate", date: "2024-06-02", status: "Follow-up Required", worker: "JD", notes: "Waiting on consent form" },
+      { id: "C-1004", risk: "Low", maram: "Screening", date: "2024-06-10", status: "Pending", worker: "RK", notes: "Initial assessment scheduled" },
+      { id: "C-1005", risk: "High", maram: "Comprehensive", date: "2024-06-03", status: "Urgent", worker: "SM", notes: "Escalated to management" },
+      { id: "C-1006", risk: "Medium", maram: "Intermediate", date: "2024-06-04", status: "Pending", worker: "JD", notes: "Reviewing previous history" },
+      { id: "C-1007", risk: "Low", maram: "Brief", date: "2024-06-15", status: "Complete", worker: "RK", notes: "No further action needed" },
+      { id: "C-1008", risk: "High", maram: "Comprehensive", date: "2024-06-02", status: "Follow-up Required", worker: "JD", notes: "Client unreachable, try again" },
+      { id: "C-1009", risk: "Medium", maram: "Screening", date: "2024-06-08", status: "Pending", worker: "SM", notes: "Awaiting NDIS plan approval" },
+      { id: "C-1010", risk: "Low", maram: "Brief", date: "2024-06-12", status: "Complete", worker: "RK", notes: "Service delivered successfully" },
+      { id: "C-1011", risk: "Medium", maram: "Intermediate", date: "2024-06-07", status: "Follow-up Required", worker: "JD", notes: "Needs housing support" },
+      { id: "C-1012", risk: "High", maram: "Comprehensive", date: "2024-06-01", status: "Urgent", worker: "SM", notes: "Multi-agency meeting required" },
+      { id: "C-1013", risk: "Low", maram: "Screening", date: "2024-06-18", status: "Pending", worker: "RK", notes: "Standard intake process" },
+      { id: "C-1014", risk: "Medium", maram: "Intermediate", date: "2024-06-09", status: "Follow-up Required", worker: "JD", notes: "Check-in on wellbeing" },
+      { id: "C-1015", risk: "High", maram: "Comprehensive", date: "2024-06-03", status: "Urgent", worker: "SM", notes: "Risk assessment updated" },
+      { id: "C-1016", risk: "Low", maram: "Brief", date: "2024-06-20", status: "Pending", worker: "RK", notes: "Information provided to client" },
+      { id: "C-1017", risk: "Medium", maram: "Intermediate", date: "2024-06-11", status: "Complete", worker: "JD", notes: "Goals achieved, closing file" },
+      { id: "C-1018", risk: "Low", maram: "Screening", date: "2024-06-22", status: "Pending", worker: "SM", notes: "Scheduled for next week" },
+      { id: "C-1019", risk: "High", maram: "Comprehensive", date: "2024-06-04", status: "Follow-up Required", worker: "RK", notes: "Safety concerns identified" },
+      { id: "C-1020", risk: "Medium", maram: "Intermediate", date: "2024-06-14", status: "Complete", worker: "JD", notes: "Final report submitted" }
+    ];
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SCROLLYTELLING BEATS CONFIGURATION (5 BEATS)
+       ══════════════════════════════════════════════════════════════════════════ */
+    const SCROLLY_BEATS = [
+      {
+        kicker: "PHASE 0 · SYSTEM OVERVIEW",
+        title: "Dual-Terminology Framework: Meeting Two Worlds in One Sheet",
+        body: "Mainstream Victorian community service standards require rigorous alignment with Victorian MARAM (Multi-Agency Risk Assessment and Management) and NDIS Quality and Safeguards. Meanwhile, Aboriginal Community Controlled Organisations (ACCOs) require cultural governance upholding Closing the Gap Priority Reform 2. This tracker unifies both without compromise.",
+        sopHeader: "Architectural Golden Principles:",
+        sopItems: [
+          "Tab 1 monitors workforce capability, MARAM tiers 1–4, and dual-track clinical & reflective supervision.",
+          "Tab 2 logs frontline practice pairing quantitative NDIS checkboxes with Elder yarning circles and cultural narratives.",
+          "Tab 3 manages funding body acquittals, NDIA mid-term audits, and contract deliverables in real time."
+        ],
+        hudTitle: "Architecture Blueprint",
+        footerNote: "Sovereign Google Drive /copy Architecture · 100% Private Cloud"
+      },
+      {
+        kicker: "PHASE 1 · WORKFORCE CAPABILITY",
+        title: "Tab 1 SOP: Workforce & MARAM Compliance Register",
+        body: "Monitors practitioner readiness, WWCC/NDIS screening expirations, MARAM Tiers 1–4, and dual-track supervision. Formula shields calculate staff readiness dynamically.",
+        sopHeader: "Workforce Manager SOP:",
+        sopItems: [
+          "Staff Name & Role: White inputs (Senior Cultural Lead, NDIS Support Coordinator, Specialist FV Practitioner).",
+          "Dual Supervision: Log internal reflective practice alongside external clinical oversight to satisfy MARAM governance.",
+          "Formula Shield: Automated IFS formula checks expiry dates and assigns 'Compliant', 'In Progress', or 'Action Required'."
+        ],
+        hudTitle: "Tab 1: Workforce & MARAM Register",
+        footerNote: "Automated KPI Shield: 4 Counters calculating live workforce readiness"
+      },
+      {
+        kicker: "PHASE 2 · FRONTLINE PRACTICE",
+        title: "Tab 2 SOP: Practice & Holistic Outcomes Log",
+        body: "Pairs quantitative NDIS compliance checkboxes (Service Agreement Active, Plan Aligned, Risk Screened) with qualitative cultural narratives and Elder/Kinship engagements.",
+        sopHeader: "Frontline Practitioner SOP:",
+        sopItems: [
+          "Client ID: Always use de-identified codes (e.g. CL-8041) to safeguard client confidentiality under APP 11.",
+          "Checkboxes: Mark TRUE/FALSE for Service Agreement, Plan Alignment, and Risk Screened.",
+          "Qualitative Narratives: Record yarning circle notes and Elder consultations. Feeds directly into AI Prompt 2 for board reporting."
+        ],
+        hudTitle: "Tab 2: Practice & Outcomes Log",
+        footerNote: "Dual-Track Log: Quantitative NDIS safety paired with qualitative cultural outcome notes"
+      },
+      {
+        kicker: "PHASE 3 · CONTRACT GOVERNANCE",
+        title: "Tab 3 SOP: Maturity & Funding Milestone Tracker",
+        body: "Tracks contractual deliverables, MARAM maturity milestones, and funding body acquittals (Victorian DFFH, NDIA Commission, and Philanthropic bodies).",
+        sopHeader: "Compliance Director SOP:",
+        sopItems: [
+          "Requirement Mapping: Log upcoming audits (e.g. NDIA Mid-Term, MARAM Annual Self-Assessment, DFFH Q2 Acquittal).",
+          "Progress Statuses: Track milestones across Completed, On Track, Under Review, At Risk, and Not Started.",
+          "Audit Reference Trail: Attach document reference IDs (e.g. EV-2025-081) for instantaneous auditor verification."
+        ],
+        hudTitle: "Tab 3: Maturity & Milestones",
+        footerNote: "Executive Oversight: Real-time contractual acquittal and audit deadline tracking"
+      },
+      {
+        kicker: "PHASE 4 · CASELOAD TRIAGE",
+        title: "Core Client Risk Ledger: Real-Time Caseload Safety",
+        body: "The engine that keeps frontline teams synchronized during daily safety huddles. Tracks 20 active client files with granular MARAM risk stratification and assigned caseworkers.",
+        sopHeader: "Daily Caseload SOP:",
+        sopItems: [
+          "High Risk Escalations: Immediately flag Comprehensive MARAM cases requiring urgent multi-agency safety plans.",
+          "Caseworker Allocation: Filter by JD, SM, or RK to review caseload balance and follow-up deadlines.",
+          "Feedback Notes: Maintain actionable audit evidence to demonstrate continuous client safeguarding."
+        ],
+        hudTitle: "Core Client Risk Ledger",
+        footerNote: "Operational Engine: 20 Active client cases synchronized across triage teams"
+      }
+    ];
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 1: PANIC BUTTON INTERACTION
+       ══════════════════════════════════════════════════════════════════════════ */
+    function simulateBreakFormula() {
+      const screen = document.getElementById('panicScreen');
+      const cellOutput = document.getElementById('panicCellOutput');
+      const tag = document.getElementById('panicStatusTag');
+      const shield = document.getElementById('panicShieldStatus');
+      const code = document.getElementById('panicFormulaCode');
+
+      if (screen) screen.classList.add('is-broken');
+      if (cellOutput) {
+        cellOutput.textContent = '#REF! ACCIDENTAL OVERWRITE';
+      }
+      if (tag) {
+        tag.textContent = 'STATUS: COMPROMISED / OVERWRITTEN';
+        tag.style.color = 'var(--error)';
+      }
+      if (shield) {
+        shield.textContent = 'SHIELD: CORRUPTED (USER TYPED HERE)';
+        shield.style.color = 'var(--error)';
+      }
+      if (code) {
+        code.textContent = '[User manually typed: "All good" over the formula]';
+      }
+    }
+
+    function simulatePanicRestore() {
+      const screen = document.getElementById('panicScreen');
+      const cellOutput = document.getElementById('panicCellOutput');
+      const tag = document.getElementById('panicStatusTag');
+      const shield = document.getElementById('panicShieldStatus');
+      const code = document.getElementById('panicFormulaCode');
+
+      if (screen) screen.classList.remove('is-broken');
+      if (cellOutput) {
+        cellOutput.textContent = 'COMPLIANT [MARAM TIER 2]';
+      }
+      if (tag) {
+        tag.textContent = 'STATUS: RESTORED VIA VERSION HISTORY (0.4s)';
+        tag.style.color = 'var(--positive)';
+      }
+      if (shield) {
+        shield.textContent = 'SHIELD: ACTIVE';
+        shield.style.color = 'var(--code-quote)';
+      }
+      if (code) {
+        code.textContent = '=IFS(D4="Overdue","Action Required", E4<TODAY(),"Action Required", TRUE,"Compliant")';
+      }
+      showToast('Version restored in 0.4s! Your formulas are safe.');
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 2: CELL INSPECTOR LOGIC
+       ══════════════════════════════════════════════════════════════════════════ */
+    function handleCellClick(cellElement) {
+      if (!cellElement) return;
+      const type = cellElement.dataset.cellType || 'white';
+      const headerText = cellElement.dataset.header || 'Cell';
+      const sampleVal = cellElement.dataset.val || '';
+      const description = cellElement.dataset.desc || '';
+      inspectCell(cellElement, type, headerText, sampleVal, description);
+    }
+
+    function inspectCell(cellElement, type, headerText, sampleVal, description) {
+      // Remove is-selected from all cells in sandbox table
+      const allCells = document.querySelectorAll('#sandboxTable td');
+      allCells.forEach(c => c.classList.remove('is-selected'));
+      cellElement.classList.add('is-selected');
+
+      const outHeader = document.getElementById('inspectorHeader');
+      const outDesc = document.getElementById('inspectorDesc');
+      const outCode = document.getElementById('inspectorCodeBadge');
+
+      if (type === 'white') {
+        if (outHeader) outHeader.innerHTML = `⚪ White Cell Selected: ${headerText}`;
+        if (outDesc) outDesc.textContent = description;
+        if (outCode) {
+          outCode.innerHTML = `<span class="formula-badge-code">Editable Input · Value: "${sampleVal}"</span>`;
+        }
+      } else {
+        if (outHeader) outHeader.innerHTML = `🩶 Grey Cell Selected: ${headerText} (Protected Shield)`;
+        if (outDesc) outDesc.textContent = `Formula Shield Protected: ${description}`;
+        if (outCode) {
+          outCode.innerHTML = `<span class="formula-badge-code" style="color: var(--warning);">${sampleVal}</span>`;
+        }
+      }
+    }
+
+    function highlightCells(filterType) {
+      const whiteCells = document.querySelectorAll('.cell-white-editable');
+      const greyCells = document.querySelectorAll('.cell-grey-shield');
+
+      if (filterType === 'all') {
+        whiteCells.forEach(c => { c.style.opacity = '1'; c.style.outline = 'none'; });
+        greyCells.forEach(c => { c.style.opacity = '1'; c.style.outline = 'none'; });
+      } else if (filterType === 'white') {
+        whiteCells.forEach(c => { c.style.opacity = '1'; c.style.outline = '2px solid var(--tertiary)'; });
+        greyCells.forEach(c => { c.style.opacity = '0.35'; c.style.outline = 'none'; });
+      } else if (filterType === 'grey') {
+        whiteCells.forEach(c => { c.style.opacity = '0.35'; c.style.outline = 'none'; });
+        greyCells.forEach(c => { c.style.opacity = '1'; c.style.outline = '2px solid var(--warning)'; });
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 3: SCROLLYTELLING GRAPHIC RENDERER (5 BEATS)
+       ══════════════════════════════════════════════════════════════════════════ */
+    let currentScrollyIndex = 0;
+
+    function renderGraphic(i) {
+      currentScrollyIndex = i;
+      const beat = SCROLLY_BEATS[i];
+      if (!beat) return;
+
+      // Update HUD headers & pills
+      const hudTitle = document.getElementById('hudActiveTitle');
+      const hudPill = document.getElementById('hudBeatPill');
+      const hudFooter = document.getElementById('hudFooterNote');
+      const hudBody = document.getElementById('hudBody');
+
+      if (hudTitle) hudTitle.textContent = beat.hudTitle;
+      if (hudPill) hudPill.textContent = `PHASE ${i + 1} / 5`;
+      if (hudFooter) hudFooter.textContent = beat.footerNote;
+
+      // Update HUD nav tabs
+      for (let t = 0; t < 5; t++) {
+        const btn = document.getElementById(`tabBtn${t}`);
+        if (btn) {
+          if (t === i) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      }
+
+      if (!hudBody) return;
+
+      // BEAT 0: Architectural Blueprint
+      if (i === 0) {
+        hudBody.innerHTML = `
+          <div style="background: var(--surface-card); border: 1px solid var(--outline-variant); padding: var(--space-md);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-sm);">
+              <strong style="color: var(--primary); font-size: 0.9375rem;">Dual-Terminology Core Master Framework</strong>
+              <span class="badge badge-complete">VERIFIED SCHEMA</span>
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              Connecting mainstream statutory oversight with indigenous data sovereignty and community control.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+              <div style="border: 1px solid var(--outline-variant); padding: 8px; background: var(--surface-container-low);">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--tertiary);">MAINSTREAM LEGISLATION</div>
+                <ul style="font-size: 0.75rem; padding-left: 14px; margin: 4px 0 0 0; color: var(--on-surface-variant);">
+                  <li>Victorian MARAM Framework Tiers 1–4</li>
+                  <li>NDIS Quality & Safeguards Standards</li>
+                  <li>Australian Privacy Act 1988 (APP 11)</li>
+                </ul>
+              </div>
+              <div style="border: 1px solid var(--outline-variant); padding: 8px; background: var(--surface-container-low);">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--positive);">ACCO CULTURAL GOVERNANCE</div>
+                <ul style="font-size: 0.75rem; padding-left: 14px; margin: 4px 0 0 0; color: var(--on-surface-variant);">
+                  <li>Closing the Gap Priority Reform 2</li>
+                  <li>Elder & Kinship Yarning Protocols</li>
+                  <li>Indigenous Data Sovereignty</li>
+                </ul>
+              </div>
+            </div>
+            <div class="inset-callout positive" style="padding: 8px; margin: 0; font-size: 0.75rem;">
+              <strong>Sovereign /copy URL:</strong> Cloned 100% locally to your Google Drive with zero external server dependencies.
+            </div>
+          </div>
+        `;
+      }
+      // BEAT 1: Tab 1 Workforce Register
+      else if (i === 1) {
+        hudBody.innerHTML = `
+          <div class="hud-scorecards">
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">TOTAL WORKFORCE</div>
+              <div class="hud-scorecard-val">18 FTE</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">MARAM COMPLIANT</div>
+              <div class="hud-scorecard-val">88.9%</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">FULLY COMPLIANT</div>
+              <div class="hud-scorecard-val" style="color: var(--positive);">14 Staff</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">ACTION REQUIRED</div>
+              <div class="hud-scorecard-val" style="color: var(--error);">4 Staff</div>
+            </div>
+          </div>
+
+          <div class="hud-table-viewport">
+            <table class="hud-table">
+              <thead>
+                <tr>
+                  <th>Staff Name (White)</th>
+                  <th>Sector Role & Title (White)</th>
+                  <th>MARAM Tier</th>
+                  <th>WWCC Expiry</th>
+                  <th>Internal Reflective</th>
+                  <th>External Clinical</th>
+                  <th>Compliance Status (Grey)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sarah Chen</td>
+                  <td>Specialist FV Practitioner</td>
+                  <td>Tier 3 - Comprehensive</td>
+                  <td>2026-11-15</td>
+                  <td>2026-05-10</td>
+                  <td>2026-05-02</td>
+                  <td><span class="badge badge-complete">COMPLIANT</span></td>
+                </tr>
+                <tr>
+                  <td>Marcus Kelly</td>
+                  <td>NDIS Support Coordinator</td>
+                  <td>Tier 2 - Intermediate</td>
+                  <td>2026-08-20</td>
+                  <td>2026-05-08</td>
+                  <td>2026-04-20</td>
+                  <td><span class="badge badge-complete">COMPLIANT</span></td>
+                </tr>
+                <tr>
+                  <td>Aunty Muriel Davis</td>
+                  <td>Senior Cultural Lead</td>
+                  <td>Tier 4 - Leadership</td>
+                  <td>2026-09-30</td>
+                  <td>2026-05-14</td>
+                  <td>2026-05-12</td>
+                  <td><span class="badge badge-complete">COMPLIANT</span></td>
+                </tr>
+                <tr>
+                  <td>Liam O'Connor</td>
+                  <td>Case Manager</td>
+                  <td>Tier 1 - Screening</td>
+                  <td style="color: var(--error); font-weight: 700;">2024-05-01 (Overdue)</td>
+                  <td>2024-03-10</td>
+                  <td>2024-03-01</td>
+                  <td><span class="badge badge-urgent">ACTION REQUIRED</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      // BEAT 2: Tab 2 Practice & Outcomes Log
+      else if (i === 2) {
+        hudBody.innerHTML = `
+          <div class="hud-scorecards">
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">SESSIONS LOGGED</div>
+              <div class="hud-scorecard-val">142</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">NDIS PASS RATE</div>
+              <div class="hud-scorecard-val">98.2%</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">CULTURAL OUTCOMES</div>
+              <div class="hud-scorecard-val">86 Notes</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">MARAM ASSESSMENTS</div>
+              <div class="hud-scorecard-val">64 Total</div>
+            </div>
+          </div>
+
+          <div class="hud-table-viewport">
+            <table class="hud-table">
+              <thead>
+                <tr>
+                  <th>Client ID</th>
+                  <th>Session Date</th>
+                  <th>Practice Tool</th>
+                  <th>[NDIS] Active</th>
+                  <th>[NDIS] Plan</th>
+                  <th>[NDIS] Risk</th>
+                  <th>Qualitative Cultural Outcomes (Yarning)</th>
+                  <th>Elder Consult</th>
+                  <th>Evidence Ref</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>CL-8041</td>
+                  <td>2024-06-01</td>
+                  <td>MARAM Comprehensive</td>
+                  <td>☑ TRUE</td>
+                  <td>☑ TRUE</td>
+                  <td>☑ TRUE</td>
+                  <td>Kinship yarning circle held on Country. Family goals mapped.</td>
+                  <td>Elder Uncle Ron</td>
+                  <td>EV-2025-081</td>
+                </tr>
+                <tr>
+                  <td>CL-8042</td>
+                  <td>2024-06-03</td>
+                  <td>NDIS Scheduled Plan Review</td>
+                  <td>☑ TRUE</td>
+                  <td>☑ TRUE</td>
+                  <td>☑ TRUE</td>
+                  <td>NDIS funding unlocked for assistive sensory tech.</td>
+                  <td>Practice Lead</td>
+                  <td>EV-2025-082</td>
+                </tr>
+                <tr>
+                  <td>CL-8043</td>
+                  <td>2024-06-04</td>
+                  <td>Cultural Safety Framework</td>
+                  <td>☑ TRUE</td>
+                  <td>☑ TRUE</td>
+                  <td>☑ TRUE</td>
+                  <td>Connection to ancestral mob restored through local gathering.</td>
+                  <td>Aunty Joyce</td>
+                  <td>EV-2025-083</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      // BEAT 3: Tab 3 Maturity & Funding Milestones
+      else if (i === 3) {
+        hudBody.innerHTML = `
+          <div class="hud-scorecards">
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">TOTAL REQUIREMENTS</div>
+              <div class="hud-scorecard-val">12</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">COMPLETED</div>
+              <div class="hud-scorecard-val" style="color: var(--positive);">7</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">IN PROGRESS / ON TRACK</div>
+              <div class="hud-scorecard-val" style="color: var(--tertiary);">4</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">AT RISK / ATTENTION</div>
+              <div class="hud-scorecard-val" style="color: var(--error);">1</div>
+            </div>
+          </div>
+
+          <div class="hud-table-viewport">
+            <table class="hud-table">
+              <thead>
+                <tr>
+                  <th>Funding Body Requirement</th>
+                  <th>Funding Stream</th>
+                  <th>Framework / Scope</th>
+                  <th>Current Progress</th>
+                  <th>Target Date</th>
+                  <th>Responsible Lead</th>
+                  <th>Evidence Ref</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>NDIA Mid-Term Audit</td>
+                  <td>NDIA / NDIS Commission</td>
+                  <td>NDIS Practice Standards</td>
+                  <td><span class="badge badge-complete">ON TRACK</span></td>
+                  <td>2026-10-15</td>
+                  <td>Compliance Lead</td>
+                  <td>AUD-NDIA-01</td>
+                </tr>
+                <tr>
+                  <td>MARAM Annual Self-Assessment</td>
+                  <td>Victorian DFFH</td>
+                  <td>FV Protection Act 2008</td>
+                  <td><span class="badge badge-complete">COMPLETED</span></td>
+                  <td>2026-06-30</td>
+                  <td>Senior Cultural Lead</td>
+                  <td>AUD-DFFH-02</td>
+                </tr>
+                <tr>
+                  <td>DFFH Quarterly Acquittal Q2</td>
+                  <td>Victorian DFFH</td>
+                  <td>Human Services Standards</td>
+                  <td><span class="badge badge-followup">UNDER REVIEW</span></td>
+                  <td>2026-07-31</td>
+                  <td>Operations Manager</td>
+                  <td>ACQ-2026-Q2</td>
+                </tr>
+                <tr>
+                  <td>Philanthropic Youth Grant Report</td>
+                  <td>Philanthropic Trust</td>
+                  <td>Community Wellbeing</td>
+                  <td><span class="badge badge-urgent">AT RISK</span></td>
+                  <td>2026-06-15</td>
+                  <td>Youth Program Lead</td>
+                  <td>GRANT-2026-Y</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      // BEAT 4: Caseload Risk Ledger HUD
+      else if (i === 4) {
+        hudBody.innerHTML = `
+          <div class="hud-scorecards">
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">TOTAL CLIENTS</div>
+              <div class="hud-scorecard-val">20</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">HIGH RISK (COMPREHENSIVE)</div>
+              <div class="hud-scorecard-val" style="color: var(--error);">6</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">URGENT ACTIONS</div>
+              <div class="hud-scorecard-val" style="color: var(--error);">4</div>
+            </div>
+            <div class="hud-scorecard">
+              <div class="hud-scorecard-label">COMPLETED CASEFILES</div>
+              <div class="hud-scorecard-val" style="color: var(--positive);">5</div>
+            </div>
+          </div>
+
+          <div class="hud-table-viewport">
+            <table class="hud-table">
+              <thead>
+                <tr>
+                  <th>Client ID</th>
+                  <th>Risk Level</th>
+                  <th>MARAM Alignment</th>
+                  <th>Next Action Date</th>
+                  <th>Status</th>
+                  <th>Worker</th>
+                  <th>Feedback / Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>C-1001</strong></td>
+                  <td><span class="badge badge-risk-high">High</span></td>
+                  <td>Comprehensive</td>
+                  <td>2024-06-01</td>
+                  <td><span class="badge badge-urgent">Urgent</span></td>
+                  <td>JD</td>
+                  <td>Immediate safety plan required</td>
+                </tr>
+                <tr>
+                  <td><strong>C-1005</strong></td>
+                  <td><span class="badge badge-risk-high">High</span></td>
+                  <td>Comprehensive</td>
+                  <td>2024-06-03</td>
+                  <td><span class="badge badge-urgent">Urgent</span></td>
+                  <td>SM</td>
+                  <td>Escalated to management</td>
+                </tr>
+                <tr>
+                  <td><strong>C-1012</strong></td>
+                  <td><span class="badge badge-risk-high">High</span></td>
+                  <td>Comprehensive</td>
+                  <td>2024-06-01</td>
+                  <td><span class="badge badge-urgent">Urgent</span></td>
+                  <td>SM</td>
+                  <td>Multi-agency meeting required</td>
+                </tr>
+                <tr>
+                  <td><strong>C-1015</strong></td>
+                  <td><span class="badge badge-risk-high">High</span></td>
+                  <td>Comprehensive</td>
+                  <td>2024-06-03</td>
+                  <td><span class="badge badge-urgent">Urgent</span></td>
+                  <td>SM</td>
+                  <td>Risk assessment updated</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+    }
+
+    function handleHudTabClick(tabIndex) {
+      const stepNodes = document.querySelectorAll('.scrolly-step');
+      if (stepNodes[tabIndex]) {
+        stepNodes[tabIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      renderGraphic(tabIndex);
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 3B: INTERACTIVE CORE CLIENT RISK LEDGER TABLE (20 ROWS)
+       ══════════════════════════════════════════════════════════════════════════ */
+    function renderLedgerTable(rowsToDisplay) {
+      const tbody = document.getElementById('ledgerTableBody');
+      const counter = document.getElementById('ledgerVisibleCount');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      if (counter) counter.textContent = `Showing ${rowsToDisplay.length} of ${CLIENT_ROWS.length}`;
+
+      if (rowsToDisplay.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: var(--space-xl); color: var(--on-surface-variant);">
+              No client records match your current filter selection. Adjust filters above.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      rowsToDisplay.forEach(row => {
+        let riskBadgeClass = 'badge-risk-low';
+        if (row.risk === 'High') riskBadgeClass = 'badge-risk-high';
+        else if (row.risk === 'Medium') riskBadgeClass = 'badge-risk-medium';
+
+        let statusBadgeClass = 'badge-pending';
+        if (row.status === 'Urgent') statusBadgeClass = 'badge-urgent';
+        else if (row.status === 'Follow-up Required') statusBadgeClass = 'badge-followup';
+        else if (row.status === 'Complete') statusBadgeClass = 'badge-complete';
+
+        const tr = document.createElement('tr');
+        tr.onclick = function() { selectLedgerDetail(row); };
+        tr.innerHTML = `
+          <td><strong>${row.id}</strong></td>
+          <td><span class="badge ${riskBadgeClass}">${row.risk}</span></td>
+          <td>${row.maram}</td>
+          <td style="font-family: var(--font-mono);">${row.date}</td>
+          <td><span class="badge ${statusBadgeClass}">${row.status}</span></td>
+          <td><strong>${row.worker}</strong></td>
+          <td style="max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${row.notes}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function applyLedgerFilters() {
+      const riskVal = document.getElementById('filterRisk') ? document.getElementById('filterRisk').value : 'ALL';
+      const statusVal = document.getElementById('filterStatus') ? document.getElementById('filterStatus').value : 'ALL';
+      const workerVal = document.getElementById('filterWorker') ? document.getElementById('filterWorker').value : 'ALL';
+      const searchVal = document.getElementById('searchLedger') ? document.getElementById('searchLedger').value.trim().toLowerCase() : '';
+
+      const filtered = CLIENT_ROWS.filter(r => {
+        if (riskVal !== 'ALL' && r.risk !== riskVal) return false;
+        if (statusVal !== 'ALL' && r.status !== statusVal) return false;
+        if (workerVal !== 'ALL' && r.worker !== workerVal) return false;
+        if (searchVal) {
+          const matchId = r.id.toLowerCase().includes(searchVal);
+          const matchNotes = r.notes.toLowerCase().includes(searchVal);
+          const matchMaram = r.maram.toLowerCase().includes(searchVal);
+          if (!matchId && !matchNotes && !matchMaram) return false;
+        }
+        return true;
+      });
+
+      renderLedgerTable(filtered);
+    }
+
+    function selectLedgerDetail(row) {
+      const card = document.getElementById('ledgerDetailCard');
+      const idEl = document.getElementById('detailClientId');
+      const badgeEl = document.getElementById('detailBadge');
+      const workerEl = document.getElementById('detailWorker');
+      const riskEl = document.getElementById('detailRisk');
+      const maramEl = document.getElementById('detailMaram');
+      const dateEl = document.getElementById('detailDate');
+      const notesEl = document.getElementById('detailNotes');
+
+      if (!card) return;
+      card.classList.add('active');
+
+      if (idEl) idEl.textContent = `Client File: ${row.id}`;
+      if (badgeEl) {
+        badgeEl.textContent = row.status.toUpperCase();
+        badgeEl.className = 'badge';
+        if (row.status === 'Urgent') badgeEl.classList.add('badge-urgent');
+        else if (row.status === 'Follow-up Required') badgeEl.classList.add('badge-followup');
+        else if (row.status === 'Complete') badgeEl.classList.add('badge-complete');
+        else badgeEl.classList.add('badge-pending');
+      }
+      if (workerEl) workerEl.textContent = row.worker;
+      if (riskEl) riskEl.textContent = row.risk;
+      if (maramEl) maramEl.textContent = row.maram;
+      if (dateEl) dateEl.textContent = row.date;
+      if (notesEl) notesEl.textContent = row.notes;
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 4: DROPDOWN & ROSTER CUSTOMIZATION
+       ══════════════════════════════════════════════════════════════════════════ */
+    let customStaffList = [
+      { name: "Marcus Kelly", role: "NDIS Support Coordinator", tier: "Tier 2", status: "COMPLIANT" },
+      { name: "Sarah Chen", role: "Specialist FV Practitioner", tier: "Tier 3", status: "COMPLIANT" },
+      { name: "Uncle Ron Walker", role: "Senior Cultural Lead", tier: "Tier 4", status: "COMPLIANT" }
+    ];
+
+    function addCustomStaffToRoster() {
+      const nameInput = document.getElementById('inputStaffName');
+      const roleSelect = document.getElementById('selectSectorRole');
+      const tierSelect = document.getElementById('selectMaramTier');
+      const staffListEl = document.getElementById('sandboxStaffList');
+      const badgeCount = document.getElementById('rosterCountBadge');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const role = roleSelect ? roleSelect.value : '';
+      const tier = tierSelect ? tierSelect.value.split(' - ')[0] : 'Tier 1';
+
+      if (!name) {
+        alert('Please enter a staff member name before inserting.');
+        return;
+      }
+
+      customStaffList.push({ name, role, tier, status: "COMPLIANT" });
+
+      if (staffListEl) {
+        const li = document.createElement('li');
+        li.className = 'sandbox-list-item';
+        li.innerHTML = `
+          <div>
+            <strong>${name}</strong>
+            <div style="font-size: 0.75rem; color: var(--on-surface-variant);">${role} · ${tier}</div>
+          </div>
+          <span class="badge badge-complete">COMPLIANT</span>
+        `;
+        staffListEl.appendChild(li);
+      }
+
+      if (badgeCount) {
+        badgeCount.textContent = `${customStaffList.length} Staff Enrolled`;
+      }
+
+      const notice = document.getElementById('sandboxFeedbackNotice');
+      if (notice) {
+        notice.innerHTML = `<strong>Safe Insertion Verified:</strong> "${name}" successfully inserted in middle of roster. Formula shields stretched automatically from row ${customStaffList.length + 2} to ${customStaffList.length + 3}.`;
+      }
+
+      if (nameInput) nameInput.value = '';
+      showToast(`Added ${name} to workforce roster safely!`);
+      persistAppState();
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       SECTION 5: AI PROMPT COPYING & PERSISTENCE
+       ══════════════════════════════════════════════════════════════════════════ */
+    function copyPrompt(elementId, promptTitle) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      const rawText = el.textContent || el.innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(rawText).then(() => {
+          showToast(`Copied ${promptTitle} to clipboard!`);
+        }).catch(() => {
+          fallbackCopyText(rawText);
+        });
+      } else {
+        fallbackCopyText(rawText);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Prompt copied to clipboard!');
+      } catch (err) {
+        alert('Please manually copy the prompt text.');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function toggleSimOutput(simId) {
+      const box = document.getElementById(simId);
+      if (box) {
+        box.classList.toggle('active');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('copyToast');
+      const toastMsg = document.getElementById('copyToastMsg');
+      if (!toast) return;
+
+      if (toastMsg) toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3200);
+    }
+
+    function handleChecklistUpdate() {
+      const checkboxes = [
+        document.getElementById('chk1'),
+        document.getElementById('chk2'),
+        document.getElementById('chk3'),
+        document.getElementById('chk4'),
+        document.getElementById('chk5'),
+        document.getElementById('chk6')
+      ];
+
+      const checkedCount = checkboxes.filter(c => c && c.checked).length;
+      const pct = Math.round((checkedCount / checkboxes.length) * 100);
+
+      const bar = document.getElementById('checklistProgressBar');
+      const label = document.getElementById('checklistPercentage');
+
+      if (bar) bar.style.width = `${pct}%`;
+      if (label) label.textContent = `${pct}% COMPLETED`;
+
+      persistAppState();
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       STATE PERSISTENCE VIA NOTEBOOK APIS
+       ══════════════════════════════════════════════════════════════════════════ */
+    async function persistAppState() {
+      if (!window.notebookAppApi || typeof window.notebookAppApi.setAppState !== 'function') return;
+
+      const checklistStates = [
+        document.getElementById('chk1') ? document.getElementById('chk1').checked : false,
+        document.getElementById('chk2') ? document.getElementById('chk2').checked : false,
+        document.getElementById('chk3') ? document.getElementById('chk3').checked : false,
+        document.getElementById('chk4') ? document.getElementById('chk4').checked : false,
+        document.getElementById('chk5') ? document.getElementById('chk5').checked : false,
+        document.getElementById('chk6') ? document.getElementById('chk6').checked : false
+      ];
+
+      const statePayload = {
+        checklist: checklistStates,
+        customStaff: customStaffList,
+        lastUpdated: new Date().toISOString()
+      };
+
+      try {
+        await window.notebookAppApi.setAppState(statePayload);
+      } catch (err) {
+        console.warn('Persistence save error:', err);
+      }
+    }
+
+    async function restoreAppState() {
+      if (!window.notebookAppApi || typeof window.notebookAppApi.getAppState !== 'function') return;
+
+      try {
+        const saved = await window.notebookAppApi.getAppState();
+        if (saved && saved.checklist && Array.isArray(saved.checklist)) {
+          saved.checklist.forEach((isChecked, idx) => {
+            const chk = document.getElementById(`chk${idx + 1}`);
+            if (chk) chk.checked = !!isChecked;
+          });
+          handleChecklistUpdate();
+        }
+
+        if (saved && saved.customStaff && Array.isArray(saved.customStaff)) {
+          // If extra staff exist beyond default 3
+          if (saved.customStaff.length > 3) {
+            customStaffList = saved.customStaff;
+            const staffListEl = document.getElementById('sandboxStaffList');
+            if (staffListEl) {
+              staffListEl.innerHTML = '';
+              customStaffList.forEach(s => {
+                const li = document.createElement('li');
+                li.className = 'sandbox-list-item';
+                li.innerHTML = `
+                  <div>
+                    <strong>${s.name}</strong>
+                    <div style="font-size: 0.75rem; color: var(--on-surface-variant);">${s.role} · ${s.tier}</div>
+                  </div>
+                  <span class="badge badge-complete">${s.status}</span>
+                `;
+                staffListEl.appendChild(li);
+              });
+              const badgeCount = document.getElementById('rosterCountBadge');
+              if (badgeCount) badgeCount.textContent = `${customStaffList.length} Staff Enrolled`;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Persistence load error:', err);
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       INITIALIZATION & SCROLLAMA PINNING SETUP
+       ══════════════════════════════════════════════════════════════════════════ */
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Build Scrollytelling Narrative Steps
+      const scrollyStepsContainer = document.getElementById('scrollySteps');
+      if (scrollyStepsContainer) {
+        scrollyStepsContainer.innerHTML = '';
+        SCROLLY_BEATS.forEach((beat, idx) => {
+          const stepDiv = document.createElement('div');
+          stepDiv.className = 'scrolly-step';
+          stepDiv.dataset.step = idx;
+
+          let sopListHtml = '';
+          if (beat.sopItems && beat.sopItems.length) {
+            sopListHtml = `
+              <div style="margin-top: var(--space-sm); background: var(--surface-container-low); padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--tertiary);">
+                <strong style="font-size: 0.8125rem; text-transform: uppercase; color: var(--primary);">${beat.sopHeader}</strong>
+                <ul class="step-sop-list">
+                  ${beat.sopItems.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+              </div>
+            `;
+          }
+
+          stepDiv.innerHTML = `
+            <div class="scrolly-step-card">
+              <span class="step-kicker">
+                <span class="step-badge" style="width: 20px; height: 20px; font-size: 0.6875rem;">${idx + 1}</span>
+                <span>${beat.kicker}</span>
+              </span>
+              <h3 style="font-size: 1.35rem; margin-bottom: var(--space-xs);">${beat.title}</h3>
+              <p style="font-size: 0.9375rem; color: var(--on-surface-variant); margin-bottom: var(--space-xs);">${beat.body}</p>
+              ${sopListHtml}
+            </div>
+          `;
+          scrollyStepsContainer.appendChild(stepDiv);
+        });
+      }
+
+      // 2. Render Initial Graphic Frame (Always call renderGraphic(0) on load)
+      renderGraphic(0);
+
+      // 3. Render 20 Core Caseload Ledger Rows
+      renderLedgerTable(CLIENT_ROWS);
+
+      // 4. Setup Scrollama or fallback to IntersectionObserver
+      const stepNodes = document.querySelectorAll('.scrolly-step');
+      function activateStep(idx) {
+        stepNodes.forEach((node, i) => {
+          if (i === idx) node.classList.add('is-active');
+          else node.classList.remove('is-active');
+        });
+        renderGraphic(idx);
+      }
+
+      if (window.scrollama) {
+        try {
+          const scroller = scrollama();
+          scroller.setup({
+            step: '.scrolly-step',
+            offset: 0.55
+          }).onStepEnter(({ index }) => {
+            activateStep(index);
+          });
+          window.addEventListener('resize', scroller.resize);
+        } catch (e) {
+          console.warn('Scrollama init error, falling back to IntersectionObserver:', e);
+          initIntersectionFallback(stepNodes, activateStep);
+        }
+      } else {
+        initIntersectionFallback(stepNodes, activateStep);
+      }
+
+      // 5. Restore State from Notebook Shim API
+      await restoreAppState();
+
+      // 6. Initialize Lucide Icons
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+
+      // 7. Notify Host App Ready
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+
+    function initIntersectionFallback(stepNodes, activateStep) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const stepIdx = parseInt(entry.target.dataset.step, 10);
+            if (!isNaN(stepIdx)) activateStep(stepIdx);
+          }
+        });
+      }, {
+        rootMargin: '-40% 0px -40% 0px',
+        threshold: 0
+      });
+
+      stepNodes.forEach(node => io.observe(node));
+    }
+  </script>
+</body>
+</html>

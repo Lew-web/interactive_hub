@@ -1,0 +1,3366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="handbook">
+  <title>MARAM Compliance Tracker — Module 1: Setup Foundations &amp; Role Matrix Configuration</title>
+  
+  <!-- Font: Public Sans (Style: Handbook) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet">
+  
+  <!-- Pinned Lucide Icons -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* CSS Variables & Handbook Style Tokens */
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      /* Ink */
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      /* Rules */
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      /* Accents */
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+
+      /* Semantic Status Colors */
+      --positive: #00703c;
+      --on-positive: #ffffff;
+      --positive-bg: #d1fae5;
+      --positive-border: #6ee7b7;
+      --positive-text: #065f46;
+
+      --warning: #eeaa00;
+      --warning-bg: #fef3c7;
+      --warning-border: #fcd34d;
+      --warning-text: #78350f;
+
+      --error-bg: #fee2e2;
+      --error-border: #fca5a5;
+      --error-text: #991b1b;
+
+      --info-bg: #e0f2fe;
+      --info-border: #7dd3fc;
+      --info-text: #0369a1;
+
+      --purple-bg: #f3e8ff;
+      --purple-border: #d8b4fe;
+      --purple-text: #581c87;
+
+      /* Cell taxonomy colors */
+      --cell-entry-bg: #ffffff;
+      --cell-entry-border: #0b0c0c;
+      --cell-formula-bg: #e8e7e5;
+      --cell-formula-border: #858686;
+
+      /* Data series */
+      --data-1: #1a569e;
+      --data-2: #c75a0a;
+      --data-3: #28a197;
+      --data-4: #4c2c92;
+      --data-context: #b1b4b6;
+
+      /* Fonts */
+      --font-headline: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-label: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      /* Shape */
+      --rounded: 0px;
+      --rounded-lg: 0px;
+      --rounded-full: 0px;
+
+      /* Style effects */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Typography Scale */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      overflow-x: clip;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Accessibility Focus */
+    :focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Page Layout Container */
+    .portal-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 var(--space-md) var(--space-3xl);
+    }
+
+    /* Index Header (Handbook Treatment 1) */
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-sm) 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: var(--background);
+    }
+
+    .statute-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: var(--space-xs) var(--space-sm);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* Portal Hero Header */
+    .portal-hero {
+      padding: var(--space-xl) 0 var(--space-lg);
+      border-bottom: 2px solid var(--outline);
+    }
+
+    .portal-tagline {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--tertiary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .portal-title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin-bottom: var(--space-sm);
+    }
+
+    .portal-desc {
+      font-size: 1.0625rem;
+      color: var(--on-surface-variant);
+      max-width: 75ch;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Global Onboarding Readiness Bar */
+    .readiness-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .readiness-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .readiness-label {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .readiness-score {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 1.125rem;
+      color: var(--primary);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--tertiary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Quick Module Navigation Tabs */
+    .module-nav {
+      display: flex;
+      overflow-x: auto;
+      gap: var(--space-xs);
+      padding: var(--space-md) 0 var(--space-lg);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .nav-btn {
+      white-space: nowrap;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .nav-btn:hover {
+      background: var(--surface-container);
+      border-color: var(--outline);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Section Foundations */
+    .portal-section {
+      padding: var(--space-2xl) 0;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--tertiary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.9375rem;
+      font-family: var(--font-label);
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 800;
+      color: var(--on-surface);
+      line-height: 1.2;
+    }
+
+    .section-lead {
+      color: var(--on-surface-variant);
+      font-size: 1.0625rem;
+      max-width: 75ch;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Inset Callout (Handbook Treatment 2) */
+    .inset-callout {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0 var(--space-lg);
+    }
+
+    .inset-callout strong {
+      display: block;
+      color: var(--on-surface);
+      font-weight: 700;
+      margin-bottom: var(--space-xs);
+    }
+
+    .inset-callout p {
+      color: var(--on-surface-variant);
+      font-size: 0.9375rem;
+      line-height: 1.5;
+    }
+
+    /* Buttons (Handbook Treatment 3) */
+    .button {
+      font: 700 0.9375rem/1.2 var(--font-label);
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      text-decoration: none;
+      transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+
+    .button:hover {
+      background: #1e3f6f;
+    }
+
+    .button:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .button--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline);
+      box-shadow: var(--button-ground-secondary);
+    }
+
+    .button--secondary:hover {
+      background: var(--surface-container);
+    }
+
+    .button--danger {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+      box-shadow: 0 2px 0 #7a1d0f;
+    }
+
+    .button--danger:hover {
+      background: #b52914;
+    }
+
+    .button--warning {
+      background: var(--warning-bg);
+      color: var(--warning-text);
+      border: 1px solid var(--warning-border);
+      box-shadow: 0 2px 0 var(--warning-text);
+    }
+
+    .button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* ========================================================
+       SECTION 1: THE SAFETY NET & PANIC BUTTON SIMULATOR
+    ======================================================== */
+    .panic-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    .panic-sim-card {
+      border: 2px solid var(--outline);
+      background: var(--background);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .panic-sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-sm);
+    }
+
+    .mock-sheet-preview {
+      border: 1px solid var(--outline);
+      background: var(--background);
+      overflow-x: auto;
+    }
+
+    .mock-sheet-bar {
+      background: var(--surface-container-low);
+      border-bottom: 1px solid var(--outline-variant);
+      padding: var(--space-xs) var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+    }
+
+    .formula-bar-label {
+      font-weight: 700;
+      color: var(--on-surface-variant);
+    }
+
+    .formula-bar-code {
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      padding: 2px var(--space-xs);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--data-1);
+    }
+
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: left;
+    }
+
+    .sheet-table th {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-xs) var(--space-sm);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .sheet-table td {
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-xs) var(--space-sm);
+      font-size: 0.875rem;
+    }
+
+    .sheet-cell-formula {
+      background-color: var(--cell-formula-bg);
+      font-weight: 600;
+      color: var(--primary);
+      position: relative;
+    }
+
+    .sheet-cell-formula.corrupted {
+      background-color: var(--error-bg);
+      color: var(--error-text);
+      font-weight: 700;
+      border: 2px dashed var(--error);
+      animation: alertPulse 1.2s infinite;
+    }
+
+    @keyframes alertPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .panic-timer-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+    }
+
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--error);
+    }
+
+    .safety-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .panic-instructions-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .version-guide-tabnav {
+      display: flex;
+      gap: 2px;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .guide-tab-btn {
+      background: var(--surface-container);
+      border: 0;
+      padding: var(--space-xs) var(--space-md);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+
+    .guide-tab-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .guide-tab-content {
+      padding-top: var(--space-sm);
+      font-size: 0.9375rem;
+    }
+
+    .guide-step-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+
+    .guide-step-list li {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: flex-start;
+    }
+
+    .guide-step-num {
+      background: var(--primary);
+      color: var(--on-primary);
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    /* ========================================================
+       SECTION 2: CELL COLOUR SYSTEM KEY
+    ======================================================== */
+    .color-key-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .color-swatch-card {
+      border: 1px solid var(--outline);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      background: var(--background);
+      cursor: pointer;
+      transition: border-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+
+    .color-swatch-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .color-swatch-card.active-swatch {
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    .swatch-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+
+    .swatch-sample {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--outline);
+      display: inline-block;
+    }
+
+    .swatch-title {
+      font-weight: 800;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+
+    .swatch-rule {
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 6px;
+    }
+
+    .swatch-desc {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+
+    .cell-inspector-panel {
+      border: 2px solid var(--outline);
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .interactive-sheet-mock {
+      background: var(--background);
+      border: 1px solid var(--outline);
+      overflow-x: auto;
+    }
+
+    .sheet-row-interactive {
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .sheet-row-interactive:hover td {
+      filter: brightness(0.96);
+    }
+
+    .cell-clickable {
+      cursor: pointer;
+      transition: outline var(--dur-micro) var(--ease-out);
+    }
+
+    .cell-clickable:hover {
+      outline: 2px dashed var(--tertiary);
+      outline-offset: -2px;
+    }
+
+    .cell-clickable.selected-cell {
+      outline: 2px solid var(--primary) !important;
+      outline-offset: -2px;
+    }
+
+    .inspector-output-box {
+      background: var(--background);
+      border: 1px solid var(--outline);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .inspector-meta-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+    }
+
+    .inspector-cell-name {
+      font-family: var(--font-headline);
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: var(--on-surface);
+    }
+
+    /* ========================================================
+       SECTION 3: MARAM TIER GUIDE & RESPONSIBILITY MATRIX
+    ======================================================== */
+    .tier-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .tier-card {
+      border: 1px solid var(--outline);
+      background: var(--background);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      border-top: 4px solid var(--outline);
+    }
+
+    .tier-card--t1 { border-top-color: var(--data-1); }
+    .tier-card--t2 { border-top-color: var(--data-2); }
+    .tier-card--t3 { border-top-color: var(--data-3); }
+    .tier-card--t4 { border-top-color: var(--data-4); }
+
+    .tier-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 2px var(--space-xs);
+      background: var(--surface-container-low);
+      align-self: flex-start;
+    }
+
+    .tier-card-title {
+      font-family: var(--font-headline);
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: var(--on-surface);
+    }
+
+    .tier-meta {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+    }
+
+    .tier-card-body {
+      font-size: 0.875rem;
+      color: var(--on-surface);
+      line-height: 1.45;
+    }
+
+    .tier-staff-list {
+      margin-top: var(--space-xs);
+      padding-left: var(--space-md);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+
+    .matrix-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .filter-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .filter-btn {
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-xs) var(--space-sm);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    .resp-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--outline);
+      font-size: 0.875rem;
+      margin-bottom: var(--space-xl);
+    }
+
+    .resp-table th {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-sm);
+      text-align: left;
+      font-weight: 800;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .resp-table td {
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-sm);
+      vertical-align: top;
+    }
+
+    .resp-tag {
+      display: inline-block;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .resp-tag.active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: var(--tertiary);
+    }
+
+    /* Role Tier Assessor Interactive Tool */
+    .assessor-box {
+      border: 2px solid var(--outline);
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .assessor-form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+    }
+
+    .assessor-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .field-label {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--on-surface);
+    }
+
+    .field-select, .field-input {
+      padding: var(--space-sm);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      border: 2px solid var(--outline);
+      background: var(--background);
+      color: var(--on-surface);
+      border-radius: 0;
+    }
+
+    .assessor-result-card {
+      background: var(--background);
+      border: 2px solid var(--primary);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    /* ========================================================
+       SECTION 4: STEP-BY-STEP SETUP WORKFLOW & LIVE SIMULATOR
+    ======================================================== */
+    .workflow-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .workflow-step-card {
+      border: 1px solid var(--outline);
+      background: var(--background);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      position: relative;
+    }
+
+    .step-number-tag {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.8125rem;
+      color: var(--tertiary);
+    }
+
+    .workflow-step-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+
+    .workflow-step-body {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+
+    /* Live Interactive Setup Sandbox */
+    .sandbox-container {
+      border: 2px solid var(--outline);
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .sandbox-tabs {
+      display: flex;
+      gap: 2px;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .sandbox-tab-btn {
+      background: var(--surface-container);
+      border: 0;
+      padding: var(--space-xs) var(--space-md);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+
+    .sandbox-tab-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .sandbox-pane {
+      background: var(--background);
+      border: 1px solid var(--outline);
+      padding: var(--space-md);
+    }
+
+    .sandbox-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .mini-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+
+    .mini-data-table th {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-xs) var(--space-sm);
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .mini-data-table td {
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-xs) var(--space-sm);
+    }
+
+    .cell-input-text {
+      width: 100%;
+      border: 1px solid var(--outline-variant);
+      padding: 4px;
+      font-family: inherit;
+      font-size: 0.8125rem;
+    }
+
+    .cell-input-select {
+      width: 100%;
+      border: 1px solid var(--outline-variant);
+      padding: 4px;
+      font-family: inherit;
+      font-size: 0.8125rem;
+      background: var(--background);
+    }
+
+    .locked-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* ========================================================
+       SECTION 5: CUSTOMER AI PROMPT CARDS
+    ======================================================== */
+    .prompt-customizer-box {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-md);
+      margin-bottom: var(--space-lg);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-md);
+      align-items: end;
+    }
+
+    .prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .prompt-card {
+      border: 2px solid var(--outline);
+      background: var(--background);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .prompt-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-xs);
+    }
+
+    .prompt-card-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+
+    .prompt-card-usecase {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--tertiary);
+    }
+
+    .prompt-text-box {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-left: 4px solid var(--tertiary);
+      padding: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: var(--on-surface);
+      white-space: pre-wrap;
+      word-break: break-word;
+      user-select: all;
+    }
+
+    .prompt-var {
+      background: var(--warning-bg);
+      color: var(--warning-text);
+      padding: 1px 4px;
+      font-weight: 700;
+      border: 1px solid var(--warning-border);
+    }
+
+    /* ========================================================
+       SECTION 6: STATUTORY DISCLAIMER & SIGN-OFF
+    ======================================================== */
+    .disclaimer-card {
+      border: 2px solid var(--outline);
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    .disclaimer-title {
+      font-weight: 800;
+      font-size: 0.9375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-xs);
+    }
+
+    .disclaimer-text {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.5;
+    }
+
+    .checklist-box {
+      border: 2px solid var(--primary);
+      background: var(--background);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .checklist-items {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .check-item-label {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      cursor: pointer;
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+
+    .check-item-input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    /* Toast Notification for Copy */
+    .toast-notice {
+      position: fixed;
+      bottom: var(--space-lg);
+      right: var(--space-lg);
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-sm) var(--space-lg);
+      font-weight: 700;
+      font-size: 0.875rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+      z-index: 9999;
+    }
+
+    .toast-notice.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .panic-grid,
+      .cell-inspector-panel,
+      .assessor-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .portal-title {
+        font-size: 1.5rem;
+      }
+      .module-nav {
+        flex-wrap: nowrap;
+        padding-bottom: var(--space-sm);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-container">
+
+    <!-- Top Index Header (Handbook Style) -->
+    <header class="index-header" aria-label="Portal Navigation Header">
+      <div style="display: flex; align-items: center; gap: var(--space-sm);">
+        <span class="step-badge" style="width: 24px; height: 24px; font-size: 0.75rem;">M1</span>
+        <span>LEW CREATIONS &bull; MARAM COMPLIANCE ONBOARDING PORTAL</span>
+      </div>
+      <div class="statute-badge">
+        <i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i>
+        <span>FAMILY VIOLENCE PROTECTION ACT 2008 (VIC)</span>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="portal-hero">
+      <div class="portal-tagline">Module 1 Operational Setup Guide</div>
+      <h1 class="portal-title">Setup Foundations &amp; MARAM Role Matrix Configuration</h1>
+      <p class="portal-desc">
+        Welcome to your guided onboarding walkthrough for the <strong>LEW CREATIONS MARAM Staff Responsibility &amp; Embedding Compliance Tracker</strong>. 
+        Before entering staff records, master the spreadsheet safety net, internalize the cell colour rules, define your organisation’s MARAM Responsibility Tiers, and configure the automated dropdown engine.
+      </p>
+
+      <!-- Global Onboarding Readiness Bar -->
+      <div class="readiness-card" aria-live="polite">
+        <div class="readiness-header">
+          <div class="readiness-label">
+            <i data-lucide="check-circle-2" style="width: 18px; height: 18px; color: var(--tertiary);"></i>
+            <span>Module 1 Onboarding Readiness:</span>
+            <span id="readiness-tasks-count" style="color: var(--on-surface-variant); font-weight: 400;">0 of 5 checkpoints completed</span>
+          </div>
+          <div class="readiness-score" id="readiness-percent">0% COMPLETED</div>
+        </div>
+        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="readiness-bar">
+          <div class="progress-fill" id="readiness-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Navigation Bar -->
+    <nav class="module-nav" aria-label="Module Jump Navigation">
+      <button type="button" class="nav-btn active" onclick="scrollToSection('sec-panic')">
+        <i data-lucide="life-buoy" style="width: 14px; height: 14px;"></i>
+        <span>1. Safety Net &amp; Panic Drill</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="scrollToSection('sec-colors')">
+        <i data-lucide="palette" style="width: 14px; height: 14px;"></i>
+        <span>2. Cell Colour System</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="scrollToSection('sec-tiers')">
+        <i data-lucide="layers" style="width: 14px; height: 14px;"></i>
+        <span>3. MARAM Tiers 1–4</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="scrollToSection('sec-workflow')">
+        <i data-lucide="table" style="width: 14px; height: 14px;"></i>
+        <span>4. Setup Workflow &amp; Simulator</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="scrollToSection('sec-prompts')">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+        <span>5. Alignment AI Prompts</span>
+      </button>
+      <button type="button" class="nav-btn" onclick="scrollToSection('sec-checklist')">
+        <i data-lucide="clipboard-check" style="width: 14px; height: 14px;"></i>
+        <span>6. Sign-off Checklist</span>
+      </button>
+    </nav>
+
+    <!-- ========================================================
+         SECTION 1: THE SAFETY NET & 10-SECOND PANIC BUTTON
+    ======================================================== -->
+    <section id="sec-panic" class="portal-section">
+      <div class="section-eyebrow">
+        <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+        <span>Foundational Rule 01</span>
+      </div>
+      <div class="section-header">
+        <div class="step-badge">1</div>
+        <div>
+          <h2 class="section-title">The Safety Net &amp; 10-Second Panic Protocol</h2>
+          <div class="section-lead">
+            Spreadsheet anxiety is normal when dealing with statutory compliance algorithms. 
+            The golden rule of modern cloud spreadsheets: <strong>You cannot permanently break this tracker</strong> unless you deliberately destroy version history.
+          </div>
+        </div>
+      </div>
+
+      <div class="panic-grid">
+        <!-- Interactive Simulator Left -->
+        <div class="panic-sim-card">
+          <div class="panic-sim-header">
+            <div>
+              <span style="font-weight: 800; font-size: 0.875rem;">INTERACTIVE SIMULATOR</span>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">Practice recovering a damaged compliance formula</p>
+            </div>
+            <span class="statute-badge" id="sim-status-badge">PRISTINE FORMULA</span>
+          </div>
+
+          <!-- Mock spreadsheet formula bar & row -->
+          <div class="mock-sheet-preview">
+            <div class="mock-sheet-bar">
+              <span class="formula-bar-label">fx [Cell J4]:</span>
+              <span class="formula-bar-code" id="mock-formula-text">=IF(H4&lt;TODAY(),"EXPIRED",IF(H4&lt;TODAY()+60,"⚠️ DUE SOON","✅ COMPLIANT"))</span>
+            </div>
+            <table class="sheet-table">
+              <thead>
+                <tr>
+                  <th>Row</th>
+                  <th>Staff Member</th>
+                  <th>Assigned Role</th>
+                  <th>WWCC Expiry Date</th>
+                  <th>Overall HR Status (Formula)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family: var(--font-mono); color: var(--on-surface-variant);">4</td>
+                  <td>Sarah Jenkins</td>
+                  <td>Intensive Case Manager</td>
+                  <td>14/12/2026</td>
+                  <td class="sheet-cell-formula" id="mock-sim-cell">
+                    <span id="mock-cell-value">✅ COMPLIANT</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Scenario prompt & feedback -->
+          <div id="sim-feedback-message" style="font-size: 0.875rem; color: var(--on-surface);">
+            <em>Scenario:</em> A team member accidentally pastes raw text directly into the grey formula cell J4, wiping out the automated expiration logic!
+          </div>
+
+          <!-- Panic timer display -->
+          <div class="panic-timer-panel" id="panic-timer-box" style="display: none;">
+            <div>
+              <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--error);">Formula Overwritten!</div>
+              <div style="font-size: 0.8125rem; color: var(--on-surface-variant);">Execute the 10-Second Panic Protocol below:</div>
+            </div>
+            <div class="timer-display" id="panic-countdown">10.0s</div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="safety-actions">
+            <button type="button" class="button button--danger" id="btn-trigger-overwrite" onclick="triggerAccidentalOverwrite()">
+              <i data-lucide="alert-triangle" style="width: 16px; height: 16px;"></i>
+              <span>Simulate Accidental Overwrite</span>
+            </button>
+            <button type="button" class="button" id="btn-panic-recovery" onclick="executePanicRecovery()" disabled>
+              <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
+              <span>Panic Button: Undo (Ctrl + Z)</span>
+            </button>
+            <button type="button" class="button button--secondary" onclick="resetPanicSim()">
+              <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+              <span>Reset Drill</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Instructions & Reference Right -->
+        <div class="panic-instructions-card">
+          <div>
+            <h3 style="font-size: 1.0625rem; font-weight: 800; margin-bottom: var(--space-xs);">The Two Recovery Lines of Defence</h3>
+            <p style="font-size: 0.875rem; color: var(--on-surface-variant);">Keep these two recovery commands memorised for all administrative staff:</p>
+          </div>
+
+          <!-- Tabs: Google Sheets vs Excel 365 -->
+          <div class="version-guide-tabnav">
+            <button type="button" class="guide-tab-btn active" id="tab-btn-gsheets" onclick="switchGuideTab('gsheets')">Google Sheets</button>
+            <button type="button" class="guide-tab-btn" id="tab-btn-excel" onclick="switchGuideTab('excel')">Excel 365 / Desktop</button>
+          </div>
+
+          <div id="guide-gsheets" class="guide-tab-content">
+            <ol class="guide-step-list">
+              <li>
+                <span class="guide-step-num">1</span>
+                <div>
+                  <strong>Defence 1: Immediate Undo (The 10-Second Reflex)</strong><br>
+                  Press <kbd style="background: var(--surface-container); border: 1px solid var(--outline); padding: 1px 4px; font-family: var(--font-mono);">Ctrl + Z</kbd> (or <kbd style="background: var(--surface-container); border: 1px solid var(--outline); padding: 1px 4px; font-family: var(--font-mono);">Cmd + Z</kbd> on Mac) immediately. This rolls back the cell alteration instantly.
+                </div>
+              </li>
+              <li>
+                <span class="guide-step-num">2</span>
+                <div>
+                  <strong>Defence 2: Version History Restore (The Deep Safety Net)</strong><br>
+                  Navigate to <strong>File &gt; Version history &gt; See version history</strong> (shortcut: <kbd style="background: var(--surface-container); border: 1px solid var(--outline); padding: 1px 4px; font-family: var(--font-mono);">Ctrl + Alt + Shift + H</kbd>).
+                </div>
+              </li>
+              <li>
+                <span class="guide-step-num">3</span>
+                <div>
+                  <strong>Defence 3: Snapshot Naming</strong><br>
+                  Select the timestamp prior to the mistake and click <strong>"Restore this version"</strong>. Best practice: Name your version before quarterly audits (e.g. <em>"Pre-Audit Q3 Baseline"</em>).
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div id="guide-excel" class="guide-tab-content" style="display: none;">
+            <ol class="guide-step-list">
+              <li>
+                <span class="guide-step-num">1</span>
+                <div>
+                  <strong>Defence 1: Instant Undo</strong><br>
+                  Press <kbd style="background: var(--surface-container); border: 1px solid var(--outline); padding: 1px 4px; font-family: var(--font-mono);">Ctrl + Z</kbd> immediately upon noticing the formula erasure.
+                </div>
+              </li>
+              <li>
+                <span class="guide-step-num">2</span>
+                <div>
+                  <strong>Defence 2: AutoSave &amp; Version History</strong><br>
+                  Click the document title bar at the top or go to <strong>File &gt; Info &gt; Version History</strong>.
+                </div>
+              </li>
+              <li>
+                <span class="guide-step-num">3</span>
+                <div>
+                  <strong>Defence 3: One-Click Revision Restore</strong><br>
+                  A right-hand pane lists saved cloud revisions with user avatars. Select an earlier version and click <strong>Restore</strong> to recover pristine formulas.
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="inset-callout" style="margin-top: auto; margin-bottom: 0;">
+            <strong>Pro Tip for Audit Lead Officers:</strong>
+            <p>Lock your sheet protection via <em>Data &gt; Protect sheets and ranges</em> for grey formula ranges, leaving only white columns editable by general team coordinators.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 2: CELL COLOUR SYSTEM KEY & INSPECTOR
+    ======================================================== */ -->
+    <section id="sec-colors" class="portal-section">
+      <div class="section-eyebrow">
+        <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+        <span>Foundational Rule 02</span>
+      </div>
+      <div class="section-header">
+        <div class="step-badge">2</div>
+        <div>
+          <h2 class="section-title">Visual Cell Colour System Key</h2>
+          <div class="section-lead">
+            The tracker utilizes a disciplined, high-contrast visual taxonomy. Every team member entering staff details must understand the clear operational division between <strong>Manual Entry</strong> and <strong>Formula Engines</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Color Swatches Grid -->
+      <div class="color-key-grid">
+        <!-- White Cell -->
+        <div class="color-swatch-card" id="card-swatch-white" onclick="selectSwatch('white')">
+          <div class="swatch-header">
+            <span class="swatch-sample" style="background: var(--cell-entry-bg);"></span>
+            <span class="swatch-rule" style="background: var(--surface-container); color: var(--on-surface);">SAFE TO TYPE</span>
+          </div>
+          <div class="swatch-title">[ WHITE CELLS ]</div>
+          <div class="swatch-desc">
+            <strong>Unlocked Data Entry Fields.</strong> Staff names, completion dates, accreditation numbers, and reflective practice qualitative notes.
+          </div>
+        </div>
+
+        <!-- Grey Cell -->
+        <div class="color-swatch-card" id="card-swatch-grey" onclick="selectSwatch('grey')">
+          <div class="swatch-header">
+            <span class="swatch-sample" style="background: var(--cell-formula-bg);"></span>
+            <span class="swatch-rule" style="background: var(--primary); color: var(--on-primary);">LOCKED FORMULA</span>
+          </div>
+          <div class="swatch-title">[ GREY CELLS ]</div>
+          <div class="swatch-desc">
+            <strong>Protected Calculation Engines.</strong> Automated formulas that look up MARAM Tiers, calculate compliance percentages, and trigger statutory alerts. Never type here.
+          </div>
+        </div>
+
+        <!-- Soft Gold Alert -->
+        <div class="color-swatch-card" id="card-swatch-gold" onclick="selectSwatch('gold')">
+          <div class="swatch-header">
+            <span class="swatch-sample" style="background: var(--warning-bg); border-color: var(--warning-border);"></span>
+            <span class="swatch-rule" style="background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);">WARNING</span>
+          </div>
+          <div class="swatch-title">⚠️ DUE SOON (Soft Gold)</div>
+          <div class="swatch-desc">
+            <strong>Screening / Training Expiry Alert.</strong> Automatically triggered when a WWCC, Police Check, NDIS Check, or MARAM accreditation is within <strong>60 days</strong> of expiration.
+          </div>
+        </div>
+
+        <!-- Soft Red Alert -->
+        <div class="color-swatch-card" id="card-swatch-red" onclick="selectSwatch('red')">
+          <div class="swatch-header">
+            <span class="swatch-sample" style="background: var(--error-bg); border-color: var(--error-border);"></span>
+            <span class="swatch-rule" style="background: var(--error-bg); color: var(--error-text); border: 1px solid var(--error-border);">CRITICAL</span>
+          </div>
+          <div class="swatch-title">🟥 EXPIRED (Soft Red)</div>
+          <div class="swatch-desc">
+            <strong>Non-Compliant / Expired Check.</strong> The check date has passed or mandatory MARAM victim-survivor training has not been undertaken. Immediate triage required.
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Cell Inspector Sandbox -->
+      <div class="cell-inspector-panel">
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+            <strong style="font-size: 0.9375rem;">Interactive Cell Inspector</strong>
+            <span style="font-size: 0.75rem; color: var(--on-surface-variant);">Click any cell in the mini-sheet below to inspect</span>
+          </div>
+
+          <div class="interactive-sheet-mock">
+            <table class="sheet-table">
+              <thead>
+                <tr>
+                  <th>Employee Name</th>
+                  <th>Assigned Role</th>
+                  <th>Required MARAM Tier</th>
+                  <th>WWCC Expiry</th>
+                  <th>Compliance Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="sheet-row-interactive">
+                  <td class="cell-clickable selected-cell" id="mockcell-name" onclick="inspectCell('name')">
+                    <strong>Marcus Chen</strong>
+                  </td>
+                  <td class="cell-clickable" id="mockcell-role" onclick="inspectCell('role')">
+                    Intensive Case Mgr
+                  </td>
+                  <td class="cell-clickable" id="mockcell-tier" onclick="inspectCell('tier')" style="background: var(--cell-formula-bg); color: var(--primary); font-weight: 700;">
+                    <i data-lucide="lock" style="width: 12px; height: 12px; display: inline;"></i> Tier 2 (Interm.)
+                  </td>
+                  <td class="cell-clickable" id="mockcell-expiry" onclick="inspectCell('expiry')" style="background: var(--warning-bg); color: var(--warning-text); font-weight: 700;">
+                    ⚠️ 22/11/2026 (Due)
+                  </td>
+                  <td class="cell-clickable" id="mockcell-status" onclick="inspectCell('status')" style="background: var(--warning-bg); color: var(--warning-text); font-weight: 700;">
+                    ⚠️ ACTION REQ
+                  </td>
+                </tr>
+                <tr class="sheet-row-interactive">
+                  <td class="cell-clickable" id="mockcell-name2" onclick="inspectCell('name2')">
+                    Elena Rossi
+                  </td>
+                  <td class="cell-clickable" id="mockcell-role2" onclick="inspectCell('role2')">
+                    Receptionist / Admin
+                  </td>
+                  <td class="cell-clickable" id="mockcell-tier2" onclick="inspectCell('tier2')" style="background: var(--cell-formula-bg); color: var(--primary); font-weight: 700;">
+                    <i data-lucide="lock" style="width: 12px; height: 12px; display: inline;"></i> Tier 1 (Ident.)
+                  </td>
+                  <td class="cell-clickable" id="mockcell-expiry2" onclick="inspectCell('expiry2')" style="background: var(--error-bg); color: var(--error-text); font-weight: 700;">
+                    🟥 01/10/2026 (Exp)
+                  </td>
+                  <td class="cell-clickable" id="mockcell-status2" onclick="inspectCell('status2')" style="background: var(--error-bg); color: var(--error-text); font-weight: 700;">
+                    🟥 NON-COMPLIANT
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top: var(--space-xs); font-size: 0.8125rem; color: var(--on-surface-variant);">
+            <i data-lucide="info" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i>
+            Notice how grey cells always host a formula lock, preventing formula disruption during onboarding.
+          </div>
+        </div>
+
+        <!-- Inspector Output Card -->
+        <div class="inspector-output-box" id="inspector-output">
+          <div class="inspector-meta-tag" id="inspect-tag">DATA ENTRY FIELD &bull; WHITE CELL</div>
+          <div class="inspector-cell-name" id="inspect-title">Employee Name (Column A)</div>
+          
+          <div style="font-size: 0.875rem;">
+            <strong>Safe for manual typing?</strong>
+            <span id="inspect-safe" style="color: var(--positive); font-weight: 700;">YES &mdash; Safe to type staff details here.</span>
+          </div>
+
+          <div style="font-size: 0.875rem;">
+            <strong>Underlying Logic:</strong>
+            <p id="inspect-logic" style="color: var(--on-surface-variant); margin-top: 4px;">
+              Raw string input for HR tracking. Do not paste formatted text with external colors to avoid overriding the native conditional formatting rules.
+            </p>
+          </div>
+
+          <div class="inset-callout" style="margin: 0; padding: var(--space-sm) var(--space-md);">
+            <strong style="font-size: 0.8125rem;">Compliance Rule:</strong>
+            <p id="inspect-action" style="font-size: 0.8125rem;">
+              Ensure legal spelling matches identity documents for Working with Children Check (WWCC) and NDIS Worker Screening verification.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 3: MARAM TIER GUIDE & RESPONSIBILITY MATRIX
+    ======================================================== -->
+    <section id="sec-tiers" class="portal-section">
+      <div class="section-eyebrow">
+        <i data-lucide="book-open" style="width: 16px; height: 16px;"></i>
+        <span>Foundational Rule 03</span>
+      </div>
+      <div class="section-header">
+        <div class="step-badge">3</div>
+        <div>
+          <h2 class="section-title">MARAM Tier 1–4 Definition Guide &amp; Responsibility Matrix</h2>
+          <div class="section-lead">
+            The Victorian <strong>Family Violence Protection Act 2008</strong> requires prescribed organisations to align their workforce with the Multi-Agency Risk Assessment and Management (MARAM) Framework across statutory responsibilities 1 through 10.
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Tier Cards -->
+      <div class="tier-cards-grid">
+        <!-- Tier 1 -->
+        <div class="tier-card tier-card--t1">
+          <div class="tier-badge" style="color: var(--data-1);">TIER 1 &bull; FOUNDATION</div>
+          <h3 class="tier-card-title">Identification Tier</h3>
+          <div class="tier-meta">Statutory Responsibilities: 1–2, 5–6, 9–10</div>
+          <div class="tier-card-body">
+            <strong>Focus:</strong> Recognizing observable signs of family violence, active listening, sensitive inquiry, trauma-informed boundary management, and safe, warm referral pathways.
+          </div>
+          <div style="font-size: 0.8125rem; font-weight: 700; margin-top: var(--space-xs);">Target Staff Roles:</div>
+          <ul class="tier-staff-list">
+            <li>Receptionists &amp; Front Desk Staff</li>
+            <li>Administrative Coordinators</li>
+            <li>Community Facilities &amp; Transport Drivers</li>
+            <li>General Intake &amp; Call Handlers</li>
+          </ul>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="tier-card tier-card--t2">
+          <div class="tier-badge" style="color: var(--data-2);">TIER 2 &bull; INTERMEDIATE</div>
+          <h3 class="tier-card-title">Intermediate Tier</h3>
+          <div class="tier-meta">Statutory Responsibilities: 1–4, 5–8, 9–10</div>
+          <div class="tier-card-body">
+            <strong>Focus:</strong> Structured intermediate risk assessment, perpetrator pattern recognition, dynamic safety planning, and collaborative multi-agency case management under FVISS/CISS.
+          </div>
+          <div style="font-size: 0.8125rem; font-weight: 700; margin-top: var(--space-xs);">Target Staff Roles:</div>
+          <ul class="tier-staff-list">
+            <li>Intensive &amp; Generalist Case Managers</li>
+            <li>Housing &amp; Tenancy Officers</li>
+            <li>Youth &amp; Family Support Workers</li>
+            <li>Community Health Nurses &amp; AOD Clinicians</li>
+          </ul>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="tier-card tier-card--t3">
+          <div class="tier-badge" style="color: var(--data-3);">TIER 3 &bull; SPECIALIST</div>
+          <h3 class="tier-card-title">Comprehensive Tier</h3>
+          <div class="tier-meta">Statutory Responsibilities: 1 through 10 (Full Depth)</div>
+          <div class="tier-card-body">
+            <strong>Focus:</strong> Advanced risk assessment, complex forensic indicators, assessing coercive control, high-risk safety plans, children's assessments, and leading multi-agency risk panels (RAMP).
+          </div>
+          <div style="font-size: 0.8125rem; font-weight: 700; margin-top: var(--space-xs);">Target Staff Roles:</div>
+          <ul class="tier-staff-list">
+            <li>Specialist Family Violence Advocates</li>
+            <li>Crisis Refuge Practitioners</li>
+            <li>Men's Behaviour Change Facilitators</li>
+            <li>High-Risk Triage Specialists</li>
+          </ul>
+        </div>
+
+        <!-- Tier 4 -->
+        <div class="tier-card tier-card--t4">
+          <div class="tier-badge" style="color: var(--data-4);">TIER 4 &bull; GOVERNANCE</div>
+          <h3 class="tier-card-title">Leadership &amp; Supervision</h3>
+          <div class="tier-meta">Oversight, Reflective Practice &amp; Audit</div>
+          <div class="tier-card-body">
+            <strong>Focus:</strong> System-level policy alignment, qualitative reflective supervision, continuous clinical auditing, statutory reporting, and multi-agency executive governance.
+          </div>
+          <div style="font-size: 0.8125rem; font-weight: 700; margin-top: var(--space-xs);">Target Staff Roles:</div>
+          <ul class="tier-staff-list">
+            <li>Practice Leads &amp; Clinical Supervisors</li>
+            <li>Program Managers &amp; Operations Leads</li>
+            <li>Executive Directors &amp; Board Compliance Chairs</li>
+            <li>Quality, Risk &amp; Accreditation Managers</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Interactive 10 Statutory Responsibilities Matrix -->
+      <div style="margin-bottom: var(--space-sm);">
+        <h3 style="font-size: 1.125rem; font-weight: 800; margin-bottom: var(--space-xs);">The 10 MARAM Statutory Responsibilities</h3>
+        <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+          Filter by MARAM Tier to explore which legal obligations apply to your team members in the tracker's <em>'3. Legal Responsibility Checklist'</em>:
+        </p>
+      </div>
+
+      <div class="matrix-controls-bar">
+        <span style="font-weight: 700; font-size: 0.8125rem; text-transform: uppercase;">Filter Responsibilities by Tier:</span>
+        <div class="filter-btn-group">
+          <button type="button" class="filter-btn active" id="btn-filter-all" onclick="filterRespMatrix('all')">Show All 10 Responsibilities</button>
+          <button type="button" class="filter-btn" id="btn-filter-t1" onclick="filterRespMatrix('t1')">Tier 1: Identification (6)</button>
+          <button type="button" class="filter-btn" id="btn-filter-t2" onclick="filterRespMatrix('t2')">Tier 2: Intermediate (8)</button>
+          <button type="button" class="filter-btn" id="btn-filter-t3" onclick="filterRespMatrix('t3')">Tier 3: Comprehensive (10)</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="resp-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Responsibility</th>
+              <th style="width: 220px;">Statutory Focus</th>
+              <th>Operational Requirements &amp; Audit Evidence</th>
+              <th style="width: 170px;">Mandated Tiers</th>
+            </tr>
+          </thead>
+          <tbody id="resp-table-body">
+            <!-- Dynamically populated via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Interactive Role-to-Tier Assessor Tool -->
+      <div class="assessor-box">
+        <div>
+          <h3 style="font-size: 1.0625rem; font-weight: 800; margin-bottom: var(--space-xs);">Interactive Role-to-Tier Mapping Assessor</h3>
+          <p style="font-size: 0.875rem; color: var(--on-surface-variant);">
+            Unsure which Tier to assign in <code>1. Role Matrix Setup</code>? Select an organizational role or task profile below to see the statutory alignment recommendation:
+          </p>
+        </div>
+
+        <div class="assessor-form-grid">
+          <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+            <div class="assessor-field">
+              <label for="assessor-role-select" class="field-label">Select Standard Organisational Role:</label>
+              <select id="assessor-role-select" class="field-select" onchange="runRoleAssessment()">
+                <option value="reception">Receptionist / Front Desk Administration</option>
+                <option value="intake">Community Intake &amp; Triage Officer</option>
+                <option value="caseworker" selected>Intensive Family Case Manager</option>
+                <option value="housing">Tenancy &amp; Crisis Housing Officer</option>
+                <option value="specialist">Specialist Family Violence Advocate</option>
+                <option value="crisis">Crisis Response / Refuge Specialist</option>
+                <option value="supervisor">Practice Lead / Reflective Clinical Supervisor</option>
+                <option value="exec">Executive Director / Board Governance</option>
+              </select>
+            </div>
+
+            <div class="assessor-field">
+              <label class="field-label">Primary Daily Clinical/Operational Responsibilities:</label>
+              <div id="assessor-task-summary" style="font-size: 0.875rem; color: var(--on-surface-variant); background: var(--background); border: 1px solid var(--outline-variant); padding: var(--space-sm);">
+                Direct client work, conducting intermediate risk assessments, safety planning, and making multi-agency referrals.
+              </div>
+            </div>
+          </div>
+
+          <div class="assessor-result-card">
+            <span class="inspector-meta-tag">STATUTORY ALIGNMENT RECOMMENDATION</span>
+            <div id="assessor-tier-result" style="font-family: var(--font-headline); font-size: 1.25rem; font-weight: 800; color: var(--primary);">
+              Assign: Tier 2 (Intermediate)
+            </div>
+            
+            <div style="font-size: 0.875rem;">
+              <strong>Mandatory Screening Checks Required:</strong>
+              <div id="assessor-checks-result" style="margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px;">
+                <span class="resp-tag active">WWCC: YES</span>
+                <span class="resp-tag active">National Police Check: YES</span>
+                <span class="resp-tag active">NDIS Worker Screening: Conditional</span>
+              </div>
+            </div>
+
+            <div style="font-size: 0.875rem;">
+              <strong>Accreditation Course Requirement:</strong>
+              <p id="assessor-training-result" style="color: var(--on-surface-variant); margin-top: 2px;">
+                Victorian Government MARAM Intermediate Training (Modules 1–4) + Information Sharing Schemes (FVISS/CISS).
+              </p>
+            </div>
+
+            <button type="button" class="button" style="margin-top: auto;" onclick="applyAssessorToWorkflow()">
+              <i data-lucide="plus-circle" style="width: 14px; height: 14px;"></i>
+              <span>Test This Role in Setup Sandbox</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 4: STEP-BY-STEP WORKFLOW & LIVE SIMULATOR
+    ======================================================== -->
+    <section id="sec-workflow" class="portal-section">
+      <div class="section-eyebrow">
+        <i data-lucide="git-merge" style="width: 16px; height: 16px;"></i>
+        <span>Foundational Rule 04</span>
+      </div>
+      <div class="section-header">
+        <div class="step-badge">4</div>
+        <div>
+          <h2 class="section-title">Step-by-Step Setup Workflow &amp; Dropdown Engine</h2>
+          <div class="section-lead">
+            The core engine of the LEW CREATIONS tracker relies on a master relational link: your definitions in <code>1. Role Matrix Setup</code> dynamically feed the dropdown menus in <code>MASTER_STAFF_RT</code>. Follow the 4-phase sequence:
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Workflow Steps -->
+      <div class="workflow-steps-grid">
+        <div class="workflow-step-card">
+          <div class="step-number-tag">PHASE 01</div>
+          <h3 class="workflow-step-title">1. Define Roles in Matrix</h3>
+          <p class="workflow-step-body">
+            Open the <code>1. Role Matrix Setup</code> tab. Add every distinct job title across your organisation in Column A. Set their assigned MARAM Tier and required checks.
+          </p>
+        </div>
+
+        <div class="workflow-step-card">
+          <div class="step-number-tag">PHASE 02</div>
+          <h3 class="workflow-step-title">2. Set Validation Dropdown</h3>
+          <p class="workflow-step-body">
+            In <code>MASTER_STAFF_RT</code>, Column C references the Role Matrix via Data Validation: <code>='1. Role Matrix Setup'!$A$2:$A$50</code>. This prevents spelling discrepancies.
+          </p>
+        </div>
+
+        <div class="workflow-step-card">
+          <div class="step-number-tag">PHASE 03</div>
+          <h3 class="workflow-step-title">3. Input Staff &amp; Dates</h3>
+          <p class="workflow-step-body">
+            Only type into <strong>White Cells</strong>. Select the role from the dropdown. The grey formula columns instantly pull the mandatory MARAM Tier and screening rules.
+          </p>
+        </div>
+
+        <div class="workflow-step-card">
+          <div class="step-number-tag">PHASE 04</div>
+          <h3 class="workflow-step-title">4. Verify Executive Dashboard</h3>
+          <p class="workflow-step-body">
+            Check <code>4. Executive Compliance Dashboard</code>. Confirm the compliance percentage matches your HR records before submitting audit statements.
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Interactive Setup Sandbox -->
+      <div class="sandbox-container">
+        <div>
+          <strong style="font-size: 1rem;">Live Tracker Setup Sandbox</strong>
+          <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+            Simulate how editing <code>1. Role Matrix Setup</code> on Tab 1 immediately updates the data validation dropdown in <code>MASTER_STAFF_RT</code> on Tab 2!
+          </p>
+        </div>
+
+        <div class="sandbox-tabs">
+          <button type="button" class="sandbox-tab-btn active" id="btn-sand-tab1" onclick="switchSandboxTab(1)">
+            Tab 1: '1. Role Matrix Setup' (Master Engine)
+          </button>
+          <button type="button" class="sandbox-tab-btn" id="btn-sand-tab2" onclick="switchSandboxTab(2)">
+            Tab 2: 'MASTER_STAFF_RT' (Staff Compliance Roster)
+          </button>
+        </div>
+
+        <!-- Sandbox Tab 1: Role Matrix -->
+        <div id="sandbox-pane-matrix" class="sandbox-pane">
+          <div class="sandbox-toolbar">
+            <span style="font-size: 0.8125rem; font-weight: 700;">Configured Organisational Roles:</span>
+            <button type="button" class="button" style="padding: 4px var(--space-sm); font-size: 0.75rem;" onclick="addSandboxRole()">
+              <i data-lucide="plus" style="width: 12px; height: 12px;"></i>
+              <span>Add Custom Role</span>
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="mini-data-table">
+              <thead>
+                <tr>
+                  <th style="width: 35%;">Organizational Role Title (Col A)</th>
+                  <th style="width: 25%;">Assigned MARAM Tier</th>
+                  <th style="width: 20%;">WWCC Required?</th>
+                  <th style="width: 20%;">National Police Check?</th>
+                </tr>
+              </thead>
+              <tbody id="sandbox-matrix-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size: 0.75rem; color: var(--on-surface-variant); margin-top: var(--space-xs);">
+            Editing or adding roles here automatically recalculates available dropdowns in all staff compliance sheets.
+          </p>
+        </div>
+
+        <!-- Sandbox Tab 2: MASTER_STAFF_RT -->
+        <div id="sandbox-pane-staff" class="sandbox-pane" style="display: none;">
+          <div class="sandbox-toolbar">
+            <span style="font-size: 0.8125rem; font-weight: 700;">Simulated Staff Compliance Roster (MASTER_STAFF_RT):</span>
+            <button type="button" class="button" style="padding: 4px var(--space-sm); font-size: 0.75rem;" onclick="addSandboxStaff()">
+              <i data-lucide="user-plus" style="width: 12px; height: 12px;"></i>
+              <span>Add Staff Row</span>
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="mini-data-table">
+              <thead>
+                <tr>
+                  <th>Staff Name [White]</th>
+                  <th>Organizational Role [Dropdown]</th>
+                  <th>Assigned Tier [Grey Formula]</th>
+                  <th>WWCC Status [Alert Formula]</th>
+                  <th>MARAM Training [Alert Formula]</th>
+                  <th>Overall HR Compliance</th>
+                </tr>
+              </thead>
+              <tbody id="sandbox-staff-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--on-surface-variant); margin-top: var(--space-xs); display: flex; justify-content: space-between; align-items: center;">
+            <span><i data-lucide="lock" style="width: 12px; height: 12px; display: inline;"></i> Grey columns are calculated automatically via <code>VLOOKUP</code> / <code>INDEX-MATCH</code>.</span>
+            <span id="sandbox-compliance-summary" style="font-weight: 700; color: var(--primary);">Roster Compliance: 67%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 5: CUSTOMER AI PROMPTS & COPYABLE CARDS
+    ======================================================== -->
+    <section id="sec-prompts" class="portal-section">
+      <div class="section-eyebrow">
+        <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+        <span>Foundational Rule 05</span>
+      </div>
+      <div class="section-header">
+        <div class="step-badge">5</div>
+        <div>
+          <h2 class="section-title">Customer AI Prompts &amp; Organisational Alignment Copier</h2>
+          <div class="section-lead">
+            Accelerate your statutory reporting, supervision preparation, and audit defensibility using the pre-tested AI prompts. Customize your organizational variables below and click <strong>Copy Prompt</strong> to paste directly into your AI assistant.
+          </div>
+        </div>
+      </div>
+
+      <!-- Variable Customizer Bar -->
+      <div class="prompt-customizer-box">
+        <div>
+          <label for="prompt-var-org" class="field-label" style="font-size: 0.8125rem;">Organisation Name:</label>
+          <input type="text" id="prompt-var-org" class="field-input" value="Melbourne Community Services" oninput="updatePromptTexts()" style="width: 100%; padding: 6px;">
+        </div>
+        <div>
+          <label for="prompt-var-worker" class="field-label" style="font-size: 0.8125rem;">Caseworker / Staff Member Name:</label>
+          <input type="text" id="prompt-var-worker" class="field-input" value="Jordan Vance" oninput="updatePromptTexts()" style="width: 100%; padding: 6px;">
+        </div>
+        <div>
+          <label for="prompt-var-tier" class="field-label" style="font-size: 0.8125rem;">Target MARAM Tiers:</label>
+          <select id="prompt-var-tier" class="field-select" onchange="updatePromptTexts()" style="width: 100%; padding: 6px;">
+            <option value="Tier 1 &amp; Tier 2">Tier 1 &amp; Tier 2</option>
+            <option value="Tier 2 &amp; Tier 3">Tier 2 &amp; Tier 3</option>
+            <option value="All Tiers (1–4)">All Tiers (1–4)</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="button button--secondary" onclick="resetPromptVars()" style="width: 100%; padding: 8px;">
+            <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+            <span>Reset Variables</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Prompt Cards Grid -->
+      <div class="prompts-grid">
+        <!-- Prompt 1: Audit Preparation (from Source) -->
+        <div class="prompt-card">
+          <div>
+            <div class="prompt-card-header">
+              <div>
+                <span class="prompt-card-usecase">Source Prompt 01 &bull; Audit Readiness</span>
+                <h3 class="prompt-card-title">Executive Audit-Readiness Statement</h3>
+              </div>
+              <i data-lucide="file-check-2" style="width: 20px; height: 20px; color: var(--tertiary);"></i>
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin: var(--space-xs) 0 var(--space-sm);">
+              Use with your quarterly export or spreadsheet summary for funding body audits and accreditation visits:
+            </p>
+            <div class="prompt-text-box" id="prompt-text-1">"Review my MARAM compliance tracker tab for <span class='prompt-var'>Melbourne Community Services</span>. Draft a formal audit-readiness statement summarising our percentage of <span class='prompt-var'>Tier 1 &amp; Tier 2</span> staff who hold active MARAM accreditation, highlighting screening compliance rates under the Victorian Family Violence Protection Act 2008 and our risk mitigation plan for any upcoming expiries."</div>
+          </div>
+          <button type="button" class="button" onclick="copyPromptCard('prompt-text-1', this)">
+            <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+            <span>Copy Audit Prompt</span>
+          </button>
+        </div>
+
+        <!-- Prompt 2: Supervision Agenda (from Source) -->
+        <div class="prompt-card">
+          <div>
+            <div class="prompt-card-header">
+              <div>
+                <span class="prompt-card-usecase">Source Prompt 02 &bull; Reflective Supervision</span>
+                <h3 class="prompt-card-title">15-Minute Reflective Supervision Agenda</h3>
+              </div>
+              <i data-lucide="message-square-heart" style="width: 20px; height: 20px; color: var(--tertiary);"></i>
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin: var(--space-xs) 0 var(--space-sm);">
+              Aligns qualitative practice notes with quantitative compliance alerts for team leaders:
+            </p>
+            <div class="prompt-text-box" id="prompt-text-2">"Draft a 15-minute reflective supervision agenda focused on MARAM practice alignment for caseworker <span class='prompt-var'>Jordan Vance</span> at <span class='prompt-var'>Melbourne Community Services</span> whose screening is up for renewal. Include: 1) statutory check renewal status; 2) application of MARAM risk assessment tools with current cases; 3) information sharing challenges under FVISS/CISS; and 4) self-care and vicarious trauma mitigation."</div>
+          </div>
+          <button type="button" class="button" onclick="copyPromptCard('prompt-text-2', this)">
+            <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+            <span>Copy Supervision Prompt</span>
+          </button>
+        </div>
+
+        <!-- Prompt 3: Role Matrix Alignment Justification -->
+        <div class="prompt-card">
+          <div>
+            <div class="prompt-card-header">
+              <div>
+                <span class="prompt-card-usecase">Governance Alignment</span>
+                <h3 class="prompt-card-title">Role-to-Tier Statutory Alignment Justification</h3>
+              </div>
+              <i data-lucide="briefcase" style="width: 20px; height: 20px; color: var(--tertiary);"></i>
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin: var(--space-xs) 0 var(--space-sm);">
+              Drafts an executive briefing defending role tier assignments for board &amp; executive review:
+            </p>
+            <div class="prompt-text-box" id="prompt-text-3">"Act as a Victorian family violence compliance specialist. Generate an internal briefing memo for the Executive Leadership Team of <span class='prompt-var'>Melbourne Community Services</span> justifying our assignment of workforce roles to MARAM <span class='prompt-var'>Tier 1 &amp; Tier 2</span>. Reference the statutory requirements of the Family Violence Protection Act 2008, mandatory checks (WWCC, Police, NDIS), and demonstrate how our role matrix satisfies regulatory guidelines."</div>
+          </div>
+          <button type="button" class="button" onclick="copyPromptCard('prompt-text-3', this)">
+            <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+            <span>Copy Governance Prompt</span>
+          </button>
+        </div>
+
+        <!-- Prompt 4: Screening Expiry Risk Escalation Protocol -->
+        <div class="prompt-card">
+          <div>
+            <div class="prompt-card-header">
+              <div>
+                <span class="prompt-card-usecase">Risk Escalation &amp; Triage</span>
+                <h3 class="prompt-card-title">Screening Expiry Risk Escalation Memo</h3>
+              </div>
+              <i data-lucide="alert-octagon" style="width: 20px; height: 20px; color: var(--tertiary);"></i>
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin: var(--space-xs) 0 var(--space-sm);">
+              Standardizes immediate operational protocol when a worker hits the 60-day soft gold or red alert:
+            </p>
+            <div class="prompt-text-box" id="prompt-text-4">"Draft an urgent operational escalation protocol for <span class='prompt-var'>Melbourne Community Services</span> when a staff member (such as <span class='prompt-var'>Jordan Vance</span>) hits a soft gold (⚠️ DUE SOON) or soft red (🟥 EXPIRED) status in our MARAM tracker. Specify: 1) 60-day HR notification sequence; 2) interim practice restrictions if screening lapses; and 3) risk assessment documentation required by executive leadership."</div>
+          </div>
+          <button type="button" class="button" onclick="copyPromptCard('prompt-text-4', this)">
+            <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+            <span>Copy Escalation Prompt</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 6: DISCLAIMER, SIGN-OFF CHECKLIST & EXPORT
+    ======================================================== -->
+    <section id="sec-checklist" class="portal-section" style="border-bottom: 0;">
+      <div class="section-eyebrow">
+        <i data-lucide="clipboard-check" style="width: 16px; height: 16px;"></i>
+        <span>Foundational Rule 06</span>
+      </div>
+      <div class="section-header">
+        <div class="step-badge">6</div>
+        <div>
+          <h2 class="section-title">Legal &amp; Organisational Disclaimer + Onboarding Sign-off</h2>
+          <div class="section-lead">
+            Review the formal statutory parameters governing this tool and complete the Module 1 verification checklist to record organizational onboarding progress.
+          </div>
+        </div>
+      </div>
+
+      <!-- Legal & Organisational Disclaimer Box -->
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">
+          <i data-lucide="scale" style="width: 18px; height: 18px; color: var(--tertiary);"></i>
+          <span>LEGAL &amp; ORGANISATIONAL DISCLAIMER &bull; LEW CREATIONS</span>
+        </div>
+        <p class="disclaimer-text">
+          This tracker is developed and distributed by <strong>LEW CREATIONS</strong> strictly as an administrative and operational template to assist organisations with workforce tracking. The contents of this spreadsheet and onboarding portal do not constitute formal legal, compliance, or regulatory advice. This template is provided for the purchasing organisation to adapt, edit, and utilize at its own professional discretion to suit its specific operational workflows.
+        </p>
+        <p class="disclaimer-text" style="margin-top: var(--space-xs);">
+          The purchasing organisation assumes <strong>full statutory responsibility</strong> for ensuring its workforce policies, MARAM alignment practices, screening verifications, and audit evidence meet all legislative requirements under the <em>Family Violence Protection Act 2008</em>. LEW CREATIONS accepts no liability for regulatory audits, funding reviews, or decisions made using this tool.
+        </p>
+      </div>
+
+      <!-- Interactive Checklist -->
+      <div class="checklist-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm);">
+          <div>
+            <h3 style="font-size: 1.125rem; font-weight: 800;">Module 1 Foundations Sign-Off Checklist</h3>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">Check off each completed operational requirement to save your onboarding state:</p>
+          </div>
+          <span class="statute-badge" id="checklist-status-badge">0 / 5 SIGNED OFF</span>
+        </div>
+
+        <div class="checklist-items">
+          <label class="check-item-label">
+            <input type="checkbox" id="chk-1" class="check-item-input" onchange="toggleCheckpoint(0)">
+            <span><strong>1. Safety Net Certified:</strong> Practice managers and team leads have completed the 10-Second Panic Drill and understand <code>Ctrl+Z</code> and <code>File &gt; Version History &gt; Restore</code>.</span>
+          </label>
+
+          <label class="check-item-label">
+            <input type="checkbox" id="chk-2" class="check-item-input" onchange="toggleCheckpoint(1)">
+            <span><strong>2. Cell Colour Taxonomy Mastered:</strong> Clear separation established between White Data Entry cells and Grey Locked Formula cells across all departments.</span>
+          </label>
+
+          <label class="check-item-label">
+            <input type="checkbox" id="chk-3" class="check-item-input" onchange="toggleCheckpoint(2)">
+            <span><strong>3. MARAM Tiers Mapped:</strong> Identified which organisational positions correspond to Tier 1 (Identification), Tier 2 (Intermediate), Tier 3 (Comprehensive), and Tier 4 (Leadership).</span>
+          </label>
+
+          <label class="check-item-label">
+            <input type="checkbox" id="chk-4" class="check-item-input" onchange="toggleCheckpoint(3)">
+            <span><strong>4. Role Matrix Configured:</strong> Defined custom roles in <code>1. Role Matrix Setup</code> and verified dropdown propagation into <code>MASTER_STAFF_RT</code>.</span>
+          </label>
+
+          <label class="check-item-label">
+            <input type="checkbox" id="chk-5" class="check-item-input" onchange="toggleCheckpoint(4)">
+            <span><strong>5. Audit AI Prompts Stored:</strong> Exported or copied executive prompts for audit preparation, 15-minute supervision agendas, and risk escalation.</span>
+          </label>
+        </div>
+
+        <div style="margin-top: var(--space-lg); display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; justify-content: space-between;">
+          <div style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+            <i data-lucide="save" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i>
+            Status is automatically persisted to your application session.
+          </div>
+          <div style="display: flex; gap: var(--space-sm);">
+            <button type="button" class="button button--secondary" onclick="resetAllCheckpoints()">
+              <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+              <span>Reset Checklist</span>
+            </button>
+            <button type="button" class="button" onclick="exportSetupSummary()">
+              <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+              <span>Export Setup Certificate / Record</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /portal-container -->
+
+  <!-- Toast Element -->
+  <div class="toast-notice" id="portal-toast">
+    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
+
+  <!-- Gemini Notebook Shim API Hook Tag (Required by specification) -->
+  <api-shim></api-shim>
+
+  <!-- Portal Application Script -->
+  <script>
+    // Global Application State Schema
+    let portalState = {
+      checkpoints: [false, false, false, false, false],
+      panicCertified: false,
+      selectedInspectorCell: 'name',
+      selectedTierFilter: 'all',
+      selectedRoleKey: 'caseworker',
+      promptVars: {
+        org: `Melbourne Community Services`,
+        worker: `Jordan Vance`,
+        tier: `Tier 1 & Tier 2`
+      },
+      sandboxRoles: [
+        { title: `Receptionist / Administration`, tier: `Tier 1 (Identification)`, wwcc: true, police: true },
+        { title: `Intensive Case Manager`, tier: `Tier 2 (Intermediate)`, wwcc: true, police: true },
+        { title: `Specialist Family Violence Worker`, tier: `Tier 3 (Comprehensive)`, wwcc: true, police: true },
+        { title: `Practice Lead / Clinical Supervisor`, tier: `Tier 4 (Leadership)`, wwcc: true, police: true }
+      ],
+      sandboxStaff: [
+        { name: `Sarah Jenkins`, role: `Intensive Case Manager`, tier: `Tier 2 (Intermediate)`, wwcc: `✅ Valid`, training: `✅ Active`, status: `✅ Compliant` },
+        { name: `Marcus Chen`, role: `Receptionist / Administration`, tier: `Tier 1 (Identification)`, wwcc: `⚠️ Due in 30d`, training: `✅ Active`, status: `⚠️ Due Soon` },
+        { name: `Elena Rossi`, role: `Specialist Family Violence Worker`, tier: `Tier 3 (Comprehensive)`, wwcc: `✅ Valid`, training: `🟥 Expired`, status: `🟥 Action Req` }
+      ]
+    };
+
+    // 10 Statutory MARAM Responsibilities Dataset
+    const MARAM_RESPONSIBILITIES = [
+      {
+        num: 1,
+        title: `Resp 1: Respectful, sensitive & safe engagement`,
+        focus: `Active listening, validating, cultural safety & trauma-informed engagement.`,
+        evidence: `Practice policy on sensitive inquiry; cultural safety training records; documentation guidelines.`,
+        tiers: [`t1`, `t2`, `t3`]
+      },
+      {
+        num: 2,
+        title: `Resp 2: Identification of family violence risk`,
+        focus: `Recognizing observable risk indicators, sensitive inquiry, and narrative assessment.`,
+        evidence: `Completion of screening questions; triage documentation; risk observation records.`,
+        tiers: [`t1`, `t2`, `t3`]
+      },
+      {
+        num: 3,
+        title: `Resp 3: Intermediate risk assessment`,
+        focus: `Assessing structured evidence-based risk factors, children's risk & perpetrator behaviour patterns.`,
+        evidence: `Completed MARAM Intermediate Risk Assessment tools; supervisor risk review notes.`,
+        tiers: [`t2`, `t3`]
+      },
+      {
+        num: 4,
+        title: `Resp 4: Intermediate risk management`,
+        focus: `Collaborative risk management action plans, safety planning, and warm multi-agency referrals.`,
+        evidence: `Dynamic safety plans; referral tracking logs; cross-agency case coordination notes.`,
+        tiers: [`t2`, `t3`]
+      },
+      {
+        num: 5,
+        title: `Resp 5: Information sharing (FVISS & CISS)`,
+        focus: `Legally requesting and sharing confidential risk information under Part 5A FVPA 2008 and CISS.`,
+        evidence: `FVISS / CISS request and response audit logs; ISE verification records.`,
+        tiers: [`t1`, `t2`, `t3`]
+      },
+      {
+        num: 6,
+        title: `Resp 6: Safety planning & risk mitigation`,
+        focus: `Tailored safety planning tailored to immediate risk circumstances and child needs.`,
+        evidence: `Dated safety plans; client emergency code words; secure storage in client files.`,
+        tiers: [`t1`, `t2`, `t3`]
+      },
+      {
+        num: 7,
+        title: `Resp 7: Comprehensive risk assessment`,
+        focus: `Deep forensic assessment of complex, lethal, and escalating risk indicators and coercive control.`,
+        evidence: `Completed MARAM Comprehensive Tool; child trauma assessments; perpetrator lethality scales.`,
+        tiers: [`t3`]
+      },
+      {
+        num: 8,
+        title: `Resp 8: Comprehensive risk management & safety planning`,
+        focus: `Advanced multi-agency risk mitigation, refuge coordination, and specialized crisis responses.`,
+        evidence: `RAMP referral forms; comprehensive multi-agency safety agreements; court advocacy records.`,
+        tiers: [`t3`]
+      },
+      {
+        num: 9,
+        title: `Resp 9: Risk mitigation through perpetrator management`,
+        focus: `Holding perpetrators in view without colluding, multi-agency information sharing on risk status.`,
+        evidence: `Men's Behaviour Change attendance tracking; police notification logs; non-collusion practice records.`,
+        tiers: [`t1`, `t2`, `t3`]
+      },
+      {
+        num: 10,
+        title: `Resp 10: Multi-agency collaboration & coordination`,
+        focus: `Active participation in coordinated multi-agency risk management and systemic case review.`,
+        evidence: `Multi-agency case conference minutes; shared safety plan sign-offs; Orange Door collaborative logs.`,
+        tiers: [`t1`, `t2`, `t3`]
+      }
+    ];
+
+    // Role Assessor Data Dictionary
+    const ROLE_PROFILES = {
+      reception: {
+        title: `Receptionist / Front Desk Administration`,
+        tasks: `Welcoming clients, taking inbound calls, recognizing disclosures of distress, and safe referral hand-offs.`,
+        tier: `Tier 1 (Identification)`,
+        wwcc: true,
+        police: true,
+        ndis: false,
+        training: `MARAM Identification Training (Victim-Survivor Focus) + FVISS/CISS Overview (1 day).`
+      },
+      intake: {
+        title: `Community Intake & Triage Officer`,
+        tasks: `Initial client screening, telephone triage, identifying immediate safety concerns, warm referrals.`,
+        tier: `Tier 1 (Identification)`,
+        wwcc: true,
+        police: true,
+        ndis: false,
+        training: `MARAM Identification & Triage Training + FVISS/CISS Practitioner Module.`
+      },
+      caseworker: {
+        title: `Intensive Family Case Manager`,
+        tasks: `Ongoing holistic case management, administering intermediate risk assessment tools, developing dynamic safety plans, and participating in multi-agency case conferences.`,
+        tier: `Tier 2 (Intermediate)`,
+        wwcc: true,
+        police: true,
+        ndis: true,
+        training: `MARAM Intermediate Training (Modules 1–4) + Information Sharing Schemes (FVISS/CISS) Specialist Course.`
+      },
+      housing: {
+        title: `Tenancy & Crisis Housing Officer`,
+        tasks: `Assisting families with transitional housing, identifying perpetrator tracking/harassment at properties, safety audits, and emergency relocations.`,
+        tier: `Tier 2 (Intermediate)`,
+        wwcc: true,
+        police: true,
+        ndis: false,
+        training: `MARAM Intermediate Risk Assessment & Management Training.`
+      },
+      specialist: {
+        title: `Specialist Family Violence Advocate`,
+        tasks: `Dedicated crisis support, comprehensive risk assessments, forensic risk analysis, children's assessments, attending RAMP, and high-risk court advocacy.`,
+        tier: `Tier 3 (Comprehensive)`,
+        wwcc: true,
+        police: true,
+        ndis: true,
+        training: `MARAM Comprehensive Assessment and Management Training + Advanced Specialist Practice Accreditation.`
+      },
+      crisis: {
+        title: `Crisis Response / Refuge Specialist`,
+        tasks: `Refuge accommodation intake, 24/7 crisis triage, comprehensive assessment, immediate security planning, child safety evaluations.`,
+        tier: `Tier 3 (Comprehensive)`,
+        wwcc: true,
+        police: true,
+        ndis: true,
+        training: `MARAM Comprehensive Specialist Certification + Crisis Intervention Protocols.`
+      },
+      supervisor: {
+        title: `Practice Lead / Reflective Clinical Supervisor`,
+        tasks: `Reviewing staff risk assessments, providing reflective practice supervision, ensuring statutory compliance with MARAM guidelines, and leading clinical reviews.`,
+        tier: `Tier 4 (Leadership & Supervision)`,
+        wwcc: true,
+        police: true,
+        ndis: true,
+        training: `MARAM Leading Alignment & Clinical Supervision Training + Organisational Governance Modules.`
+      },
+      exec: {
+        title: `Executive Director / Board Governance`,
+        tasks: `Workforce policy oversight, funding compliance, MARAM organisational alignment sign-off, statutory risk accountability under FVPA 2008.`,
+        tier: `Tier 4 (Leadership & Governance)`,
+        wwcc: false,
+        police: true,
+        ndis: false,
+        training: `MARAM Executive & Organisational Governance Briefing.`
+      }
+    };
+
+    // Inspector Mock Cells Data Dictionary
+    const INSPECTOR_CELLS = {
+      name: {
+        tag: `DATA ENTRY FIELD &bull; WHITE CELL`,
+        title: `Employee Name (Col A)`,
+        safe: `YES &mdash; Safe to enter staff details here.`,
+        safeColor: `var(--positive)`,
+        logic: `Raw text input. Safe for copy-pasting or direct typing. Enter full legal name to ensure consistency with WWCC/Police registry matching.`,
+        action: `Always verify spelling against government screening registries (WWCC & NDIS Commission).`
+      },
+      role: {
+        tag: `DATA ENTRY FIELD &bull; DROPDOWN (WHITE CELL)`,
+        title: `Organizational Role Title (Col C)`,
+        safe: `YES &mdash; Select from predefined dropdown list.`,
+        safeColor: `var(--positive)`,
+        logic: `Validated dropdown list pulling from '1. Role Matrix Setup'!$A$2:$A$50. Selecting a role here triggers all automated VLOOKUP formulas for MARAM Tiers and Screening rules.`,
+        action: `Never type custom text that is not in the dropdown. Add new job titles into '1. Role Matrix Setup' first!`
+      },
+      tier: {
+        tag: `LOCKED FORMULA ENGINE &bull; GREY CELL`,
+        title: `Required MARAM Tier (Col D)`,
+        safe: `NO &mdash; LOCKED FORMULA! DO NOT TYPE.`,
+        safeColor: `var(--error)`,
+        logic: `Formula: =VLOOKUP(C4, '1. Role Matrix Setup'!$A$2:$D$50, 2, FALSE). Automatically retrieves the legislated Tier (1 to 4) mapped to the staff member's role.`,
+        action: `Typing here overwrites the formula and will break executive compliance reporting.`
+      },
+      expiry: {
+        tag: `SCREENING DATE ALERT &bull; CONDITIONAL FORMATTING`,
+        title: `WWCC / Screening Expiry Date (Col H)`,
+        safe: `YES &mdash; Enter DD/MM/YYYY dates only.`,
+        safeColor: `var(--positive)`,
+        logic: `Date field checked by conditional formatting. Turns Soft Gold if within 60 days of TODAY(); turns Soft Red if past expiry date.`,
+        action: `Soft Gold indicates team lead must notify staff member to begin renewal paperwork immediately.`
+      },
+      status: {
+        tag: `EXECUTIVE SUMMARY FORMULA &bull; GREY CELL`,
+        title: `Overall HR Compliance Status (Col J)`,
+        safe: `NO &mdash; LOCKED FORMULA! DO NOT TYPE.`,
+        safeColor: `var(--error)`,
+        logic: `Formula: =IF(AND(H4>TODAY()+60, F4="Completed"), "COMPLIANT", IF(H4<TODAY(), "EXPIRED", "ACTION REQ")). Rolls up screening, training, and checks into an aggregate audit score.`,
+        action: `Feeds into the '4. Executive Compliance Dashboard' for board and statutory reporting.`
+      },
+      name2: {
+        tag: `DATA ENTRY FIELD &bull; WHITE CELL`,
+        title: `Employee Name (Col A)`,
+        safe: `YES &mdash; Safe to type staff details here.`,
+        safeColor: `var(--positive)`,
+        logic: `Raw text entry for Administrative worker. White background confirms cell is open for manual input.`,
+        action: `Ensure spelling is consistent across payroll and operational rosters.`
+      },
+      role2: {
+        tag: `DATA ENTRY FIELD &bull; DROPDOWN (WHITE CELL)`,
+        title: `Organizational Role Title (Col C)`,
+        safe: `YES &mdash; Select from predefined dropdown list.`,
+        safeColor: `var(--positive)`,
+        logic: `Data validation links directly to '1. Role Matrix Setup' tab.`,
+        action: `Select the role corresponding to the worker's position description.`
+      },
+      tier2: {
+        tag: `LOCKED FORMULA ENGINE &bull; GREY CELL`,
+        title: `Required MARAM Tier (Col D)`,
+        safe: `NO &mdash; LOCKED FORMULA! DO NOT TYPE.`,
+        safeColor: `var(--error)`,
+        logic: `Auto-populated: Tier 1 (Identification). Staff in this role must complete Responsibilities 1–2, 5–6, 9–10.`,
+        action: `Never overwrite. If role changes, change Column C instead.`
+      },
+      expiry2: {
+        tag: `CRITICAL ALERT &bull; EXPIRED SCREENING CHECK`,
+        title: `WWCC Expiry Date (Col H)`,
+        safe: `YES &mdash; Update date once renewal verified.`,
+        safeColor: `var(--positive)`,
+        logic: `Triggered soft red highlight because entered date is prior to today. Worker has an expired Working with Children Check.`,
+        action: `CRITICAL: Staff member cannot engage in direct client service until current clearance is verified.`
+      },
+      status2: {
+        tag: `EXECUTIVE SUMMARY FORMULA &bull; GREY CELL`,
+        title: `Overall HR Compliance Status (Col J)`,
+        safe: `NO &mdash; LOCKED FORMULA! DO NOT TYPE.`,
+        safeColor: `var(--error)`,
+        logic: `Formula: Evaluated to NON-COMPLIANT due to expired clearance in Column H.`,
+        action: `Requires immediate administrative escalation and inclusion on the weekly HR triage log.`
+      }
+    };
+
+    // Panic Simulator Timer State
+    let panicTimerInterval = null;
+    let panicTimeRemaining = 10.0;
+
+    // ========================================================
+    // INITIALIZATION & STATE PERSISTENCE
+    // ========================================================
+    window.addEventListener('DOMContentLoaded', async function() {
+      // Initialize Lucide icons
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      // Render Initial Views
+      renderResponsibilitiesTable('all');
+      runRoleAssessment();
+      renderSandboxMatrix();
+      renderSandboxStaff();
+      updatePromptTexts();
+
+      // Attempt to load persisted state from shim
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const savedState = await window.notebookAppApi.getAppState();
+          if (savedState && typeof savedState === 'object') {
+            restoreAppState(savedState);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load previous state:', err);
+      }
+
+      updateReadinessUI();
+
+      // Notify App Ready
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+
+    // Helper: Save state safely to Shim API
+    async function saveState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(portalState);
+        }
+      } catch (e) {
+        console.warn('Unable to persist app state:', e);
+      }
+    }
+
+    function restoreAppState(saved) {
+      if (Array.isArray(saved.checkpoints)) {
+        portalState.checkpoints = saved.checkpoints;
+        for (let i = 0; i < 5; i++) {
+          const chk = document.getElementById(`chk-${i+1}`);
+          if (chk) chk.checked = !!portalState.checkpoints[i];
+        }
+      }
+      if (saved.promptVars) {
+        portalState.promptVars = saved.promptVars;
+        const orgInput = document.getElementById('prompt-var-org');
+        const workerInput = document.getElementById('prompt-var-worker');
+        const tierInput = document.getElementById('prompt-var-tier');
+        if (orgInput && saved.promptVars.org) orgInput.value = saved.promptVars.org;
+        if (workerInput && saved.promptVars.worker) workerInput.value = saved.promptVars.worker;
+        if (tierInput && saved.promptVars.tier) tierInput.value = saved.promptVars.tier;
+        updatePromptTexts();
+      }
+      if (Array.isArray(saved.sandboxRoles) && saved.sandboxRoles.length > 0) {
+        portalState.sandboxRoles = saved.sandboxRoles;
+        renderSandboxMatrix();
+        renderSandboxStaff();
+      }
+      updateReadinessUI();
+    }
+
+    // ========================================================
+    // READINESS PROGRESS BAR
+    // ========================================================
+    function updateReadinessUI() {
+      let count = 0;
+      for (let i = 0; i < portalState.checkpoints.length; i++) {
+        if (portalState.checkpoints[i]) count++;
+      }
+      const pct = Math.round((count / portalState.checkpoints.length) * 100);
+
+      const countEl = document.getElementById('readiness-tasks-count');
+      const scoreEl = document.getElementById('readiness-percent');
+      const fillEl = document.getElementById('readiness-fill');
+      const barTrack = document.getElementById('readiness-bar');
+      const badgeEl = document.getElementById('checklist-status-badge');
+
+      if (countEl) countEl.textContent = `${count} of 5 checkpoints completed`;
+      if (scoreEl) scoreEl.textContent = `${pct}% COMPLETED`;
+      if (fillEl) fillEl.style.width = `${pct}%`;
+      if (barTrack) barTrack.setAttribute('aria-valuenow', pct.toString());
+      if (badgeEl) badgeEl.textContent = `${count} / 5 SIGNED OFF`;
+    }
+
+    function toggleCheckpoint(index) {
+      const chk = document.getElementById(`chk-${index+1}`);
+      if (!chk) return;
+      portalState.checkpoints[index] = chk.checked;
+      updateReadinessUI();
+      saveState();
+
+      if (chk.checked) {
+        showToast(`Checkpoint ${index+1} marked as complete!`);
+      }
+    }
+
+    function resetAllCheckpoints() {
+      for (let i = 0; i < 5; i++) {
+        portalState.checkpoints[i] = false;
+        const chk = document.getElementById(`chk-${i+1}`);
+        if (chk) chk.checked = false;
+      }
+      updateReadinessUI();
+      saveState();
+      showToast(`Sign-off checklist has been reset.`);
+    }
+
+    // ========================================================
+    // SECTION 1: PANIC BUTTON SIMULATOR
+    // ========================================================
+    function triggerAccidentalOverwrite() {
+      const cell = document.getElementById('mock-sim-cell');
+      const formulaText = document.getElementById('mock-formula-text');
+      const cellVal = document.getElementById('mock-cell-value');
+      const msg = document.getElementById('sim-feedback-message');
+      const statusBadge = document.getElementById('sim-status-badge');
+      const timerBox = document.getElementById('panic-timer-box');
+      const panicBtn = document.getElementById('btn-panic-recovery');
+      const triggerBtn = document.getElementById('btn-trigger-overwrite');
+
+      if (!cell || !cellVal || !formulaText || !msg || !timerBox || !panicBtn) return;
+
+      // Corrupt formula cell
+      cell.classList.add('corrupted');
+      cellVal.textContent = `All Good Mate (Text Typo)`;
+      formulaText.textContent = `All Good Mate`;
+      formulaText.style.color = `var(--error)`;
+
+      if (statusBadge) {
+        statusBadge.textContent = `FORMULA CORRUPTED!`;
+        statusBadge.style.backgroundColor = `var(--error-bg)`;
+        statusBadge.style.color = `var(--error-text)`;
+      }
+
+      msg.innerHTML = `<span style="color: var(--error); font-weight: 700;">DANGER:</span> Formula destroyed! Column J can no longer calculate legal screening alerts. Click the <strong>Panic Button</strong> or press <kbd style="background: var(--surface-container); border: 1px solid var(--outline); padding: 1px 4px;">Ctrl+Z</kbd> before the timer runs out!`;
+
+      // Enable panic button, disable trigger
+      panicBtn.disabled = false;
+      panicBtn.classList.remove('button--secondary');
+      panicBtn.classList.add('button--warning');
+      if (triggerBtn) triggerBtn.disabled = true;
+
+      // Start Countdown
+      timerBox.style.display = 'flex';
+      panicTimeRemaining = 10.0;
+      updateTimerDisplay();
+
+      if (panicTimerInterval) clearInterval(panicTimerInterval);
+      panicTimerInterval = setInterval(function() {
+        panicTimeRemaining -= 0.1;
+        if (panicTimeRemaining <= 0) {
+          panicTimeRemaining = 0;
+          clearInterval(panicTimerInterval);
+          handlePanicTimeout();
+        }
+        updateTimerDisplay();
+      }, 100);
+    }
+
+    function updateTimerDisplay() {
+      const timerEl = document.getElementById('panic-countdown');
+      if (timerEl) {
+        timerEl.textContent = `${panicTimeRemaining.toFixed(1)}s`;
+      }
+    }
+
+    function handlePanicTimeout() {
+      const msg = document.getElementById('sim-feedback-message');
+      if (msg) {
+        msg.innerHTML = `<span style="color: var(--error); font-weight: 700;">10 Seconds Elapsed!</span> Don't worry—even if you missed the instant 10s Ctrl+Z window, Defence 2 (<strong>File &gt; Version History &gt; Restore this version</strong>) can recover your formulas at any time. Click "Reset Drill" or press Panic Button to restore now.`;
+      }
+    }
+
+    function executePanicRecovery() {
+      if (panicTimerInterval) clearInterval(panicTimerInterval);
+
+      const cell = document.getElementById('mock-sim-cell');
+      const formulaText = document.getElementById('mock-formula-text');
+      const cellVal = document.getElementById('mock-cell-value');
+      const msg = document.getElementById('sim-feedback-message');
+      const statusBadge = document.getElementById('sim-status-badge');
+      const timerBox = document.getElementById('panic-timer-box');
+      const panicBtn = document.getElementById('btn-panic-recovery');
+      const triggerBtn = document.getElementById('btn-trigger-overwrite');
+
+      if (!cell || !cellVal || !formulaText || !msg || !panicBtn) return;
+
+      // Restore
+      cell.classList.remove('corrupted');
+      cellVal.textContent = `✅ COMPLIANT`;
+      formulaText.textContent = `=IF(H4<TODAY(),"EXPIRED",IF(H4<TODAY()+60,"⚠️ DUE SOON","✅ COMPLIANT"))`;
+      formulaText.style.color = `var(--data-1)`;
+
+      if (statusBadge) {
+        statusBadge.textContent = `RESTORED & SECURE`;
+        statusBadge.style.backgroundColor = `var(--positive-bg)`;
+        statusBadge.style.color = `var(--positive-text)`;
+      }
+
+      if (timerBox) timerBox.style.display = 'none';
+
+      msg.innerHTML = `<span style="color: var(--positive); font-weight: 700;">SUCCESS!</span> The formula has been resurrected via instant rollback. No formulas were harmed. You are now <strong>Safety Certified</strong>!`;
+
+      panicBtn.disabled = true;
+      panicBtn.classList.remove('button--warning');
+      if (triggerBtn) triggerBtn.disabled = false;
+
+      // Auto-check Checkpoint 1
+      const chk1 = document.getElementById('chk-1');
+      if (chk1 && !chk1.checked) {
+        chk1.checked = true;
+        portalState.checkpoints[0] = true;
+        updateReadinessUI();
+        saveState();
+      }
+
+      showToast(`Formula Restored! Checkpoint 1 verified.`);
+    }
+
+    function resetPanicSim() {
+      if (panicTimerInterval) clearInterval(panicTimerInterval);
+
+      const cell = document.getElementById('mock-sim-cell');
+      const formulaText = document.getElementById('mock-formula-text');
+      const cellVal = document.getElementById('mock-cell-value');
+      const msg = document.getElementById('sim-feedback-message');
+      const statusBadge = document.getElementById('sim-status-badge');
+      const timerBox = document.getElementById('panic-timer-box');
+      const panicBtn = document.getElementById('btn-panic-recovery');
+      const triggerBtn = document.getElementById('btn-trigger-overwrite');
+
+      if (cell) cell.classList.remove('corrupted');
+      if (cellVal) cellVal.textContent = `✅ COMPLIANT`;
+      if (formulaText) {
+        formulaText.textContent = `=IF(H4<TODAY(),"EXPIRED",IF(H4<TODAY()+60,"⚠️ DUE SOON","✅ COMPLIANT"))`;
+        formulaText.style.color = `var(--data-1)`;
+      }
+      if (statusBadge) {
+        statusBadge.textContent = `PRISTINE FORMULA`;
+        statusBadge.style.backgroundColor = `var(--primary-container)`;
+        statusBadge.style.color = `var(--on-primary-container)`;
+      }
+      if (timerBox) timerBox.style.display = 'none';
+      if (panicBtn) panicBtn.disabled = true;
+      if (triggerBtn) triggerBtn.disabled = false;
+      if (msg) {
+        msg.innerHTML = `<em>Scenario:</em> A team member accidentally pastes raw text directly into the grey formula cell J4, wiping out the automated expiration logic!`;
+      }
+    }
+
+    // Keyboard shortcut listener for Ctrl+Z / Cmd+Z inside the simulator
+    window.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z')) {
+        const panicBtn = document.getElementById('btn-panic-recovery');
+        if (panicBtn && !panicBtn.disabled) {
+          e.preventDefault();
+          executePanicRecovery();
+        }
+      }
+    });
+
+    function switchGuideTab(tab) {
+      const gsheetsBtn = document.getElementById('tab-btn-gsheets');
+      const excelBtn = document.getElementById('tab-btn-excel');
+      const gsheetsContent = document.getElementById('guide-gsheets');
+      const excelContent = document.getElementById('guide-excel');
+
+      if (!gsheetsBtn || !excelBtn || !gsheetsContent || !excelContent) return;
+
+      if (tab === 'gsheets') {
+        gsheetsBtn.classList.add('active');
+        excelBtn.classList.remove('active');
+        gsheetsContent.style.display = 'block';
+        excelContent.style.display = 'none';
+      } else {
+        excelBtn.classList.add('active');
+        gsheetsBtn.classList.remove('active');
+        excelContent.style.display = 'block';
+        gsheetsContent.style.display = 'none';
+      }
+    }
+
+    // ========================================================
+    // SECTION 2: CELL COLOUR INSPECTOR
+    // ========================================================
+    function selectSwatch(swatchKey) {
+      const cards = ['white', 'grey', 'gold', 'red'];
+      cards.forEach(k => {
+        const card = document.getElementById(`card-swatch-${k}`);
+        if (card) {
+          if (k === swatchKey) {
+            card.classList.add('active-swatch');
+          } else {
+            card.classList.remove('active-swatch');
+          }
+        }
+      });
+
+      // Jump to matching mock cell
+      if (swatchKey === 'white') inspectCell('name');
+      else if (swatchKey === 'grey') inspectCell('tier');
+      else if (swatchKey === 'gold') inspectCell('expiry');
+      else if (swatchKey === 'red') inspectCell('expiry2');
+    }
+
+    function inspectCell(cellKey) {
+      const data = INSPECTOR_CELLS[cellKey];
+      if (!data) return;
+
+      portalState.selectedInspectorCell = cellKey;
+
+      // Update cell outline highlights
+      document.querySelectorAll('.cell-clickable').forEach(el => {
+        el.classList.remove('selected-cell');
+      });
+      const selectedEl = document.getElementById(`mockcell-${cellKey}`);
+      if (selectedEl) selectedEl.classList.add('selected-cell');
+
+      // Update inspector card
+      const tagEl = document.getElementById('inspect-tag');
+      const titleEl = document.getElementById('inspect-title');
+      const safeEl = document.getElementById('inspect-safe');
+      const logicEl = document.getElementById('inspect-logic');
+      const actionEl = document.getElementById('inspect-action');
+
+      if (tagEl) tagEl.innerHTML = data.tag;
+      if (titleEl) titleEl.textContent = data.title;
+      if (safeEl) {
+        safeEl.innerHTML = data.safe;
+        safeEl.style.color = data.safeColor;
+      }
+      if (logicEl) logicEl.textContent = data.logic;
+      if (actionEl) actionEl.textContent = data.action;
+
+      // Mark Checkpoint 2 if touched
+      const chk2 = document.getElementById('chk-2');
+      if (chk2 && !chk2.checked) {
+        chk2.checked = true;
+        portalState.checkpoints[1] = true;
+        updateReadinessUI();
+        saveState();
+      }
+    }
+
+    // ========================================================
+    // SECTION 3: MARAM RESPONSIBILITIES MATRIX
+    // ========================================================
+    function renderResponsibilitiesTable(filter) {
+      const tbody = document.getElementById('resp-table-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+
+      MARAM_RESPONSIBILITIES.forEach(item => {
+        const matches = (filter === 'all') || item.tiers.includes(filter);
+        if (!matches) return;
+
+        const row = document.createElement('tr');
+
+        // Tiers badge rendering
+        let tierBadges = '';
+        if (item.tiers.includes('t1')) tierBadges += `<span class="resp-tag active" style="margin-right: 2px;">Tier 1</span>`;
+        if (item.tiers.includes('t2')) tierBadges += `<span class="resp-tag active" style="margin-right: 2px;">Tier 2</span>`;
+        if (item.tiers.includes('t3')) tierBadges += `<span class="resp-tag active">Tier 3</span>`;
+
+        row.innerHTML = `
+          <td><strong>${item.title.split(':')[0]}</strong></td>
+          <td><strong>${item.title.split(':')[1] || item.title}</strong><br><span style="color: var(--on-surface-variant); font-size: 0.8125rem;">${item.focus}</span></td>
+          <td><span style="font-size: 0.8125rem;">${item.evidence}</span></td>
+          <td>${tierBadges}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function filterRespMatrix(filter) {
+      portalState.selectedTierFilter = filter;
+      const btns = ['all', 't1', 't2', 't3'];
+      btns.forEach(b => {
+        const btn = document.getElementById(`btn-filter-${b}`);
+        if (btn) {
+          if (b === filter) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+      renderResponsibilitiesTable(filter);
+    }
+
+    function runRoleAssessment() {
+      const select = document.getElementById('assessor-role-select');
+      if (!select) return;
+
+      const key = select.value;
+      const profile = ROLE_PROFILES[key];
+      if (!profile) return;
+
+      portalState.selectedRoleKey = key;
+
+      const summaryEl = document.getElementById('assessor-task-summary');
+      const tierResultEl = document.getElementById('assessor-tier-result');
+      const checksResultEl = document.getElementById('assessor-checks-result');
+      const trainingResultEl = document.getElementById('assessor-training-result');
+
+      if (summaryEl) summaryEl.textContent = profile.tasks;
+      if (tierResultEl) tierResultEl.textContent = `Assign: ${profile.tier}`;
+      if (trainingResultEl) trainingResultEl.textContent = profile.training;
+
+      if (checksResultEl) {
+        checksResultEl.innerHTML = `
+          <span class="resp-tag ${profile.wwcc ? 'active' : ''}">WWCC: ${profile.wwcc ? 'Mandatory' : 'Optional'}</span>
+          <span class="resp-tag ${profile.police ? 'active' : ''}">Police Check: ${profile.police ? 'Mandatory' : 'Exempt'}</span>
+          <span class="resp-tag ${profile.ndis ? 'active' : ''}">NDIS Screening: ${profile.ndis ? 'Mandatory' : 'Conditional'}</span>
+        `;
+      }
+    }
+
+    function applyAssessorToWorkflow() {
+      const key = portalState.selectedRoleKey || 'caseworker';
+      const profile = ROLE_PROFILES[key];
+      if (!profile) return;
+
+      // Add to sandbox roles if not present
+      const exists = portalState.sandboxRoles.some(r => r.title === profile.title);
+      if (!exists) {
+        portalState.sandboxRoles.push({
+          title: profile.title,
+          tier: profile.tier,
+          wwcc: profile.wwcc,
+          police: profile.police
+        });
+        renderSandboxMatrix();
+        renderSandboxStaff();
+      }
+
+      // Scroll to Section 4
+      scrollToSection('sec-workflow');
+      switchSandboxTab(1);
+      showToast(`'${profile.title}' loaded into Setup Sandbox!`);
+
+      // Checkpoint 3 auto-check
+      const chk3 = document.getElementById('chk-3');
+      if (chk3 && !chk3.checked) {
+        chk3.checked = true;
+        portalState.checkpoints[2] = true;
+        updateReadinessUI();
+        saveState();
+      }
+    }
+
+    // ========================================================
+    // SECTION 4: STEP-BY-STEP WORKFLOW SANDBOX
+    // ========================================================
+    function switchSandboxTab(tabNum) {
+      const btn1 = document.getElementById('btn-sand-tab1');
+      const btn2 = document.getElementById('btn-sand-tab2');
+      const pane1 = document.getElementById('sandbox-pane-matrix');
+      const pane2 = document.getElementById('sandbox-pane-staff');
+
+      if (!btn1 || !btn2 || !pane1 || !pane2) return;
+
+      if (tabNum === 1) {
+        btn1.classList.add('active');
+        btn2.classList.remove('active');
+        pane1.style.display = 'block';
+        pane2.style.display = 'none';
+      } else {
+        btn2.classList.add('active');
+        btn1.classList.remove('active');
+        pane2.style.display = 'block';
+        pane1.style.display = 'none';
+      }
+    }
+
+    function renderSandboxMatrix() {
+      const tbody = document.getElementById('sandbox-matrix-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      portalState.sandboxRoles.forEach((role, idx) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            <input type="text" class="cell-input-text" value="${role.title}" onchange="updateRoleTitle(${idx}, this.value)">
+          </td>
+          <td>
+            <select class="cell-input-select" onchange="updateRoleTier(${idx}, this.value)">
+              <option value="Tier 1 (Identification)" ${role.tier.includes('Tier 1') ? 'selected' : ''}>Tier 1 (Identification)</option>
+              <option value="Tier 2 (Intermediate)" ${role.tier.includes('Tier 2') ? 'selected' : ''}>Tier 2 (Intermediate)</option>
+              <option value="Tier 3 (Comprehensive)" ${role.tier.includes('Tier 3') ? 'selected' : ''}>Tier 3 (Comprehensive)</option>
+              <option value="Tier 4 (Leadership)" ${role.tier.includes('Tier 4') ? 'selected' : ''}>Tier 4 (Leadership)</option>
+            </select>
+          </td>
+          <td>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem;">
+              <input type="checkbox" ${role.wwcc ? 'checked' : ''} onchange="updateRoleWWCC(${idx}, this.checked)">
+              <span>Required</span>
+            </label>
+          </td>
+          <td>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 0.75rem;">
+              <input type="checkbox" ${role.police ? 'checked' : ''} onchange="updateRolePolice(${idx}, this.checked)">
+              <span>Required</span>
+            </label>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function updateRoleTitle(idx, val) {
+      if (portalState.sandboxRoles[idx]) {
+        portalState.sandboxRoles[idx].title = val;
+        renderSandboxStaff();
+        saveState();
+      }
+    }
+
+    function updateRoleTier(idx, val) {
+      if (portalState.sandboxRoles[idx]) {
+        portalState.sandboxRoles[idx].tier = val;
+        renderSandboxStaff();
+        saveState();
+      }
+    }
+
+    function updateRoleWWCC(idx, checked) {
+      if (portalState.sandboxRoles[idx]) {
+        portalState.sandboxRoles[idx].wwcc = checked;
+        renderSandboxStaff();
+        saveState();
+      }
+    }
+
+    function updateRolePolice(idx, checked) {
+      if (portalState.sandboxRoles[idx]) {
+        portalState.sandboxRoles[idx].police = checked;
+        renderSandboxStaff();
+        saveState();
+      }
+    }
+
+    function addSandboxRole() {
+      portalState.sandboxRoles.push({
+        title: `New Custom Role ${portalState.sandboxRoles.length + 1}`,
+        tier: `Tier 2 (Intermediate)`,
+        wwcc: true,
+        police: true
+      });
+      renderSandboxMatrix();
+      renderSandboxStaff();
+      saveState();
+      showToast(`Added new role. Check Tab 2 dropdown to see it appear!`);
+    }
+
+    function renderSandboxStaff() {
+      const tbody = document.getElementById('sandbox-staff-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      portalState.sandboxStaff.forEach((staff, sIdx) => {
+        // Build Role options from current sandboxRoles
+        let roleOptions = '';
+        portalState.sandboxRoles.forEach(r => {
+          const isSelected = (r.title === staff.role) ? 'selected' : '';
+          roleOptions += `<option value="${r.title}" ${isSelected}>${r.title}</option>`;
+        });
+
+        // Find linked tier from sandboxRoles
+        const matchedRole = portalState.sandboxRoles.find(r => r.title === staff.role);
+        const resolvedTier = matchedRole ? matchedRole.tier : 'Tier 1 (Identification)';
+        staff.tier = resolvedTier;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="background: var(--cell-entry-bg);">
+            <input type="text" class="cell-input-text" value="${staff.name}" onchange="updateStaffName(${sIdx}, this.value)">
+          </td>
+          <td style="background: var(--cell-entry-bg);">
+            <select class="cell-input-select" onchange="updateStaffRole(${sIdx}, this.value)">
+              ${roleOptions}
+            </select>
+          </td>
+          <td style="background: var(--cell-formula-bg); font-weight: 700; color: var(--primary);">
+            <span class="locked-indicator"><i data-lucide="lock" style="width: 10px; height: 10px;"></i> ${resolvedTier.split(' ')[0]}</span>
+          </td>
+          <td style="background: ${staff.wwcc.includes('Due') ? 'var(--warning-bg)' : (staff.wwcc.includes('Expired') ? 'var(--error-bg)' : 'var(--positive-bg)')}; font-weight: 700;">
+            <select class="cell-input-select" style="background: transparent;" onchange="updateStaffWWCC(${sIdx}, this.value)">
+              <option value="✅ Valid" ${staff.wwcc === '✅ Valid' ? 'selected' : ''}>✅ Valid</option>
+              <option value="⚠️ Due in 30d" ${staff.wwcc.includes('Due') ? 'selected' : ''}>⚠️ Due in 30d</option>
+              <option value="🟥 Expired" ${staff.wwcc.includes('Expired') ? 'selected' : ''}>🟥 Expired</option>
+            </select>
+          </td>
+          <td style="background: ${staff.training.includes('Expired') ? 'var(--error-bg)' : 'var(--positive-bg)'}; font-weight: 700;">
+            <select class="cell-input-select" style="background: transparent;" onchange="updateStaffTraining(${sIdx}, this.value)">
+              <option value="✅ Active" ${staff.training === '✅ Active' ? 'selected' : ''}>✅ Active</option>
+              <option value="🟥 Expired" ${staff.training.includes('Expired') ? 'selected' : ''}>🟥 Expired</option>
+            </select>
+          </td>
+          <td style="background: var(--cell-formula-bg); font-weight: 800;">
+            ${recalculateStaffStatus(staff)}
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Update Lucide icons inside dynamically created rows
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      updateSandboxSummary();
+    }
+
+    function recalculateStaffStatus(staff) {
+      if (staff.wwcc.includes('Expired') || staff.training.includes('Expired')) {
+        staff.status = `🟥 Action Req`;
+        return `<span style="color: var(--error);">🟥 Non-Compliant</span>`;
+      } else if (staff.wwcc.includes('Due')) {
+        staff.status = `⚠️ Due Soon`;
+        return `<span style="color: var(--warning-text);">⚠️ Due Soon</span>`;
+      } else {
+        staff.status = `✅ Compliant`;
+        return `<span style="color: var(--positive-text);">✅ Compliant</span>`;
+      }
+    }
+
+    function updateStaffName(idx, val) {
+      if (portalState.sandboxStaff[idx]) {
+        portalState.sandboxStaff[idx].name = val;
+        saveState();
+      }
+    }
+
+    function updateStaffRole(idx, val) {
+      if (portalState.sandboxStaff[idx]) {
+        portalState.sandboxStaff[idx].role = val;
+        renderSandboxStaff();
+        saveState();
+
+        // Checkpoint 4 auto-check
+        const chk4 = document.getElementById('chk-4');
+        if (chk4 && !chk4.checked) {
+          chk4.checked = true;
+          portalState.checkpoints[3] = true;
+          updateReadinessUI();
+          saveState();
+        }
+      }
+    }
+
+    function updateStaffWWCC(idx, val) {
+      if (portalState.sandboxStaff[idx]) {
+        portalState.sandboxStaff[idx].wwcc = val;
+        renderSandboxStaff();
+        saveState();
+      }
+    }
+
+    function updateStaffTraining(idx, val) {
+      if (portalState.sandboxStaff[idx]) {
+        portalState.sandboxStaff[idx].training = val;
+        renderSandboxStaff();
+        saveState();
+      }
+    }
+
+    function addSandboxStaff() {
+      const defaultRole = portalState.sandboxRoles[0] ? portalState.sandboxRoles[0].title : 'Intensive Case Manager';
+      portalState.sandboxStaff.push({
+        name: `New Staff Member ${portalState.sandboxStaff.length + 1}`,
+        role: defaultRole,
+        tier: `Tier 2 (Intermediate)`,
+        wwcc: `✅ Valid`,
+        training: `✅ Active`,
+        status: `✅ Compliant`
+      });
+      renderSandboxStaff();
+      saveState();
+      showToast(`Added staff row with automated formula logic!`);
+    }
+
+    function updateSandboxSummary() {
+      const summaryEl = document.getElementById('sandbox-compliance-summary');
+      if (!summaryEl || portalState.sandboxStaff.length === 0) return;
+
+      const compliantCount = portalState.sandboxStaff.filter(s => s.status === '✅ Compliant').length;
+      const rate = Math.round((compliantCount / portalState.sandboxStaff.length) * 100);
+      summaryEl.textContent = `Roster Compliance: ${rate}% (${compliantCount}/${portalState.sandboxStaff.length} Compliant)`;
+    }
+
+    // ========================================================
+    // SECTION 5: CUSTOMER AI PROMPTS
+    // ========================================================
+    function updatePromptTexts() {
+      const org = document.getElementById('prompt-var-org')?.value || `Melbourne Community Services`;
+      const worker = document.getElementById('prompt-var-worker')?.value || `Jordan Vance`;
+      const tier = document.getElementById('prompt-var-tier')?.value || `Tier 1 & Tier 2`;
+
+      portalState.promptVars = { org, worker, tier };
+
+      // Update prompt 1
+      const p1 = document.getElementById('prompt-text-1');
+      if (p1) {
+        p1.innerHTML = `"Review my MARAM compliance tracker tab for <span class='prompt-var'>${escapeHtml(org)}</span>. Draft a formal audit-readiness statement summarising our percentage of <span class='prompt-var'>${escapeHtml(tier)}</span> staff who hold active MARAM accreditation, highlighting screening compliance rates under the Victorian Family Violence Protection Act 2008 and our risk mitigation plan for any upcoming expiries."`;
+      }
+
+      // Update prompt 2
+      const p2 = document.getElementById('prompt-text-2');
+      if (p2) {
+        p2.innerHTML = `"Draft a 15-minute reflective supervision agenda focused on MARAM practice alignment for caseworker <span class='prompt-var'>${escapeHtml(worker)}</span> at <span class='prompt-var'>${escapeHtml(org)}</span> whose screening is up for renewal. Include: 1) statutory check renewal status; 2) application of MARAM risk assessment tools with current cases; 3) information sharing challenges under FVISS/CISS; and 4) self-care and vicarious trauma mitigation."`;
+      }
+
+      // Update prompt 3
+      const p3 = document.getElementById('prompt-text-3');
+      if (p3) {
+        p3.innerHTML = `"Act as a Victorian family violence compliance specialist. Generate an internal briefing memo for the Executive Leadership Team of <span class='prompt-var'>${escapeHtml(org)}</span> justifying our assignment of workforce roles to MARAM <span class='prompt-var'>${escapeHtml(tier)}</span>. Reference the statutory requirements of the Family Violence Protection Act 2008, mandatory checks (WWCC, Police, NDIS), and demonstrate how our role matrix satisfies regulatory guidelines."`;
+      }
+
+      // Update prompt 4
+      const p4 = document.getElementById('prompt-text-4');
+      if (p4) {
+        p4.innerHTML = `"Draft an urgent operational escalation protocol for <span class='prompt-var'>${escapeHtml(org)}</span> when a staff member (such as <span class='prompt-var'>${escapeHtml(worker)}</span>) hits a soft gold (⚠️ DUE SOON) or soft red (🟥 EXPIRED) status in our MARAM tracker. Specify: 1) 60-day HR notification sequence; 2) interim practice restrictions if screening lapses; and 3) risk assessment documentation required by executive leadership."`;
+      }
+
+      saveState();
+    }
+
+    function resetPromptVars() {
+      const orgInput = document.getElementById('prompt-var-org');
+      const workerInput = document.getElementById('prompt-var-worker');
+      const tierInput = document.getElementById('prompt-var-tier');
+
+      if (orgInput) orgInput.value = `Melbourne Community Services`;
+      if (workerInput) workerInput.value = `Jordan Vance`;
+      if (tierInput) tierInput.value = `Tier 1 & Tier 2`;
+
+      updatePromptTexts();
+      showToast(`Variables reset to defaults.`);
+    }
+
+    function copyPromptCard(elementId, btnElement) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      const text = el.innerText || el.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Prompt copied to clipboard!`);
+        if (btnElement) {
+          const originalText = btnElement.innerHTML;
+          btnElement.innerHTML = `<i data-lucide="check" style="width: 14px; height: 14px;"></i><span>Copied!</span>`;
+          if (window.lucide) window.lucide.createIcons();
+          setTimeout(() => {
+            btnElement.innerHTML = originalText;
+            if (window.lucide) window.lucide.createIcons();
+          }, 2000);
+        }
+
+        // Auto-check Checkpoint 5
+        const chk5 = document.getElementById('chk-5');
+        if (chk5 && !chk5.checked) {
+          chk5.checked = true;
+          portalState.checkpoints[4] = true;
+          updateReadinessUI();
+          saveState();
+        }
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        showToast(`Please manually select and copy prompt text.`);
+      });
+    }
+
+    // ========================================================
+    // SECTION 6: EXPORT SETUP RECORD
+    // ========================================================
+    function exportSetupSummary() {
+      const org = portalState.promptVars.org || `Organisation`;
+      let count = 0;
+      for (let i = 0; i < portalState.checkpoints.length; i++) {
+        if (portalState.checkpoints[i]) count++;
+      }
+      const pct = Math.round((count / portalState.checkpoints.length) * 100);
+
+      const content = `================================================================================
+LEW CREATIONS MARAM STAFF COMPLIANCE TRACKER — SETUP RECORD
+Module 1: Setup Foundations & MARAM Role Matrix Configuration
+Statutory Reference: Family Violence Protection Act 2008 (Vic)
+Generated: ${new Date().toLocaleDateString('en-AU', { dateStyle: 'full' })}
+Organisation: ${org}
+================================================================================
+
+1. ONBOARDING COMPLETION STATUS
+Overall Readiness Score: ${pct}% (${count} of 5 checkpoints verified)
+- [${portalState.checkpoints[0] ? 'X' : ' '}] Checkpoint 1: 10-Second Panic Protocol & Version History Certified
+- [${portalState.checkpoints[1] ? 'X' : ' '}] Checkpoint 2: Cell Colour Taxonomy Mastered (White Entry vs Grey Formulas)
+- [${portalState.checkpoints[2] ? 'X' : ' '}] Checkpoint 3: MARAM Tiers 1–4 Defined for Workforce Roles
+- [${portalState.checkpoints[3] ? 'X' : ' '}] Checkpoint 4: Role Matrix Setup Configured & Dropdowns Verified
+- [${portalState.checkpoints[4] ? 'X' : ' '}] Checkpoint 5: Audit & Supervision AI Prompts Configured
+
+2. CONFIGURATION SUMMARY
+Master Roles Configured: ${portalState.sandboxRoles.length}
+Staff Roster Members Tracked: ${portalState.sandboxStaff.length}
+
+Configured Organisational Roles:
+${portalState.sandboxRoles.map(r => `  * ${r.title} | ${r.tier} | WWCC: ${r.wwcc ? 'Required' : 'No'} | Police: ${r.police ? 'Required' : 'No'}`).join('\n')}
+
+3. STATUTORY DISCLAIMER (LEW CREATIONS)
+This tracker is developed and distributed by LEW CREATIONS strictly as an
+administrative and operational template to assist organisations with workforce tracking.
+The purchasing organisation assumes full statutory responsibility for ensuring its
+workforce policies, MARAM alignment practices, and audit evidence meet all legislative
+requirements under the Family Violence Protection Act 2008.
+
+================================================================================
+RECORD END`;
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+          window.notebookAppApi.triggerFileDownload({
+            content: content,
+            contentType: 'text/plain',
+            encoding: 'utf-8',
+            filename: `MARAM_Module1_Setup_Record_${org.replace(/\s+/g, '_')}.txt`
+          });
+        } else {
+          // Fallback plain blob download
+          const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `MARAM_Module1_Setup_Record.txt`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+        showToast(`Setup Record exported successfully!`);
+      } catch (e) {
+        console.error('Export error:', e);
+        showToast(`Export initiated.`);
+      }
+    }
+
+    // ========================================================
+    // UTILITY FUNCTIONS
+    // ========================================================
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Update nav active states
+      const btns = document.querySelectorAll('.nav-btn');
+      btns.forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(btns).find(b => b.getAttribute('onclick')?.includes(id));
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('portal-toast');
+      const textEl = document.getElementById('toast-message');
+      if (!toast || !textEl) return;
+
+      textEl.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
+</body>
+</html>

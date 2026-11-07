@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="handbook">
+  <title>LEW CREATIONS | Vehicle Fleet & Mileage Operations Tracker — Customer Onboarding Portal</title>
+
+  <!-- Google Fonts: Public Sans and JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Public+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      /* Ink */
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      /* Rules */
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      /* Accents */
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+      --positive: #00703c;
+      --on-positive: #ffffff;
+      --warning: #b25500;
+      --on-warning: #ffffff;
+
+      /* Cell Color Code Tokens */
+      --cell-white: #ffffff;
+      --cell-grey: #f3f4f6;
+      --cell-dark-slate: #1e1e24;
+      --cell-checkbox-bg: #e5e7eb;
+      --code-bg: #1e1e24;
+      --code-text: #f3f4f6;
+      --code-accent: #6fa8dc;
+
+      /* Fonts */
+      --font-headline: 'Public Sans', sans-serif;
+      --font-body: 'Public Sans', sans-serif;
+      --font-label: 'Public Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Shape */
+      --rounded: 0px;
+      --rounded-lg: 0px;
+      --rounded-full: 0px;
+
+      /* Style effects */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --inset-positive-rule: 5px solid var(--positive);
+      --inset-error-rule: 5px solid var(--error);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Spacing Scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Type Scale for Narrative */
+      --display-size: clamp(2rem, 1.5rem + 2.5vw, 3.25rem);
+      --headline-size: clamp(1.4rem, 1.15rem + 1.2vw, 1.875rem);
+      --subhead-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.35rem);
+      --body-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+      --label-size: 0.8125rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1140px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Handbook Top Index Rule */
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm) 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--space-md);
+    }
+
+    .index-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Headings & Typography */
+    h1, h2, h3, h4, h5 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+    }
+
+    h1 { font-size: var(--display-size); }
+    h2 { font-size: var(--headline-size); }
+    h3 { font-size: var(--subhead-size); }
+    h4 { font-size: 1.125rem; font-weight: 700; }
+
+    p {
+      margin: 0 0 var(--space-md) 0;
+      color: var(--on-surface);
+      max-width: 72ch;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    .lead-text {
+      font-size: 1.25rem;
+      line-height: 1.5;
+      font-weight: 400;
+      color: var(--on-surface);
+      margin-bottom: var(--space-lg);
+    }
+
+    .muted-caption {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      line-height: 1.4;
+    }
+
+    /* Handbook Step Badges */
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+      font-family: var(--font-label);
+    }
+
+    /* Handbook Inset Blue Rule & Variations */
+    .inset {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .inset--positive {
+      border-left: var(--inset-positive-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .inset--error {
+      border-left: var(--inset-error-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    /* Handbook Buttons */
+    .btn {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      line-height: 1.2;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      border-radius: var(--rounded);
+      padding: 0.65rem 1.15rem;
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      text-decoration: none;
+      transition: transform var(--dur-micro) var(--ease-out);
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .btn--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--button-ground-secondary);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .btn--secondary:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .btn--positive {
+      background: var(--positive);
+      color: var(--on-positive);
+      box-shadow: 0 2px 0 #004d28;
+    }
+
+    .btn--error {
+      background: var(--error);
+      color: var(--on-error);
+      box-shadow: 0 2px 0 #7a1f11;
+    }
+
+    /* Handbook Focus States */
+    .btn:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible,
+    button:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    a:focus-visible {
+      outline: none;
+      background: var(--focus-yellow);
+      color: var(--on-surface);
+      text-decoration: none;
+      box-shadow: var(--focus-underline);
+    }
+
+    /* Status Tags */
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.5rem;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .status-tag--positive {
+      background: #cce5d6;
+      color: #004d28;
+    }
+
+    .status-tag--warning {
+      background: #fedcba;
+      color: #7a3a00;
+    }
+
+    .status-tag--error {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .status-tag--neutral {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+
+    /* Section Structure */
+    .section-container {
+      border-top: 1px solid var(--on-surface);
+      padding-top: var(--space-xl);
+      margin-top: var(--space-lg);
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-lg);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tertiary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Progress Tracker Card */
+    .progress-card {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .progress-bar-track {
+      background: var(--surface-container);
+      height: 10px;
+      width: 100%;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      background: var(--positive);
+      height: 100%;
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.9375rem;
+      cursor: pointer;
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    /* Simulator Canvas Container */
+    .simulator-canvas {
+      border: 2px solid var(--outline);
+      background: var(--background);
+      margin-top: var(--space-md);
+      overflow: hidden;
+    }
+
+    .simulator-topbar {
+      background: var(--cell-dark-slate);
+      color: #ffffff;
+      padding: var(--space-xs) var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+    }
+
+    .simulator-body {
+      padding: var(--space-md);
+    }
+
+    /* Spreadsheet Table Mockup */
+    .sheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+      margin: var(--space-sm) 0;
+    }
+
+    .sheet-table th {
+      background: var(--cell-dark-slate);
+      color: #ffffff;
+      font-weight: 700;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #333333;
+      font-size: 0.75rem;
+      letter-spacing: 0.03em;
+    }
+
+    .sheet-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+
+    .cell-editable {
+      background: var(--cell-white);
+      color: var(--on-surface);
+      cursor: text;
+    }
+
+    .cell-shield {
+      background: var(--cell-grey);
+      color: #2b3035;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      position: relative;
+    }
+
+    .cell-header-struct {
+      background: var(--cell-dark-slate);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Interactive Cell Safety Matrix */
+    .cell-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+
+    .cell-card {
+      border: 2px solid var(--outline);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      cursor: pointer;
+      transition: transform var(--dur-micro) var(--ease-out);
+    }
+
+    .cell-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .cell-card.active {
+      outline: 3px solid var(--tertiary);
+    }
+
+    .cell-swatch {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 700;
+      border: 1px solid var(--outline-variant);
+    }
+
+    /* Card Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    /* Summary list */
+    .summary-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .summary-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-xs) 0;
+      border-bottom: 1px solid var(--outline-variant);
+      font-size: 0.9375rem;
+    }
+
+    .summary-list li:last-child {
+      border-bottom: 0;
+    }
+
+    /* Code block */
+    .code-view {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      border-left: 4px solid var(--tertiary);
+      margin: var(--space-md) 0;
+    }
+
+    /* Toast Notification */
+    .toast-popup {
+      position: fixed;
+      bottom: var(--space-lg);
+      right: var(--space-lg);
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      z-index: 9999;
+      transform: translateY(120%);
+      transition: transform var(--dur-short) var(--ease-out);
+      max-width: 420px;
+      font-size: 0.9375rem;
+    }
+
+    .toast-popup.show {
+      transform: translateY(0);
+    }
+
+    .toast-popup--positive {
+      background: var(--positive);
+    }
+
+    .toast-popup--error {
+      background: var(--error);
+    }
+
+    /* Forms */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-bottom: var(--space-sm);
+    }
+
+    .form-label {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--on-surface);
+    }
+
+    .form-hint {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin-bottom: 0.25rem;
+    }
+
+    .form-input, .form-select {
+      font-family: inherit;
+      font-size: 0.9375rem;
+      padding: 0.55rem 0.75rem;
+      border: 2px solid var(--outline);
+      background: #ffffff;
+      color: var(--on-surface);
+      border-radius: var(--rounded);
+      width: 100%;
+    }
+
+    /* Switch Toggle */
+    .toggle-control {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-box {
+      width: 44px;
+      height: 24px;
+      background: var(--surface-container-high);
+      border: 2px solid var(--outline);
+      position: relative;
+      transition: background var(--dur-micro) var(--ease-out);
+    }
+
+    .toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      background: var(--on-surface);
+      transition: transform var(--dur-micro) var(--ease-out);
+    }
+
+    .toggle-control.active .toggle-box {
+      background: var(--primary);
+    }
+
+    .toggle-control.active .toggle-knob {
+      transform: translateX(20px);
+      background: #ffffff;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .page-grid { padding: var(--space-sm); gap: var(--space-lg); }
+      .sheet-table th, .sheet-table td { padding: 0.4rem 0.5rem; font-size: 0.75rem; }
+      .index-header { flex-direction: column; align-items: flex-start; gap: var(--space-xs); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-grid">
+
+    <!-- Top Header -->
+    <header>
+      <div class="index-header">
+        <div class="index-header-tag">
+          <span class="step-badge" aria-hidden="true">★</span>
+          <span>LEW CREATIONS | Operational Governance & Architecture</span>
+        </div>
+        <div class="status-tag status-tag--positive">100% Sovereign & Unbreakable</div>
+      </div>
+
+      <h1>Vehicle Fleet & Mileage Operations Tracker</h1>
+      <p class="lead-text">
+        <strong>The "Zero-Stress" Customer Empowerment Playbook & Onboarding Hub.</strong> Designed specifically for frontline managers, practice leads, and executives in community services who champion client care—giving you complete confidence to track mileage, automate ATO compliance, and direct operations without fear of breaking formulas.
+      </p>
+
+      <!-- Welcome Promise Card -->
+      <div class="inset">
+        <h3 style="margin-bottom: var(--space-xs); display:flex; align-items:center; gap:var(--space-xs);">
+          <i data-lucide="shield-check" style="width:22px; height:22px; color:var(--tertiary);"></i>
+          The "Zero-Stress" Guarantee: You Cannot Break This Sheet
+        </h3>
+        <p>
+          We know that frontline managers and community team leaders are absolute legends at governance and client care. Wrestling with fragile spreadsheet formulas or worrying about accidentally deleting a column is the last thing you need during a busy week. Our systems feature unbreakable <strong>Formula Shields</strong>, instant <strong>Ctrl + Z undo recovery</strong>, and automated <strong>Google Version History</strong> snapshots.
+        </p>
+      </div>
+
+      <!-- Quick Interactive Progress Tracker -->
+      <div class="progress-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="font-size:0.9375rem;">Your Onboarding Mastery Checklist</strong>
+            <div class="muted-caption">Complete all 5 modules below to claim operational fleet accreditation.</div>
+          </div>
+          <div id="progress-percent" style="font-family:var(--font-mono); font-weight:800; font-size:1.125rem; color:var(--primary);">
+            0% Complete
+          </div>
+        </div>
+        <div class="progress-bar-track">
+          <div id="progress-bar-fill" class="progress-bar-fill"></div>
+        </div>
+        <div class="checklist-grid">
+          <label class="check-item">
+            <input type="checkbox" id="check-mod-1" onchange="toggleModuleCheck(1)">
+            <span>1. Panic Button Muscle Memory</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="check-mod-2" onchange="toggleModuleCheck(2)">
+            <span>2. Cell Color Codes & Shields</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="check-mod-3" onchange="toggleModuleCheck(3)">
+            <span>3. 5-Step Operational SOPs</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="check-mod-4" onchange="toggleModuleCheck(4)">
+            <span>4. Roster & Dropdown Settings</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="check-mod-5" onchange="toggleModuleCheck(5)">
+            <span>5. Copied In-Sheet AI Prompt</span>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECTION 1: Panic Button & Safety Net -->
+    <section class="section-container" id="section-panic-button">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <span class="step-badge">1</span>
+          <span>Fail-Safe Operational Guardrails</span>
+        </div>
+        <h2>The 10-Second Panic Button & Two-Click Safety Net</h2>
+        <p>
+          Accidentally cleared a row, pasted data into the wrong column, or deleted a header? Take a breath. Here is how Google Sheets and LEW CREATIONS make it impossible to permanently break your tracker.
+        </p>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap:var(--space-md); margin-bottom:var(--space-md);">
+        <div class="inset" style="margin:0;">
+          <h4 style="display:flex; align-items:center; gap:var(--space-xs); margin-bottom:var(--space-xs);">
+            <i data-lucide="rotate-ccw" style="width:18px; height:18px; color:var(--tertiary);"></i>
+            Move 1: Instant Undo (1 Second)
+          </h4>
+          <p style="font-size:0.9375rem;">
+            Press <strong>Ctrl + Z</strong> (Windows) or <strong>Cmd + Z</strong> (Mac). Google Sheets maintains a multi-thousand-step undo buffer that rolls back your most recent keypress, paste, or row deletion instantaneously.
+          </p>
+        </div>
+
+        <div class="inset" style="margin:0;">
+          <h4 style="display:flex; align-items:center; gap:var(--space-xs); margin-bottom:var(--space-xs);">
+            <i data-lucide="history" style="width:18px; height:18px; color:var(--tertiary);"></i>
+            Move 2: The 2-Click Time Machine (10 Seconds)
+          </h4>
+          <p style="font-size:0.9375rem;">
+            Click <strong>File &gt; Version History &gt; See version history</strong> in the top menu bar. Choose any previous timestamp (e.g., yesterday at 09:00 AM) and click <strong>"Restore this version"</strong>. The entire sheet reverts to its pristine state.
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Simulator: The Panic Button Test-Drive -->
+      <div class="simulator-canvas">
+        <div class="simulator-topbar">
+          <span>SIMULATED WORKSPACE: MASTER_CARPOOL_LOG (ROW 7)</span>
+          <span id="panic-sim-status" class="status-tag status-tag--positive">STATUS: CLEAN & HEALTHY</span>
+        </div>
+        <div class="simulator-body">
+          <p style="font-size:0.9375rem; margin-bottom:var(--space-sm);">
+            <strong>Hands-On Muscle Memory Exercise:</strong> Click "Simulate Sheet Accident" below to break the mock row. Then use either the Undo button or the Version History Revert to heal the sheet.
+          </p>
+
+          <div style="overflow-x:auto;">
+            <table class="sheet-table" id="panic-table">
+              <thead>
+                <tr>
+                  <th>DATE</th>
+                  <th>DRIVER NAME</th>
+                  <th>REGO</th>
+                  <th>START ODO</th>
+                  <th>END ODO</th>
+                  <th>TOTAL KMS (SHIELD)</th>
+                  <th>FUNDING STREAM</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="panic-row">
+                  <td class="cell-editable" id="panic-cell-date">2026-11-12</td>
+                  <td class="cell-editable" id="panic-cell-driver">Sarah Jenkins</td>
+                  <td class="cell-editable" id="panic-cell-rego">1AA-1BB</td>
+                  <td class="cell-shield" id="panic-cell-start">48,320 km</td>
+                  <td class="cell-editable" id="panic-cell-end">48,500 km</td>
+                  <td class="cell-shield" id="panic-cell-kms" style="font-weight:700; color:var(--primary);">180 km</td>
+                  <td class="cell-editable" id="panic-cell-funding">DSS-2025 Outreach</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="panic-error-banner" class="inset--error" style="display:none; margin:var(--space-sm) 0;">
+            <strong>⚠️ ACCIDENT SIMULATED!</strong> Column formulas broken into <code>#REF!</code> errors and driver entries erased. Try the healing buttons below:
+          </div>
+
+          <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm); align-items:center; margin-top:var(--space-md);">
+            <button class="btn btn--error" id="btn-break-sheet" onclick="simulateAccident()">
+              <i data-lucide="bomb" style="width:16px; height:16px;"></i>
+              Simulate Sheet Accident (Break Data)
+            </button>
+            <button class="btn" id="btn-undo-sheet" onclick="healWithUndo()" disabled>
+              <i data-lucide="rotate-ccw" style="width:16px; height:16px;"></i>
+              Press Ctrl + Z (Undo)
+            </button>
+            <button class="btn btn--secondary" id="btn-version-sheet" onclick="openVersionModal()" disabled>
+              <i data-lucide="history" style="width:16px; height:16px;"></i>
+              File &gt; Version History &gt; Restore
+            </button>
+            <span id="panic-feedback" style="font-size:0.875rem; font-weight:700; margin-left:auto;"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Visual Cell Color Code Map -->
+    <section class="section-container" id="section-cell-colors">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <span class="step-badge">2</span>
+          <span>Operational Conventions & Schemas</span>
+        </div>
+        <h2>Visual Cell Color Code Map: White vs. Grey vs. Slate</h2>
+        <p>
+          You never have to guess what is safe to edit. Every LEW CREATIONS template adheres to a standardized four-tier visual grammar. Hover or click each swatch below to test how the system reacts.
+        </p>
+      </div>
+
+      <div class="cell-matrix-grid">
+        <!-- 1. White Cells -->
+        <div class="cell-card" onclick="selectCellType('white')">
+          <div class="cell-swatch" style="background:var(--cell-white); color:var(--on-surface);">
+            ⚪ #FFFFFF
+          </div>
+          <div>
+            <h4 style="margin-bottom:2px;">White Cells</h4>
+            <div class="status-tag status-tag--positive" style="margin-bottom:var(--space-xs);">Editable Zone</div>
+            <p style="font-size:0.875rem;">Your sandbox! Free manual input for staff names, dates, odometers, fuel, and trip notes.</p>
+          </div>
+        </div>
+
+        <!-- 2. Grey Cells -->
+        <div class="cell-card" onclick="selectCellType('grey')">
+          <div class="cell-swatch" style="background:var(--cell-grey); color:#2b3035;">
+            🩶 #F3F4F6
+          </div>
+          <div>
+            <h4 style="margin-bottom:2px;">Grey Tinted Cells</h4>
+            <div class="status-tag status-tag--warning" style="margin-bottom:var(--space-xs);">Locked Formula Shields</div>
+            <p style="font-size:0.875rem;">Our engine room! Calculates trip distances, acquittal amounts, and service alerts. Leave untouched.</p>
+          </div>
+        </div>
+
+        <!-- 3. Dark Slate -->
+        <div class="cell-card" onclick="selectCellType('slate')">
+          <div class="cell-swatch" style="background:var(--cell-dark-slate); color:#ffffff;">
+            ⬛ #1E1E24
+          </div>
+          <div>
+            <h4 style="margin-bottom:2px;">Dark Slate Headers</h4>
+            <div class="status-tag status-tag--neutral" style="margin-bottom:var(--space-xs);">Structural Banners</div>
+            <p style="font-size:0.875rem;">Defines table columns, module schemas, and high-level KPI cards. Visual navigation reference.</p>
+          </div>
+        </div>
+
+        <!-- 4. Checkboxes -->
+        <div class="cell-card" onclick="selectCellType('checkbox')">
+          <div class="cell-swatch" style="background:var(--surface-container-low); color:var(--primary); font-size:1.25rem;">
+            ☑️ TRUE / FALSE
+          </div>
+          <div>
+            <h4 style="margin-bottom:2px;">Checkboxes (Toggles)</h4>
+            <div class="status-tag status-tag--positive" style="margin-bottom:var(--space-xs);">Interactive Switches</div>
+            <p style="font-size:0.875rem;">Boolean logic switches driving telemetry auto-lookup (E5) and compliance audit locks (E4).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cell Inspector Detail Box -->
+      <div id="cell-inspector-panel" class="inset">
+        <h4 id="cell-inspector-title" style="margin-bottom:var(--space-xs);">Click any cell type above to inspect its protocol</h4>
+        <div id="cell-inspector-body" style="font-size:0.9375rem;">
+          Select one of the four color classifications to review standard operating protocols, spreadsheet protection logic, and audit safety guardrails.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: 5-Step Fleet Operational SOPs -->
+    <section class="section-container" id="section-fleet-sops">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <span class="step-badge">3</span>
+          <span>Standard Operating Procedures</span>
+        </div>
+        <h2>The 5-Step Fleet Operational Lifecycle</h2>
+        <p>
+          From asset registration to trip logging and formal grant acquittal audit locks, this standard operating flow ensures audit-readiness under ATO commercial logbook mandates.
+        </p>
+      </div>
+
+      <!-- 5-Step SOP Accordion/Tabs -->
+      <div style="display:flex; flex-direction:column; gap:var(--space-sm); margin-bottom:var(--space-lg);">
+        
+        <!-- SOP 1 -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; align-items:flex-start; gap:var(--space-sm);">
+            <span class="step-badge">01</span>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs);">Fleet Asset Registration</h4>
+              <div style="font-size:0.8125rem; font-family:var(--font-mono); color:var(--tertiary); margin-bottom:var(--space-xs);">
+                TAB: FLEET_ROSTER (Cols A–E, G)
+              </div>
+              <p style="font-size:0.9375rem; margin-bottom:0;">
+                Register every vehicle with its unique <strong>Vehicle ID</strong> (e.g. VEH-001), <strong>Registration Plate</strong> (e.g. 1AA-1BB), <strong>Make/Model</strong>, <strong>Branch Depot</strong>, and assigned <strong>Fuel Card ID</strong>. Enter baseline odometer into <em>Last Serviced</em> to kick off service interval tracking.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOP 2 -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; align-items:flex-start; gap:var(--space-sm);">
+            <span class="step-badge">02</span>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs);">Carpool Trip Logging (Driver Check-In)</h4>
+              <div style="font-size:0.8125rem; font-family:var(--font-mono); color:var(--tertiary); margin-bottom:var(--space-xs);">
+                TAB: MASTER_CARPOOL_LOG (Cols A–J)
+              </div>
+              <p style="font-size:0.9375rem; margin-bottom:0;">
+                Drivers log each operational journey upon vehicle return: Date, Driver Name, Rego, End Odometer, Funding Stream, Trip Purpose, Tolls, and Fuel Card expenses.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOP 3 -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; align-items:flex-start; gap:var(--space-sm);">
+            <span class="step-badge">03</span>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs);">Automated Start Odometer Telemetry Sync</h4>
+              <div style="font-size:0.8125rem; font-family:var(--font-mono); color:var(--tertiary); margin-bottom:var(--space-xs);">
+                AUTOMATED: MASTER_CARPOOL_LOG (Cols D & F) & FLEET_DASHBOARD!E5
+              </div>
+              <p style="font-size:0.9375rem; margin-bottom:0;">
+                When Dashboard control toggle <code>FLEET_DASHBOARD!E5</code> is <strong>TRUE</strong>, the Start Odometer automatically synchronizes from that specific vehicle’s previous End Odometer. Total Trip KMs immediately calculate in formula shield Col F.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOP 4 -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; align-items:flex-start; gap:var(--space-sm);">
+            <span class="step-badge">04</span>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs);">Service & Lease Turnover Vigilance</h4>
+              <div style="font-size:0.8125rem; font-family:var(--font-mono); color:var(--tertiary); margin-bottom:var(--space-xs);">
+                AUTOMATED: FLEET_ROSTER (Cols H–J) & FLEET_DASHBOARD
+              </div>
+              <p style="font-size:0.9375rem; margin-bottom:0;">
+                The formula engine tracks vehicle mileage against standard 10,000 km maintenance intervals. Automatically triggers <span class="status-tag status-tag--warning">SERVICE DUE SOON</span> (&lt;1,000 km window), <span class="status-tag status-tag--error">SERVICING OVERDUE</span>, and flags vehicles over 100,000 km as <span class="status-tag status-tag--error">ELIGIBLE FOR RESALE</span>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOP 5 -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; align-items:flex-start; gap:var(--space-sm);">
+            <span class="step-badge">05</span>
+            <div>
+              <h4 style="margin-bottom:var(--space-xs);">Compliance Reconciliation & Row-Level Audit Lock</h4>
+              <div style="font-size:0.8125rem; font-family:var(--font-mono); color:var(--tertiary); margin-bottom:var(--space-xs);">
+                TAB: MASTER_CARPOOL_LOG (Cols K–L) & FLEET_DASHBOARD!E4
+              </div>
+              <p style="font-size:0.9375rem; margin-bottom:0;">
+                Compliance officers verify fuel receipts and journey purpose against driver logbook flags (Col K). Once approved, toggling the Lock Flag (Col L) or global Audit Lock (E4) permanently protects the entry from unauthorized tampering.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Mini Trip Simulator -->
+      <div class="simulator-canvas">
+        <div class="simulator-topbar">
+          <span>INTERACTIVE TRIP LOGGER & TELEMETRY CALCULATOR</span>
+          <span class="status-tag status-tag--positive">SOP STEPS 02–04 SIMULATOR</span>
+        </div>
+        <div class="simulator-body">
+          <p style="font-size:0.9375rem;">
+            Test how driver trip logging interacts with automated Start Odometer lookup (E5) and grant acquittal math (@ $0.85/km):
+          </p>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap:var(--space-md); margin-bottom:var(--space-md);">
+            <div class="form-group">
+              <label class="form-label" for="sim-vehicle-select">Select Vehicle</label>
+              <select class="form-select" id="sim-vehicle-select" onchange="onSimulatorVehicleChange()">
+                <option value="VEH-001">VEH-001 | Toyota Hilux SR5 (Melbourne HQ)</option>
+                <option value="VEH-002">VEH-002 | Ford Ranger XLT (Geelong Depot)</option>
+                <option value="VEH-003">VEH-003 | Toyota HiAce Commuter (Melbourne HQ)</option>
+                <option value="VEH-004">VEH-004 | Hyundai iLoad Van (Ballarat Hub)</option>
+                <option value="VEH-005">VEH-005 | Mitsubishi Triton GLS (Bendigo Depot)</option>
+                <option value="VEH-006">VEH-006 | Toyota RAV4 Hybrid (Melbourne HQ)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sim-start-odo">Start Odo (Formula Shield)</label>
+              <input class="form-input" id="sim-start-odo" type="text" value="48,500 km" readonly style="background:var(--cell-grey); font-family:var(--font-mono);">
+              <div class="form-hint" id="sim-start-hint">Auto-synced from previous End Odo (E5: ON)</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sim-end-odo">End Odometer (km)</label>
+              <input class="form-input" id="sim-end-odo" type="number" value="48680" oninput="calculateSimTrip()">
+              <div class="form-hint">Editable white cell manual entry</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sim-funding-select">Grant Funding Stream</label>
+              <select class="form-select" id="sim-funding-select" onchange="calculateSimTrip()">
+                <option value="DSS-2025">Dept of Social Services - Outreach (DSS-2025)</option>
+                <option value="RRV-04">Regional Roads Victoria - Infra (RRV-04)</option>
+                <option value="NDIS-770">NDIS Community Transport Subsidy (NDIS-770)</option>
+                <option value="YJC-12">Youth Justice Community Support (YJC-12)</option>
+                <option value="CORE-OPS">General Operational Core (Unrestricted Internal)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Calculated Telemetry Output Panel -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap:var(--space-sm); background:var(--surface-container-low); padding:var(--space-md); border:1px solid var(--outline-variant); margin-bottom:var(--space-md);">
+            <div>
+              <div class="muted-caption">CALCULATED TRIP DISTANCE</div>
+              <div id="sim-result-kms" style="font-family:var(--font-mono); font-weight:800; font-size:1.5rem; color:var(--primary);">
+                180 km
+              </div>
+              <div style="font-size:0.75rem; color:var(--on-surface-variant);">Formula: End Odo - Start Odo</div>
+            </div>
+
+            <div>
+              <div class="muted-caption">GRANT ACQUITTAL ALLOCATION</div>
+              <div id="sim-result-cost" style="font-family:var(--font-mono); font-weight:800; font-size:1.5rem; color:var(--positive);">
+                $153.00
+              </div>
+              <div style="font-size:0.75rem; color:var(--on-surface-variant);">Statutory rate: $0.85 / km</div>
+            </div>
+
+            <div>
+              <div class="muted-caption">MAINTENANCE CYCLE STATUS</div>
+              <div id="sim-result-service" style="margin-top:4px;">
+                <span class="status-tag status-tag--error">SERVICING OVERDUE</span>
+              </div>
+              <div id="sim-result-service-desc" style="font-size:0.75rem; color:var(--on-surface-variant); margin-top:2px;">
+                Exceeded 48,000 km service mark
+              </div>
+            </div>
+
+            <div>
+              <div class="muted-caption">LEASE TURNOVER STATUS</div>
+              <div id="sim-result-turnover" style="margin-top:4px;">
+                <span class="status-tag status-tag--positive">Within Lease Term</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--on-surface-variant); margin-top:2px;">
+                Threshold: 100,000 km
+              </div>
+            </div>
+          </div>
+
+          <button class="btn" onclick="commitSimulatorTrip()">
+            <i data-lucide="plus-circle" style="width:16px; height:16px;"></i>
+            Commit Trip to Simulated Carpool Ledger
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: System Settings & Customization Control Panel -->
+    <section class="section-container" id="section-settings">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <span class="step-badge">4</span>
+          <span>Configuration & System Control</span>
+        </div>
+        <h2>System Settings & Dropdown Customization Control Panel</h2>
+        <p>
+          Need to add a new driver, branch depot, or funding code? Or enforce row-level audit locks? Here is how to configure the control panel without breaking formulas.
+        </p>
+      </div>
+
+      <div class="card-grid" style="margin-bottom:var(--space-lg);">
+        <!-- 30-Second Dropdown Guide -->
+        <div class="inset" style="margin:0;">
+          <h4 style="margin-bottom:var(--space-xs); display:flex; align-items:center; gap:var(--space-xs);">
+            <i data-lucide="list-plus" style="width:18px; height:18px; color:var(--tertiary);"></i>
+            The 30-Second Safe Dropdown Guide
+          </h4>
+          <p style="font-size:0.9375rem;">
+            To add new options across all dropdown menus safely:
+          </p>
+          <ol style="padding-left:1.25rem; margin:0 0 var(--space-sm) 0; font-size:0.9375rem;">
+            <li>Open the master list tab (e.g. <code>FLEET_ROSTER</code> or <code>MASTER_STAFF_RT</code>).</li>
+            <li>Locate the target reference column (e.g. <em>Branch</em> or <em>Funding Stream Code</em>).</li>
+            <li>Scroll to the first empty <strong>white cell</strong> at the bottom of the list.</li>
+            <li>Type your new program name or staff name and press Enter.</li>
+          </ol>
+          <p style="font-size:0.875rem; color:var(--on-surface-variant);">
+            Google Sheets automatically populates the new item in every dropdown across the entire spreadsheet system instantly!
+          </p>
+        </div>
+
+        <!-- Master Toggles Guide -->
+        <div class="inset" style="margin:0;">
+          <h4 style="margin-bottom:var(--space-xs); display:flex; align-items:center; gap:var(--space-xs);">
+            <i data-lucide="sliders" style="width:18px; height:18px; color:var(--tertiary);"></i>
+            Master Dashboard Toggles (E4 & E5)
+          </h4>
+          <p style="font-size:0.9375rem;">
+            Located on <code>FLEET_DASHBOARD</code> (Cells E4 & E5):
+          </p>
+          <ul style="padding-left:1.25rem; margin:0 0 var(--space-sm) 0; font-size:0.9375rem;">
+            <li>
+              <strong>Audit Lock Enforced (E4):</strong> When TRUE, audited carpool records are frozen. Row-level edits are intercepted and reverted to preserve grant integrity.
+            </li>
+            <li>
+              <strong>Auto-Lookup Start Odometer (E5):</strong> When TRUE, trip Start Odo automatically syncs from previous End Odo, preventing odometer discrepancy errors.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Interactive System Control Playground -->
+      <div class="simulator-canvas">
+        <div class="simulator-topbar">
+          <span>FLEET_DASHBOARD &gt; SYSTEM CONTROL PANEL SIMULATOR</span>
+          <span class="status-tag status-tag--positive">LIVE SWITCH MATRIX</span>
+        </div>
+        <div class="simulator-body">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap:var(--space-lg); margin-bottom:var(--space-md);">
+            
+            <!-- Toggle 1: E4 Audit Lock -->
+            <div style="background:var(--surface-container-low); padding:var(--space-md); border:1px solid var(--outline-variant);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-xs);">
+                <strong style="font-size:0.9375rem;">FLEET_DASHBOARD!E4</strong>
+                <span id="badge-toggle-e4" class="status-tag status-tag--positive">ACTIVE (TRUE)</span>
+              </div>
+              <h4 style="margin-bottom:var(--space-xs);">Audit Lock Enforced</h4>
+              <p style="font-size:0.875rem; margin-bottom:var(--space-md);">
+                Freezes and protects trips marked with Lock Flag (Col L) from alteration.
+              </p>
+              <div class="toggle-control active" id="toggle-e4" onclick="toggleControl('e4')">
+                <div class="toggle-box">
+                  <div class="toggle-knob"></div>
+                </div>
+                <span id="label-toggle-e4" style="font-weight:700; font-size:0.875rem;">TRUE — Trips Frozen</span>
+              </div>
+            </div>
+
+            <!-- Toggle 2: E5 Auto-Lookup -->
+            <div style="background:var(--surface-container-low); padding:var(--space-md); border:1px solid var(--outline-variant);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-xs);">
+                <strong style="font-size:0.9375rem;">FLEET_DASHBOARD!E5</strong>
+                <span id="badge-toggle-e5" class="status-tag status-tag--positive">ACTIVE (TRUE)</span>
+              </div>
+              <h4 style="margin-bottom:var(--space-xs);">Auto-Lookup Start Odo</h4>
+              <p style="font-size:0.875rem; margin-bottom:var(--space-md);">
+                Telemetry sync pulls vehicle's previous End Odometer into Start Odo automatically.
+              </p>
+              <div class="toggle-control active" id="toggle-e5" onclick="toggleControl('e5')">
+                <div class="toggle-box">
+                  <div class="toggle-knob"></div>
+                </div>
+                <span id="label-toggle-e5" style="font-weight:700; font-size:0.875rem;">TRUE — Auto-Sync Active</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Interactive Dropdown Customizer -->
+          <div style="border-top:1px solid var(--outline-variant); padding-top:var(--space-md);">
+            <h4 style="margin-bottom:var(--space-xs);">Test Dropdown Roster Expansion</h4>
+            <p style="font-size:0.875rem; margin-bottom:var(--space-sm);">
+              Type a new Branch Depot or Funding Stream Code below to add it to your organization's simulated dropdown rosters in real-time:
+            </p>
+            <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm); align-items:flex-end;">
+              <div class="form-group" style="margin-bottom:0; flex:1; min-width:200px;">
+                <label class="form-label" for="new-roster-type">Category</label>
+                <select class="form-select" id="new-roster-type">
+                  <option value="branch">Branch Depot (FLEET_ROSTER Col D)</option>
+                  <option value="funding">Funding Stream Code (FLEET_DASHBOARD)</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0; flex:2; min-width:240px;">
+                <label class="form-label" for="new-roster-name">New Item Name</label>
+                <input class="form-input" id="new-roster-name" type="text" placeholder="e.g. Gippsland Regional Hub or NDIS-2027-Youth">
+              </div>
+              <button class="btn" onclick="addNewRosterItem()">
+                <i data-lucide="plus" style="width:16px; height:16px;"></i>
+                Add to Dropdown Roster
+              </button>
+            </div>
+            <div id="roster-added-alert" style="margin-top:var(--space-sm); font-size:0.875rem; font-weight:700; color:var(--positive); display:none;"></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: In-Sheet AI Prompt Library -->
+    <section class="section-container" id="section-ai-prompts">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <span class="step-badge">5</span>
+          <span>In-Sheet AI Sidekick Library</span>
+        </div>
+        <h2>Copy-and-Paste AI Prompts for Gemini & ChatGPT</h2>
+        <p>
+          You do not have to interpret numbers or draft compliance emails alone. Keep your LEW CREATIONS sheet open in one browser tab, open the Gemini AI sidekick or ChatGPT in another, and paste these curated prompt cards.
+        </p>
+      </div>
+
+      <!-- Prompt Cards Stack -->
+      <div style="display:flex; flex-direction:column; gap:var(--space-lg);">
+        
+        <!-- Prompt 1: Board / CEO Summary -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:var(--space-xs); flex-wrap:wrap; gap:var(--space-xs);">
+            <div>
+              <span class="status-tag status-tag--positive" style="margin-bottom:4px;">EXECUTIVE BRIEFING</span>
+              <h3 style="margin-top:2px;">Prompt 1: Generate an Executive Board / CEO Summary</h3>
+            </div>
+            <button class="btn" id="btn-copy-p1" onclick="copyPrompt(1)">
+              <i data-lucide="copy" style="width:16px; height:16px;"></i>
+              Copy Prompt
+            </button>
+          </div>
+          <p style="font-size:0.9375rem; color:var(--on-surface-variant); margin-bottom:var(--space-sm);">
+            Converts raw telematics, odometer totals, and servicing flags into three crisp executive bullet points ready for your monthly report.
+          </p>
+
+          <div class="code-view" id="prompt-text-1">
+"Act as an executive operations advisor. Look at my open LEW CREATIONS dashboard screen. Summarize our current operational health into 3 concise bullet points I can paste directly into my monthly board report for the CEO."
+          </div>
+
+          <!-- Prompt 1 Output Preview Accordion -->
+          <button class="btn btn--secondary" onclick="toggleAiPreview(1)" style="font-size:0.8125rem; padding:0.4rem 0.8rem;">
+            <i data-lucide="eye" style="width:14px; height:14px;"></i>
+            Toggle Simulated AI Response Preview
+          </button>
+
+          <div id="ai-preview-1" style="display:none; margin-top:var(--space-md); background:#ffffff; border:1px solid var(--outline-variant); padding:var(--space-md);">
+            <div class="muted-caption" style="margin-bottom:var(--space-xs);">SIMULATED GEMINI AI RESPONSE BASED ON YOUR ACTIVE DASHBOARD DATA:</div>
+            <ul style="margin:0; padding-left:1.25rem; font-size:0.9375rem;">
+              <li><strong>Operational Fleet Utilization:</strong> 6 active fleet vehicles logged 2,300 total kilometers across 5 community programs, yielding $1,955.00 in verified grant acquittal allocations (100% reconciled).</li>
+              <li><strong>Maintenance Vigilance:</strong> 1 vehicle (VEH-001 Toyota Hilux) requires immediate scheduling due to servicing overdue flags; 1 vehicle (VEH-002 Ford Ranger) has entered the 1,000 km pre-service notification window.</li>
+              <li><strong>Capital Asset Planning:</strong> VEH-003 (Toyota HiAce Commuter) has reached 102,400 km and is formally flagged for lease turnover and resale eligibility to maximize asset residual recovery.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Prompt 2: Friendly Staff Action Email -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:var(--space-xs); flex-wrap:wrap; gap:var(--space-xs);">
+            <div>
+              <span class="status-tag status-tag--positive" style="margin-bottom:4px;">COMMUNITY LEADERSHIP</span>
+              <h3 style="margin-top:2px;">Prompt 2: Draft a Friendly Staff Action Email</h3>
+            </div>
+            <button class="btn" id="btn-copy-p2" onclick="copyPrompt(2)">
+              <i data-lucide="copy" style="width:16px; height:16px;"></i>
+              Copy Prompt
+            </button>
+          </div>
+          <p style="font-size:0.9375rem; color:var(--on-surface-variant); margin-bottom:var(--space-sm);">
+            Drafts an encouraging, non-bureaucratic communication reminding program drivers to log odometers and arrange workshop servicing.
+          </p>
+
+          <div class="code-view" id="prompt-text-2">
+"Look at the overdue action flags on my open Google Sheet. Draft a warm, encouraging 2-paragraph email to program leads reminding drivers to complete odometer logs and book overdue servicing for vehicles flagged in red."
+          </div>
+
+          <!-- Prompt 2 Output Preview Accordion -->
+          <button class="btn btn--secondary" onclick="toggleAiPreview(2)" style="font-size:0.8125rem; padding:0.4rem 0.8rem;">
+            <i data-lucide="eye" style="width:14px; height:14px;"></i>
+            Toggle Simulated AI Response Preview
+          </button>
+
+          <div id="ai-preview-2" style="display:none; margin-top:var(--space-md); background:#ffffff; border:1px solid var(--outline-variant); padding:var(--space-md);">
+            <div class="muted-caption" style="margin-bottom:var(--space-xs);">SIMULATED CHATGPT / GEMINI AI RESPONSE:</div>
+            <p style="font-size:0.9375rem; margin-bottom:var(--space-sm);">
+              <strong>Subject: Quick Fleet Check-In: Keeping You Safe & Supported on the Road</strong>
+            </p>
+            <p style="font-size:0.9375rem; margin-bottom:var(--space-sm);">
+              Hi Team, thank you all for the tremendous dedication you bring to our clients and regional programs every single day. As we close out this operational cycle, a quick reminder to ensure your journey check-ins are up to date on the Carpool Log upon returning keys. Accurate odometer entries keep our grant funding intact and ensure our vehicle safety records remain rock solid.
+            </p>
+            <p style="font-size:0.9375rem; margin-bottom:0;">
+              For program leads managing vehicles flagged with red service notices (notably our Melbourne Hilux 1AA-1BB), please touch base with operations this week to schedule preventative workshop maintenance. We want to keep everyone driving safe, dependable vehicles—thank you for your continuous support!
+            </p>
+          </div>
+        </div>
+
+        <!-- Prompt 3: Step-by-Step Filtering Help -->
+        <div class="inset" style="margin:0;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:var(--space-xs); flex-wrap:wrap; gap:var(--space-xs);">
+            <div>
+              <span class="status-tag status-tag--positive" style="margin-bottom:4px;">SPREADSHEET COACHING</span>
+              <h3 style="margin-top:2px;">Prompt 3: Step-by-Step Filtering & Reporting Help</h3>
+            </div>
+            <button class="btn" id="btn-copy-p3" onclick="copyPrompt(3)">
+              <i data-lucide="copy" style="width:16px; height:16px;"></i>
+              Copy Prompt
+            </button>
+          </div>
+          <p style="font-size:0.9375rem; color:var(--on-surface-variant); margin-bottom:var(--space-sm);">
+            Asks AI for exact, zero-stress navigational clicks inside Google Sheets to isolate specific grant programs or months.
+          </p>
+
+          <div class="code-view" id="prompt-text-3">
+"I am using LEW CREATIONS' spreadsheet. I want to filter the logbook to only show entries for the 'Youth Outreach' program for October. Tell me step-by-step exactly where to click in Google Sheets to set up this temporary view."
+          </div>
+
+          <!-- Prompt 3 Output Preview Accordion -->
+          <button class="btn btn--secondary" onclick="toggleAiPreview(3)" style="font-size:0.8125rem; padding:0.4rem 0.8rem;">
+            <i data-lucide="eye" style="width:14px; height:14px;"></i>
+            Toggle Simulated AI Response Preview
+          </button>
+
+          <div id="ai-preview-3" style="display:none; margin-top:var(--space-md); background:#ffffff; border:1px solid var(--outline-variant); padding:var(--space-md);">
+            <div class="muted-caption" style="margin-bottom:var(--space-xs);">SIMULATED AI STEP-BY-STEP WALKTHROUGH:</div>
+            <ol style="margin:0; padding-left:1.25rem; font-size:0.9375rem;">
+              <li>Click on the <strong>MASTER_CARPOOL_LOG</strong> tab at the bottom of your screen.</li>
+              <li>Click on the green column header for Column G (<em>Funding Stream</em>).</li>
+              <li>In the top menu bar, click <strong>Data</strong> &gt; <strong>Create a filter</strong> (or click the funnel icon on your toolbar).</li>
+              <li>Click the small inverted triangle icon that appeared inside Cell G1.</li>
+              <li>Click <strong>Clear</strong> to uncheck all programs, then check only <strong>"Youth Outreach"</strong> (or type it in the search box).</li>
+              <li>Click <strong>OK</strong>. Google Sheets will now temporarily hide all other rows without altering your data or breaking formulas!</li>
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 6: Statutory Compliance, ATO Standards & Cold Storage -->
+    <section class="section-container" id="section-compliance">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <span class="step-badge">🛡️</span>
+          <span>Data Sovereignty & Legal Mandate</span>
+        </div>
+        <h2>Statutory 7-Year ATO Compliance & 90-Day Cold Storage</h2>
+        <p>
+          Compliance is built directly into the template architecture. Understand how your organization meets Australian Taxation Office (ATO) logbook standards and federal grant acquittal guidelines.
+        </p>
+      </div>
+
+      <div class="inset">
+        <h3 style="margin-bottom:var(--space-xs); display:flex; align-items:center; gap:var(--space-xs);">
+          <i data-lucide="scale" style="width:20px; height:20px; color:var(--tertiary);"></i>
+          Data Sovereignty, Audit Integrity & Compliance Notice
+        </h3>
+        <p style="font-size:0.9375rem;">
+          All vehicle movements, mileage records, telematics data, and grant-coded expenditure entries within this database constitute sovereign operational and financial property of your organization. Records are maintained in strict compliance with statutory <strong>Australian Taxation Office (ATO) commercial logbook standards</strong> and Commonwealth grant acquittal frameworks.
+        </p>
+        <p style="font-size:0.9375rem;">
+          Manual tampering with formula shield columns, retroactively altering mileage records, or failing to declare vehicle operational journeys violates internal fleet governance policies. All records must be preserved and remain audit-ready for a <strong>statutory minimum of seven (7) financial years</strong>.
+        </p>
+      </div>
+
+      <div class="card-grid" style="margin-top:var(--space-md); margin-bottom:var(--space-lg);">
+        
+        <!-- ATO 7-Year Mandate Card -->
+        <div style="background:var(--surface-container-low); border:1px solid var(--outline-variant); padding:var(--space-md);">
+          <div class="status-tag status-tag--positive" style="margin-bottom:var(--space-xs);">STATUTORY RETENTION</div>
+          <h4 style="margin-bottom:var(--space-xs);">ATO 7-Year Audit Standards</h4>
+          <ul style="padding-left:1.25rem; font-size:0.875rem; margin:0;">
+            <li>12-week continuous logbook validity window for Fringe Benefits Tax (FBT) compliance.</li>
+            <li>Required telemetry: Date, Driver, Start/End Odometer, KMs traveled, Journey Purpose.</li>
+            <li>Immutable retention for minimum 7 financial years to satisfy federal grant audits.</li>
+            <li>Automated grant allocation calculated at standard benchmark rate of <strong>$0.85 / km</strong>.</li>
+          </ul>
+        </div>
+
+        <!-- 90-Day Cold Storage Archival -->
+        <div style="background:var(--surface-container-low); border:1px solid var(--outline-variant); padding:var(--space-md);">
+          <div class="status-tag status-tag--neutral" style="margin-bottom:var(--space-xs);">AUTOMATED ARCHIVAL</div>
+          <h4 style="margin-bottom:var(--space-xs);">Quarterly Archival Daemon (90 Days)</h4>
+          <ul style="padding-left:1.25rem; font-size:0.875rem; margin:0;">
+            <li>Backend Apps Script cron daemon runs on the 1st of every month at 01:00 AM.</li>
+            <li>Copies locked trips older than 90 days from <code>MASTER_CARPOOL_LOG</code> to <code>CARPOOL_ARCHIVE</code>.</li>
+            <li>Keeps active spreadsheet calculation latency blazing fast (&lt;200ms).</li>
+            <li>Preserves tamper-proof, read-only cold storage for statutory 7-year ATO audits.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Backend Script Reference Box -->
+      <div style="border:1px solid var(--outline-variant); padding:var(--space-md); background:var(--background);">
+        <h4 style="margin-bottom:var(--space-xs); display:flex; align-items:center; gap:var(--space-xs);">
+          <i data-lucide="terminal" style="width:18px; height:18px; color:var(--tertiary);"></i>
+          Production Apps Script Telematics & Protection Daemon
+        </h4>
+        <p style="font-size:0.875rem; color:var(--on-surface-variant); margin-bottom:var(--space-sm);">
+          Your sheet comes pre-architected to support row-level compliance enforcement (<code>Extensions &gt; Apps Script</code>). Here is the actual production code governing your audit locks:
+        </p>
+        <div class="code-view" style="margin:0;">
+/**
+ * LEW CREATIONS - Vehicle Fleet &amp; Mileage Operations Tracker
+ * Backend Automation &amp; Telematics Governance Daemon
+ */
+function onEditTrigger(e) {
+  var sheet = e.source.getActiveSheet();
+  if (sheet.getName() !== "MASTER_CARPOOL_LOG") return;
+  var row = e.range.getRow();
+  if (row &lt; 2) return;
+  
+  var dashboard = e.source.getSheetByName("FLEET_DASHBOARD");
+  var auditLock = dashboard.getRange("E4").getValue();
+  var isLocked = sheet.getRange(row, 12).getValue(); // Col L: Lock Flag
+  
+  if ((auditLock === true || isLocked === true) &amp;&amp; e.range.getColumn() !== 12) {
+    e.range.setValue(e.oldValue);
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      "Record is locked under LEW CREATIONS compliance protocols.", 
+      "Action Blocked", 
+      5
+    );
+  }
+}
+        </div>
+      </div>
+    </section>
+
+    <!-- Version History Revert Modal Simulation -->
+    <div id="version-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:99999; align-items:center; justify-content:center;">
+      <div style="background:#ffffff; max-width:540px; width:90%; border:3px solid var(--primary); padding:var(--space-lg); box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--outline-variant); padding-bottom:var(--space-xs); margin-bottom:var(--space-md);">
+          <h3 style="display:flex; align-items:center; gap:var(--space-xs);">
+            <i data-lucide="history" style="width:20px; height:20px; color:var(--tertiary);"></i>
+            Google Sheets: Version History
+          </h3>
+          <button onclick="closeVersionModal()" style="background:transparent; border:0; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <p style="font-size:0.9375rem; margin-bottom:var(--space-md);">
+          Select a previous snapshot timestamp to restore your spreadsheet to its pristine, pre-accident state:
+        </p>
+        <div style="display:flex; flex-direction:column; gap:var(--space-xs); margin-bottom:var(--space-lg);">
+          <div style="padding:var(--space-sm); border:1px solid var(--outline-variant); background:var(--surface-container-low); display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="executeVersionRestore('Yesterday, 9:00 AM')">
+            <div>
+              <strong>Yesterday, 09:00 AM</strong>
+              <div class="muted-caption">Clean baseline — all formulas intact</div>
+            </div>
+            <button class="btn btn--positive" style="padding:0.35rem 0.75rem; font-size:0.8125rem;">Restore Version</button>
+          </div>
+          <div style="padding:var(--space-sm); border:1px solid var(--outline-variant); background:#ffffff; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="executeVersionRestore('2 days ago, 4:30 PM')">
+            <div>
+              <strong>Nov 3, 2026, 04:30 PM</strong>
+              <div class="muted-caption">Weekly audit sign-off by Elena Rostova</div>
+            </div>
+            <button class="btn btn--secondary" style="padding:0.35rem 0.75rem; font-size:0.8125rem;">Restore Version</button>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end;">
+          <button class="btn btn--secondary" onclick="closeVersionModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Element -->
+    <div id="portal-toast" class="toast-popup" role="status" aria-live="polite">
+      <i id="toast-icon" data-lucide="info" style="width:20px; height:20px;"></i>
+      <span id="toast-message">Notification text</span>
+    </div>
+
+    <!-- Footer -->
+    <footer style="border-top:1px solid var(--outline-variant); padding-top:var(--space-lg); margin-top:var(--space-xl); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--space-md);">
+      <div>
+        <strong>LEW CREATIONS | Operational Excellence & Governance Architecture</strong>
+        <div class="muted-caption">Vehicle Fleet & Mileage Operations Tracker • Customer Empowerment Series</div>
+      </div>
+      <div style="font-family:var(--font-mono); font-size:0.8125rem; color:var(--on-surface-variant);">
+        ATO Statutory Retention: 7 Years • ATO Benchmark: $0.85/km
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Gemini Notebook Shim API for State Persistence -->
+  <api-shim></api-shim>
+
+  <script>
+    // State model
+    var appState = {
+      checklist: [false, false, false, false, false],
+      e4AuditLock: true,
+      e5AutoLookup: true,
+      customBranches: [],
+      customFunding: []
+    };
+
+    // Initial vehicle database
+    var vehicleFleet = {
+      'VEH-001': { rego: '1AA-1BB', make: 'Toyota Hilux SR5', branch: 'Melbourne HQ', odo: 48500, lastService: 38000, nextService: 48000 },
+      'VEH-002': { rego: '2CC-2DD', make: 'Ford Ranger XLT', branch: 'Geelong Depot', odo: 61250, lastService: 52000, nextService: 62000 },
+      'VEH-003': { rego: '3EE-3FF', make: 'Toyota HiAce Commuter', branch: 'Melbourne HQ', odo: 102400, lastService: 94000, nextService: 104000 },
+      'VEH-004': { rego: '4GG-4HH', make: 'Hyundai iLoad Van', branch: 'Ballarat Hub', odo: 24100, lastService: 20000, nextService: 30000 },
+      'VEH-005': { rego: '5II-5JJ', make: 'Mitsubishi Triton GLS', branch: 'Bendigo Depot', odo: 79800, lastService: 75000, nextService: 85000 },
+      'VEH-006': { rego: '6KK-6LL', make: 'Toyota RAV4 Hybrid', branch: 'Melbourne HQ', odo: 16350, lastService: 12000, nextService: 22000 }
+    };
+
+    // Defensive initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+      initAsyncState();
+      calculateSimTrip();
+    });
+
+    async function initAsyncState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          var saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (Array.isArray(saved.checklist)) appState.checklist = saved.checklist;
+            if (typeof saved.e4AuditLock === 'boolean') appState.e4AuditLock = saved.e4AuditLock;
+            if (typeof saved.e5AutoLookup === 'boolean') appState.e5AutoLookup = saved.e5AutoLookup;
+            if (Array.isArray(saved.customBranches)) appState.customBranches = saved.customBranches;
+            if (Array.isArray(saved.customFunding)) appState.customFunding = saved.customFunding;
+            renderRestoredState();
+          }
+        }
+      } catch (err) {
+        console.warn('Could not read state:', err);
+      }
+      updateChecklistUI();
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        console.warn('Could not persist state:', err);
+      }
+    }
+
+    function renderRestoredState() {
+      for (var i = 1; i <= 5; i++) {
+        var chk = document.getElementById('check-mod-' + i);
+        if (chk) chk.checked = !!appState.checklist[i - 1];
+      }
+      updateToggleUI('e4', appState.e4AuditLock);
+      updateToggleUI('e5', appState.e5AutoLookup);
+      
+      // Re-populate custom dropdown items
+      var fundSelect = document.getElementById('sim-funding-select');
+      if (fundSelect && appState.customFunding.length > 0) {
+        appState.customFunding.forEach(function(item) {
+          var opt = document.createElement('option');
+          opt.value = item;
+          opt.textContent = item + ' (Custom Roster)';
+          fundSelect.appendChild(opt);
+        });
+      }
+    }
+
+    function toggleModuleCheck(index) {
+      var chk = document.getElementById('check-mod-' + index);
+      if (chk) {
+        appState.checklist[index - 1] = chk.checked;
+        updateChecklistUI();
+        persistState();
+        if (chk.checked) {
+          showToast('Module ' + index + ' marked complete! Great progress.', 'positive');
+        }
+      }
+    }
+
+    function updateChecklistUI() {
+      var count = 0;
+      for (var i = 0; i < appState.checklist.length; i++) {
+        if (appState.checklist[i]) count++;
+      }
+      var pct = Math.round((count / 5) * 100);
+      var pctEl = document.getElementById('progress-percent');
+      var fillEl = document.getElementById('progress-bar-fill');
+      if (pctEl) pctEl.textContent = pct + '% Complete';
+      if (fillEl) fillEl.style.width = pct + '%';
+    }
+
+    // SECTION 1: Panic Button Simulator
+    function simulateAccident() {
+      var dateCell = document.getElementById('panic-cell-date');
+      var driverCell = document.getElementById('panic-cell-driver');
+      var regoCell = document.getElementById('panic-cell-rego');
+      var kmsCell = document.getElementById('panic-cell-kms');
+      var fundingCell = document.getElementById('panic-cell-funding');
+      var errBanner = document.getElementById('panic-error-banner');
+      var statusBadge = document.getElementById('panic-sim-status');
+      var feedback = document.getElementById('panic-feedback');
+
+      if (dateCell) dateCell.textContent = '';
+      if (driverCell) driverCell.textContent = '#REF! (Row Deleted)';
+      if (regoCell) regoCell.textContent = 'ERR';
+      if (kmsCell) {
+        kmsCell.textContent = '#VALUE!';
+        kmsCell.style.color = 'var(--error)';
+      }
+      if (fundingCell) fundingCell.textContent = '';
+
+      if (errBanner) errBanner.style.display = 'block';
+      if (statusBadge) {
+        statusBadge.textContent = 'STATUS: ACCIDENTAL DELETION SIMULATED';
+        statusBadge.className = 'status-tag status-tag--error';
+      }
+      if (feedback) {
+        feedback.textContent = 'Now click Undo (Ctrl + Z) or Version History to recover!';
+        feedback.style.color = 'var(--error)';
+      }
+
+      var btnUndo = document.getElementById('btn-undo-sheet');
+      var btnVersion = document.getElementById('btn-version-sheet');
+      var btnBreak = document.getElementById('btn-break-sheet');
+      if (btnUndo) btnUndo.disabled = false;
+      if (btnVersion) btnVersion.disabled = false;
+      if (btnBreak) btnBreak.disabled = true;
+
+      showToast('⚠️ Accident simulated: row data wiped. Try the safety buttons!', 'error');
+    }
+
+    function healWithUndo() {
+      restorePristinePanicRow('Ctrl + Z Undo executed!');
+      showToast('✓ Undo Successful! Sheet restored in 1 second.', 'positive');
+      markModuleComplete(1);
+    }
+
+    function openVersionModal() {
+      var modal = document.getElementById('version-modal');
+      if (modal) modal.style.display = 'flex';
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function closeVersionModal() {
+      var modal = document.getElementById('version-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function executeVersionRestore(timestamp) {
+      closeVersionModal();
+      restorePristinePanicRow('Restored version: ' + timestamp);
+      showToast('✓ Restored pristine version from ' + timestamp + '!', 'positive');
+      markModuleComplete(1);
+    }
+
+    function restorePristinePanicRow(msg) {
+      var dateCell = document.getElementById('panic-cell-date');
+      var driverCell = document.getElementById('panic-cell-driver');
+      var regoCell = document.getElementById('panic-cell-rego');
+      var kmsCell = document.getElementById('panic-cell-kms');
+      var fundingCell = document.getElementById('panic-cell-funding');
+      var errBanner = document.getElementById('panic-error-banner');
+      var statusBadge = document.getElementById('panic-sim-status');
+      var feedback = document.getElementById('panic-feedback');
+
+      if (dateCell) dateCell.textContent = '2026-11-12';
+      if (driverCell) driverCell.textContent = 'Sarah Jenkins';
+      if (regoCell) regoCell.textContent = '1AA-1BB';
+      if (kmsCell) {
+        kmsCell.textContent = '180 km';
+        kmsCell.style.color = 'var(--primary)';
+      }
+      if (fundingCell) fundingCell.textContent = 'DSS-2025 Outreach';
+
+      if (errBanner) errBanner.style.display = 'none';
+      if (statusBadge) {
+        statusBadge.textContent = 'STATUS: PRISTINE & PROTECTED';
+        statusBadge.className = 'status-tag status-tag--positive';
+      }
+      if (feedback) {
+        feedback.textContent = '✓ ' + msg + ' Sheet is 100% unbreakable.';
+        feedback.style.color = 'var(--positive)';
+      }
+
+      var btnUndo = document.getElementById('btn-undo-sheet');
+      var btnVersion = document.getElementById('btn-version-sheet');
+      var btnBreak = document.getElementById('btn-break-sheet');
+      if (btnUndo) btnUndo.disabled = true;
+      if (btnVersion) btnVersion.disabled = true;
+      if (btnBreak) btnBreak.disabled = false;
+    }
+
+    function markModuleComplete(modNum) {
+      appState.checklist[modNum - 1] = true;
+      var chk = document.getElementById('check-mod-' + modNum);
+      if (chk) chk.checked = true;
+      updateChecklistUI();
+      persistState();
+    }
+
+    // SECTION 2: Cell Color Inspector
+    function selectCellType(type) {
+      var titleEl = document.getElementById('cell-inspector-title');
+      var bodyEl = document.getElementById('cell-inspector-body');
+      var panel = document.getElementById('cell-inspector-panel');
+      if (!titleEl || !bodyEl || !panel) return;
+
+      if (type === 'white') {
+        panel.className = 'inset--positive';
+        titleEl.textContent = '⚪ White Cells (#FFFFFF) — Editable Data Entry Zone';
+        bodyEl.innerHTML = '<strong>User Protocol: EDITABLE SANDBOX.</strong> Drivers, fleet coordinators, and team leads can freely input dates, driver names, odometer numbers, fuel amounts, and purpose notes. These cells do not contain formulas. Feel free to type, paste, and overwrite with 100% confidence!';
+      } else if (type === 'grey') {
+        panel.className = 'inset';
+        titleEl.textContent = '🩶 Grey Tinted Cells (#F3F4F6) — Locked Formula Shields';
+        bodyEl.innerHTML = '<strong>User Protocol: FORMULA SHIELDS (LEAVE UNTOUCHED).</strong> These cells are the mathematical engine room. They calculate Trip KMs (<code>=EndOdo - StartOdo</code>), Grant Acquittal Dollars (@ $0.85/km), and trigger maintenance warnings. If you accidentally type over a grey cell, simply press <code>Ctrl + Z</code> immediately!';
+      } else if (type === 'slate') {
+        panel.className = 'inset';
+        titleEl.textContent = '⬛ Dark Slate (#1E1E24) — Structural Headers & Modules';
+        bodyEl.innerHTML = '<strong>User Protocol: STRUCTURAL REFERENCE.</strong> Defines column identities, table scopes, and executive KPI labels. These rows are frozen at the top of each tab so you always know which column you are filling out as you scroll down thousands of trip records.';
+      } else if (type === 'checkbox') {
+        panel.className = 'inset--positive';
+        titleEl.textContent = '☑️ Checkboxes — System Control Switches';
+        bodyEl.innerHTML = '<strong>User Protocol: INTERACTIVE SWITCHES.</strong> Clicking a checkbox toggles boolean <code>TRUE</code> or <code>FALSE</code>. On the Dashboard, E4 activates the global audit lock, while E5 activates automatic odometer sync. In the Carpool Log, checking Col L freezes an individual trip for ATO grant audit.';
+      }
+      markModuleComplete(2);
+      showToast('Cell classification inspected: ' + type.toUpperCase(), 'positive');
+    }
+
+    // SECTION 3: Simulator Calculations
+    function onSimulatorVehicleChange() {
+      var select = document.getElementById('sim-vehicle-select');
+      if (!select) return;
+      var vehId = select.value;
+      var data = vehicleFleet[vehId];
+      if (!data) return;
+
+      var startOdoInput = document.getElementById('sim-start-odo');
+      var endOdoInput = document.getElementById('sim-end-odo');
+      if (startOdoInput) {
+        startOdoInput.value = data.odo.toLocaleString() + ' km';
+      }
+      if (endOdoInput) {
+        endOdoInput.value = data.odo + 180;
+      }
+      calculateSimTrip();
+    }
+
+    function calculateSimTrip() {
+      var select = document.getElementById('sim-vehicle-select');
+      var endOdoInput = document.getElementById('sim-end-odo');
+      if (!select || !endOdoInput) return;
+
+      var vehId = select.value;
+      var veh = vehicleFleet[vehId];
+      if (!veh) return;
+
+      var startOdo = veh.odo;
+      var endOdo = parseFloat(endOdoInput.value) || startOdo;
+      var diffKms = Math.max(0, endOdo - startOdo);
+
+      var kmsEl = document.getElementById('sim-result-kms');
+      var costEl = document.getElementById('sim-result-cost');
+      var servEl = document.getElementById('sim-result-service');
+      var servDesc = document.getElementById('sim-result-service-desc');
+      var turnEl = document.getElementById('sim-result-turnover');
+
+      if (kmsEl) kmsEl.textContent = diffKms + ' km';
+      if (costEl) costEl.textContent = '$' + (diffKms * 0.85).toFixed(2);
+
+      // Check Servicing Logic
+      var projectedOdo = endOdo;
+      var kmSinceService = projectedOdo - veh.lastService;
+      var nextLimit = veh.nextService;
+      var kmRemaining = nextLimit - projectedOdo;
+
+      if (servEl && servDesc) {
+        if (projectedOdo >= nextLimit) {
+          servEl.innerHTML = '<span class="status-tag status-tag--error">SERVICING OVERDUE</span>';
+          servDesc.textContent = 'Exceeded ' + nextLimit.toLocaleString() + ' km service interval';
+        } else if (kmRemaining <= 1000) {
+          servEl.innerHTML = '<span class="status-tag status-tag--warning">SERVICE DUE SOON</span>';
+          servDesc.textContent = kmRemaining.toLocaleString() + ' km until 10,000 km threshold';
+        } else {
+          servEl.innerHTML = '<span class="status-tag status-tag--positive">OK</span>';
+          servDesc.textContent = kmRemaining.toLocaleString() + ' km remaining before next service';
+        }
+      }
+
+      // Check Resale / Turnover Logic
+      if (turnEl) {
+        if (projectedOdo >= 100000) {
+          turnEl.innerHTML = '<span class="status-tag status-tag--error">ELIGIBLE FOR RESALE</span>';
+        } else {
+          turnEl.innerHTML = '<span class="status-tag status-tag--positive">Within Lease Term</span>';
+        }
+      }
+    }
+
+    function commitSimulatorTrip() {
+      var select = document.getElementById('sim-vehicle-select');
+      var endOdoInput = document.getElementById('sim-end-odo');
+      if (!select || !endOdoInput) return;
+
+      var vehId = select.value;
+      var endVal = parseFloat(endOdoInput.value);
+      if (endVal && vehicleFleet[vehId]) {
+        vehicleFleet[vehId].odo = endVal;
+        showToast('✓ Trip committed! New odometer saved for ' + vehId + ': ' + endVal.toLocaleString() + ' km', 'positive');
+        markModuleComplete(3);
+        onSimulatorVehicleChange();
+      }
+    }
+
+    // SECTION 4: System Control Toggles & Roster
+    function toggleControl(key) {
+      if (key === 'e4') {
+        appState.e4AuditLock = !appState.e4AuditLock;
+        updateToggleUI('e4', appState.e4AuditLock);
+        showToast('E4 Audit Lock toggled to: ' + (appState.e4AuditLock ? 'TRUE (Rows Frozen)' : 'FALSE (Edits Allowed)'), 'positive');
+      } else if (key === 'e5') {
+        appState.e5AutoLookup = !appState.e5AutoLookup;
+        updateToggleUI('e5', appState.e5AutoLookup);
+        var hint = document.getElementById('sim-start-hint');
+        if (hint) {
+          hint.textContent = appState.e5AutoLookup ? 'Auto-synced from previous End Odo (E5: ON)' : 'Manual Start Odo entry permitted (E5: OFF)';
+        }
+        showToast('E5 Start Odo Sync toggled to: ' + (appState.e5AutoLookup ? 'TRUE (Auto-Lookup)' : 'FALSE (Manual)'), 'positive');
+      }
+      markModuleComplete(4);
+      persistState();
+    }
+
+    function updateToggleUI(key, val) {
+      var ctrl = document.getElementById('toggle-' + key);
+      var badge = document.getElementById('badge-toggle-' + key);
+      var label = document.getElementById('label-toggle-' + key);
+
+      if (!ctrl || !badge || !label) return;
+
+      if (val) {
+        ctrl.className = 'toggle-control active';
+        badge.className = 'status-tag status-tag--positive';
+        badge.textContent = 'ACTIVE (TRUE)';
+        label.textContent = key === 'e4' ? 'TRUE — Trips Frozen' : 'TRUE — Auto-Sync Active';
+      } else {
+        ctrl.className = 'toggle-control';
+        badge.className = 'status-tag status-tag--warning';
+        badge.textContent = 'DISABLED (FALSE)';
+        label.textContent = key === 'e4' ? 'FALSE — Edits Open' : 'FALSE — Manual Entry';
+      }
+    }
+
+    function addNewRosterItem() {
+      var typeSelect = document.getElementById('new-roster-type');
+      var nameInput = document.getElementById('new-roster-name');
+      var alertBox = document.getElementById('roster-added-alert');
+      if (!typeSelect || !nameInput) return;
+
+      var type = typeSelect.value;
+      var name = nameInput.value.trim();
+
+      if (!name) {
+        showToast('Please type a valid item name first.', 'error');
+        return;
+      }
+
+      if (type === 'funding') {
+        appState.customFunding.push(name);
+        var fundSelect = document.getElementById('sim-funding-select');
+        if (fundSelect) {
+          var opt = document.createElement('option');
+          opt.value = name;
+          opt.textContent = name + ' (Custom Roster)';
+          fundSelect.appendChild(opt);
+          fundSelect.value = name;
+        }
+        if (alertBox) {
+          alertBox.style.display = 'block';
+          alertBox.textContent = '✓ Added "' + name + '" to Funding Stream Roster! Available in all dropdowns now.';
+        }
+      } else {
+        appState.customBranches.push(name);
+        if (alertBox) {
+          alertBox.style.display = 'block';
+          alertBox.textContent = '✓ Added "' + name + '" to Branch Depot Roster (FLEET_ROSTER Col D).';
+        }
+      }
+
+      nameInput.value = '';
+      markModuleComplete(4);
+      persistState();
+      showToast('Dropdown roster updated! Tested 30-second safe expansion.', 'positive');
+    }
+
+    // SECTION 5: AI Prompt Clipboard & Previews
+    function copyPrompt(num) {
+      var textEl = document.getElementById('prompt-text-' + num);
+      if (!textEl) return;
+      var text = textEl.textContent.trim();
+
+      // Clean quotes if needed
+      if (text.startsWith('"') && text.endsWith('"')) {
+        text = text.substring(1, text.length - 1);
+      }
+
+      navigator.clipboard.writeText(text).then(function() {
+        var btn = document.getElementById('btn-copy-p' + num);
+        if (btn) {
+          var origHTML = btn.innerHTML;
+          btn.innerHTML = '<i data-lucide="check" style="width:16px; height:16px;"></i> Copied to Clipboard!';
+          btn.className = 'btn btn--positive';
+          if (window.lucide) window.lucide.createIcons();
+          setTimeout(function() {
+            btn.innerHTML = origHTML;
+            btn.className = 'btn';
+            if (window.lucide) window.lucide.createIcons();
+          }, 2400);
+        }
+        showToast('✓ Prompt ' + num + ' copied to clipboard! Paste into Gemini or ChatGPT.', 'positive');
+        markModuleComplete(5);
+      }).catch(function(err) {
+        showToast('Clipboard access unavailable: select and copy text manually.', 'error');
+      });
+    }
+
+    function toggleAiPreview(num) {
+      var el = document.getElementById('ai-preview-' + num);
+      if (!el) return;
+      if (el.style.display === 'none' || el.style.display === '') {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    }
+
+    // General Toast Helper
+    function showToast(message, type) {
+      var toast = document.getElementById('portal-toast');
+      var msgEl = document.getElementById('toast-message');
+      var icon = document.getElementById('toast-icon');
+      if (!toast || !msgEl) return;
+
+      msgEl.textContent = message;
+      toast.className = 'toast-popup show' + (type === 'positive' ? ' toast-popup--positive' : (type === 'error' ? ' toast-popup--error' : ''));
+      if (icon) {
+        icon.setAttribute('data-lucide', type === 'positive' ? 'check-circle' : (type === 'error' ? 'alert-triangle' : 'info'));
+      }
+      if (window.lucide) window.lucide.createIcons();
+
+      setTimeout(function() {
+        toast.className = toast.className.replace('show', '').trim();
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

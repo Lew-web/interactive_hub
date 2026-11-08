@@ -1,0 +1,2709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="briefing">
+  <title>Youth Program & Care Leaver Transition Hub | Interactive Onboarding Portal</title>
+  
+  <!-- Google Fonts: Source Serif 4, Plus Jakarta Sans, Geist Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons (Exact Pinned CDN) -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS: BRIEFING STYLE (THE GLOBAL DOSSIER)
+       ========================================================================== */
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #faf9f5;               /* warm stone-white paper */
+      --surface-container-low: #ffffff;    /* crisp white for cards and panels */
+      --surface-container: #f1efe8;        /* warm sand-stone for secondary bands */
+      --surface-container-high: #e6e2d6;   /* deeper stone: hover fills, table headers */
+
+      /* Ink */
+      --on-surface: #17181a;               /* rich editorial black: headlines and body */
+      --on-surface-variant: #56585c;       /* warm slate: captions, secondary text */
+
+      /* Rules */
+      --outline: #17181a;                  /* crisp black section rules */
+      --outline-variant: #dedad0;          /* stone border for cards and dividers */
+
+      /* Accents */
+      --primary: #17181a;                  /* ink is the primary action fill */
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;        /* signal gold: dossier badge, highlights */
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;                /* deep petrol slate: decks, subheads, links */
+      --on-secondary: #ffffff;
+      --tertiary: #785008;                 /* dark amber-ochre: text-safe gold voice */
+      --on-tertiary: #ffffff;
+      --error: #b42318;
+      --on-error: #ffffff;
+      --positive: #2b6e52;                 /* civic pine */
+      --on-positive: #ffffff;
+      --warning: #d99000;                  /* dossier gold */
+      --on-warning: #17181a;
+      --focus: #1f4e5f;
+
+      /* Cell Safety Specific Palette */
+      --cell-white-bg: #ffffff;
+      --cell-white-border: #17181a;
+      --cell-grey-bg: #f3f4f6;
+      --cell-grey-border: #cbd5e1;
+      --cell-grey-text: #475569;
+      --cell-highlight: #fef08a;
+
+      /* Status Badges */
+      --badge-stable-bg: #dcfce7;
+      --badge-stable-fg: #15803d;
+      --badge-trans-bg: #fef9c3;
+      --badge-trans-fg: #854d0e;
+      --badge-risk-bg: #fee2e2;
+      --badge-risk-fg: #b91c1c;
+      --badge-crisis-bg: #ffe4e6;
+      --badge-crisis-fg: #9f1239;
+      --badge-due-bg: #ffedd5;
+      --badge-due-fg: #9a3412;
+
+      /* ACCO & Cultural Accents */
+      --acco-ochre: #92400e;
+      --acco-ochre-bg: #fef3c7;
+      --acco-clay: #b45309;
+
+      /* Data series */
+      --data-1: #1f4e5f;                   /* petrol slate */
+      --data-2: #d99000;                   /* dossier gold */
+      --data-3: #2b6e52;                   /* civic pine */
+      --data-4: #b84a39;                   /* brick red */
+      --data-context: #c4bfb2;             /* context series */
+
+      /* Fonts */
+      --font-headline: 'Source Serif 4', Georgia, serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-label: 'Geist Mono', monospace;
+
+      /* Type Scale (Tool / Dashboard tightened ratio) */
+      --display-size: clamp(1.875rem, 1.4rem + 1.5vw, 2.75rem);
+      --headline-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.85rem);
+      --subhead-size: clamp(1.1rem, 1rem + 0.35vw, 1.25rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1.05rem);
+      --label-size: 0.75rem;
+
+      /* Spacing Scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Shapes & Effects */
+      --rounded: 0.25rem;                  /* 4px buttons and inputs */
+      --rounded-lg: 0.375rem;              /* 6px cards and panels */
+      --rounded-full: 0.25rem;             /* squared dossier badges */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --brass-rule: 2px solid var(--tertiary);
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset -- required on every artifact */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; }
+    header { position: static !important; }
+
+    body {
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1240px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    h1 { font-size: var(--display-size); }
+    h2 { font-size: var(--headline-size); }
+    h3 { font-size: var(--subhead-size); }
+    p { margin: 0 0 var(--space-md) 0; }
+    p:last-child { margin-bottom: 0; }
+
+    .font-mono {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      letter-spacing: 0.05em;
+    }
+
+    /* Dossier & Category Badges */
+    .dossier-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--rounded);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--outline);
+    }
+
+    .meta-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background-color: var(--surface-container);
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      text-transform: uppercase;
+    }
+
+    /* Cards & Containers */
+    .figure-card {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .figure-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      gap: var(--space-md);
+    }
+
+    .section-divider {
+      border: 0;
+      border-top: var(--section-rule);
+      margin: var(--space-lg) 0;
+    }
+
+    /* Navigation Bar */
+    .quick-nav {
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      padding: var(--space-xs) var(--space-sm);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      align-items: center;
+    }
+
+    .nav-link-btn {
+      background: none;
+      border: 1px solid transparent;
+      padding: 0.4rem 0.75rem;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--secondary);
+      cursor: pointer;
+      border-radius: var(--rounded);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 38px;
+    }
+
+    .nav-link-btn:hover {
+      background-color: var(--surface-container);
+      border-color: var(--outline-variant);
+    }
+
+    .nav-link-btn:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.6rem 1.1rem;
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+      min-height: 44px;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background-color: var(--secondary);
+    }
+
+    .btn-secondary {
+      background-color: var(--surface-container);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+    }
+    .btn-secondary:hover {
+      background-color: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+
+    .btn-danger {
+      background-color: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+    .btn-danger:hover {
+      background-color: #8c1b12;
+    }
+
+    .btn-gold {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      border: 1px solid var(--outline);
+    }
+    .btn-gold:hover {
+      background-color: #e0a700;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.775rem;
+      min-height: 34px;
+    }
+
+    /* KPI Tiles Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .kpi-card {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      border-left: 3px solid var(--secondary);
+    }
+
+    .kpi-label {
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--on-surface-variant);
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      line-height: 1.1;
+      margin-bottom: var(--space-xs);
+    }
+
+    .kpi-footnote {
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--rounded);
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .badge-stable { background-color: var(--badge-stable-bg); color: var(--badge-stable-fg); border-color: #bbf7d0; }
+    .badge-transitional { background-color: var(--badge-trans-bg); color: var(--badge-trans-fg); border-color: #fef08a; }
+    .badge-risk { background-color: var(--badge-risk-bg); color: var(--badge-risk-fg); border-color: #fecaca; }
+    .badge-crisis { background-color: var(--badge-crisis-bg); color: var(--badge-crisis-fg); border-color: #fecdd3; }
+    .badge-due { background-color: var(--badge-due-bg); color: var(--badge-due-fg); border-color: #fed7aa; }
+    .badge-neutral { background-color: var(--surface-container); color: var(--on-surface-variant); border-color: var(--outline-variant); }
+    .badge-acco { background-color: var(--acco-ochre-bg); color: var(--acco-ochre); border-color: #fde68a; }
+
+    /* Interactive Cell Safety Grid */
+    .cell-grid-container {
+      overflow-x: auto;
+      border: 1px solid var(--outline);
+      background-color: var(--surface-container-low);
+      border-radius: var(--rounded);
+    }
+
+    .spreadsheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      font-family: var(--font-body);
+    }
+
+    .spreadsheet-table th {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--outline-variant);
+      text-align: left;
+    }
+
+    .spreadsheet-table td {
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+
+    .cell-editable-demo {
+      background-color: var(--cell-white-bg) !important;
+      cursor: pointer;
+      position: relative;
+      border: 1.5px dashed #2563eb !important;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .cell-editable-demo:hover {
+      background-color: #f0fdf4 !important;
+    }
+
+    .cell-shield-demo {
+      background-color: var(--cell-grey-bg) !important;
+      color: var(--cell-grey-text);
+      cursor: not-allowed;
+      position: relative;
+      border: 1.5px solid var(--cell-grey-border) !important;
+    }
+    .cell-shield-demo:hover {
+      background-color: #e2e8f0 !important;
+    }
+
+    .cell-tag {
+      font-family: var(--font-label);
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.1rem 0.35rem;
+      border-radius: var(--rounded);
+      margin-left: 0.3rem;
+      text-transform: uppercase;
+    }
+    .tag-white { background-color: var(--cell-white-bg); color: #1e3a8a; border: 1px solid #93c5fd; }
+    .tag-grey { background-color: #e5e7eb; color: #374151; border: 1px solid #9ca3af; }
+
+    /* Callout Boxes */
+    .callout-box {
+      border-left: 4px solid var(--secondary);
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      margin: var(--space-md) 0;
+    }
+
+    .callout-box-warning {
+      border-left-color: var(--warning);
+      background-color: #fefce8;
+    }
+
+    .callout-box-danger {
+      border-left-color: var(--error);
+      background-color: #fef2f2;
+    }
+
+    .callout-box-acco {
+      border-left-color: var(--acco-ochre);
+      background-color: var(--acco-ochre-bg);
+    }
+
+    /* Tabs Component */
+    .tab-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      background-color: var(--surface-container);
+      padding: 3px 3px 0 3px;
+      border-radius: var(--rounded) var(--rounded) 0 0;
+      border-bottom: 1px solid var(--outline);
+    }
+
+    .tab-btn {
+      background: none;
+      border: 1px solid transparent;
+      border-bottom: none;
+      padding: 0.6rem 1rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      border-radius: var(--rounded) var(--rounded) 0 0;
+      transition: all var(--dur-micro) var(--ease-out);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 40px;
+    }
+
+    .tab-btn:hover {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+
+    .tab-btn.active {
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline) var(--outline) var(--surface-container-low) var(--outline);
+      box-shadow: 0 -2px 0 var(--secondary);
+    }
+
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: -2px;
+    }
+
+    .tab-content {
+      display: none;
+      padding: var(--space-lg);
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      border-top: none;
+      border-radius: 0 0 var(--rounded) var(--rounded);
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* AI Prompt Box */
+    .prompt-box {
+      background-color: #1e293b;
+      color: #f8fafc;
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      position: relative;
+      border: 1px solid #334155;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    .prompt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #0f172a;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--rounded) var(--rounded) 0 0;
+      border: 1px solid #334155;
+      border-bottom: none;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    /* Interactive Inputs & Controls */
+    .form-group {
+      margin-bottom: var(--space-md);
+    }
+
+    label {
+      display: block;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--on-surface);
+      margin-bottom: var(--space-xs);
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      transition: border-color var(--dur-micro) var(--ease-out);
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 1px;
+      border-color: var(--secondary);
+    }
+
+    /* Toast Notification */
+    #toast-notification {
+      position: fixed;
+      bottom: var(--space-lg);
+      right: var(--space-lg);
+      background-color: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transform: translateY(120%);
+      transition: transform var(--dur-short) var(--ease-out);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      border: 1px solid var(--primary-container);
+    }
+
+    #toast-notification.show {
+      transform: translateY(0);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .page-grid {
+        padding: var(--space-sm);
+        gap: var(--space-lg);
+      }
+      .figure-card {
+        padding: var(--space-md);
+      }
+      .tab-btn {
+        flex: 1 1 100%;
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-grid">
+
+    <!-- ======================================================================
+         MASTHEAD & SECTOR POSITIONING
+         ====================================================================== -->
+    <header>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+        <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap;">
+          <span class="dossier-tag"><i data-lucide="shield-check" style="width: 14px; height: 14px;"></i> Sector Briefing</span>
+          <span class="meta-tag">Build: Youth Program &amp; Care Leaver Transition Hub</span>
+          <span class="meta-tag">Ref: LEW-YTH-2026-VIC</span>
+        </div>
+        <div class="font-mono" style="color: var(--on-surface-variant);">
+          Standard: CYFA 2005 &bull; Better Futures &bull; MARAM &bull; Reform 2
+        </div>
+      </div>
+
+      <h1 style="margin-bottom: var(--space-xs);">Youth Program &amp; Care Leaver Transition Hub</h1>
+      <p style="font-size: var(--subhead-size); color: var(--secondary); max-width: 85ch; font-weight: 500; margin-bottom: var(--space-md);">
+        Operational Onboarding, Dual-Terminology Governance &amp; Frontline Practice Manual for Victorian Youth Services, Out-of-Home Care (OOHC) Providers, Community Health Agencies, and Aboriginal Community Controlled Organisations (ACCOs).
+      </p>
+
+      <!-- Quick Navigation Bar -->
+      <nav class="quick-nav" aria-label="Portal Navigation">
+        <span class="font-mono" style="font-weight: 700; margin-right: var(--space-xs); color: var(--on-surface);">JUMP TO:</span>
+        <button type="button" class="nav-link-btn" onclick="scrollToSection('sec-panic')"><i data-lucide="alert-octagon" style="width: 14px; height: 14px;"></i> 10s Panic Button</button>
+        <button type="button" class="nav-link-btn" onclick="scrollToSection('sec-cells')"><i data-lucide="table" style="width: 14px; height: 14px;"></i> Cell Safety Rules</button>
+        <button type="button" class="nav-link-btn" onclick="scrollToSection('sec-schemas')"><i data-lucide="columns-3" style="width: 14px; height: 14px;"></i> 4-Tab Schemas</button>
+        <button type="button" class="nav-link-btn" onclick="scrollToSection('sec-database')"><i data-lucide="database" style="width: 14px; height: 14px;"></i> Live Data Explorer</button>
+        <button type="button" class="nav-link-btn" onclick="scrollToSection('sec-calculators')"><i data-lucide="calculator" style="width: 14px; height: 14px;"></i> Age Gate Engine</button>
+        <button type="button" class="nav-link-btn" onclick="scrollToSection('sec-frameworks')"><i data-lucide="scale" style="width: 14px; height: 14px;"></i> Statutory Matrix</button>
+        <button type="button" class="nav-link-btn" onclick="scrollToSection('sec-prompts')"><i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> AI Companion Pack</button>
+      </nav>
+      <hr class="section-divider">
+    </header>
+
+    <!-- ======================================================================
+         EXECUTIVE OVERVIEW & DUAL-TERMINOLOGY ARCHITECTURE
+         ====================================================================== -->
+    <section id="sec-overview">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag" style="background-color: var(--secondary); color: var(--on-secondary); border-color: var(--secondary);">Operational Architecture</span>
+            <h2 style="margin-top: var(--space-xs);">Dual-Terminology Governance &amp; Care Leaver Context</h2>
+          </div>
+          <span class="badge badge-neutral font-mono">Victorian CYFA 2005 Alignment</span>
+        </div>
+
+        <p>
+          The <strong>Youth Program &amp; Care Leaver Transition Hub</strong> provides a rigorous operational database to manage the critical transition cliff-edge faced by young people (ages 15–21) transitioning from Victorian Out-of-Home Care (OOHC). Built specifically for mainstream youth providers and Aboriginal Community Controlled Organisations (ACCOs), it unites statutory post-care milestones under <strong>Better Futures</strong> and <strong>Home Stretch</strong> with flexible youth brokerage ledgers, frontline qualitative yarning logs, and MARAM risk triage.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <!-- Mainstream Pillar -->
+          <div style="background-color: var(--surface-container); padding: var(--space-md); border-radius: var(--rounded); border-top: 3px solid var(--secondary);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+              <i data-lucide="briefcase" style="width: 18px; height: 18px; color: var(--secondary);"></i>
+              <h3 style="font-size: 1.05rem;">Mainstream Victorian Compliance Track</h3>
+            </div>
+            <ul style="padding-left: 1.25rem; margin: 0; font-size: 0.88rem; color: var(--on-surface);">
+              <li><strong>Children, Youth and Families Act 2005 (CYFA):</strong> Mandates post-care transition planning starting at age 15 and supports voluntary extended care up to age 21.</li>
+              <li><strong>Better Futures &amp; Home Stretch Guidelines:</strong> Tracks housing allowances, independent living life-skills goals, and flexible brokerage acquittals ($10k allocation pools).</li>
+              <li><strong>MARAM Risk Framework:</strong> Systematically logs youth family violence triage, screening tiers, and safety plan completions.</li>
+            </ul>
+          </div>
+
+          <!-- ACCO Cultural Governance Pillar -->
+          <div style="background-color: var(--acco-ochre-bg); padding: var(--space-md); border-radius: var(--rounded); border-top: 3px solid var(--acco-ochre);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+              <i data-lucide="feather" style="width: 18px; height: 18px; color: var(--acco-ochre);"></i>
+              <h3 style="font-size: 1.05rem; color: var(--acco-ochre);">ACCO Cultural Governance &amp; Priority Reform 2</h3>
+            </div>
+            <ul style="padding-left: 1.25rem; margin: 0; font-size: 0.88rem; color: #451a03;">
+              <li><strong>Closing the Gap Priority Reform 2:</strong> Empowers community-controlled service delivery, self-determination, and cultural authority in transition planning.</li>
+              <li><strong>Yarning Circles &amp; Qualitative Evidence:</strong> Frontline logs recognize Elder guidance, Kinship reconnection, and Connection to Country as protective audit evidence.</li>
+              <li><strong>Dual-Terminology Practice:</strong> Pairs quantitative contract KPIs with culturally safe youth narratives and mentoring consultations.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Zero-Access Guarantee -->
+        <div class="callout-box" style="margin-top: var(--space-md); display: flex; align-items: flex-start; gap: var(--space-md);">
+          <i data-lucide="lock" style="width: 24px; height: 24px; color: var(--secondary); flex-shrink: 0; margin-top: 2px;"></i>
+          <div>
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.2rem;">Data Sovereignty &amp; Zero-Access Guarantee</h4>
+            <p style="font-size: 0.85rem; color: var(--on-surface-variant); margin: 0;">
+              This system operates 100% locally inside your organisation's private Google Drive (via copy model). Neither LEW CREATIONS nor any third party ever sees or stores de-identified youth records, MARAM disclosures, Elder yarning notes, or financial brokerage receipts. Fully aligned with the <em>Australian Privacy Act 1988</em> and the <em>Victorian Health Records Act 2001</em>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 1: THE 10-SECOND PANIC BUTTON (INTERACTIVE SIMULATOR)
+         ====================================================================== -->
+    <section id="sec-panic">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag" style="background-color: var(--error); color: var(--on-error); border-color: var(--error);">Safety Mechanism</span>
+            <h2 style="margin-top: var(--space-xs);">The 10-Second Panic Button &amp; Version History Recovery</h2>
+          </div>
+          <span class="badge badge-risk font-mono">Zero-Data-Loss Protocol</span>
+        </div>
+
+        <p>
+          Frontline caseworkers and intake leads often worry about "breaking the sheet" by accidentally overwriting complex nested formulas (such as age gate triggers or remaining brokerage balances) or sorting a column without freezing header ranges. <strong>There is zero reason to panic.</strong> Google Sheets automatically preserves every keystroke with indestructible revision logs.
+        </p>
+
+        <!-- Two Recovery Protocols -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+              <span style="background-color: var(--secondary); color: var(--on-secondary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">1</span>
+              <h3 style="font-size: 1rem;">Action 1: Instant Keystroke Undo</h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--on-surface-variant);">
+              Accidentally backspaced a formula cell or typed over a locked badge? Press <kbd style="background: #e2e8f0; padding: 2px 6px; border-radius: 3px; font-family: var(--font-label); border: 1px solid #cbd5e1;">Ctrl + Z</kbd> (Windows) or <kbd style="background: #e2e8f0; padding: 2px 6px; border-radius: 3px; font-family: var(--font-label); border: 1px solid #cbd5e1;">Cmd + Z</kbd> (Mac). Your sheet immediately restores the intact formula in under 2 seconds.
+            </p>
+          </div>
+
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--space-xs);">
+              <span style="background-color: var(--tertiary); color: var(--on-tertiary); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">2</span>
+              <h3 style="font-size: 1rem;">Action 2: The 2-Click Version History</h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--on-surface-variant);">
+              If someone overwrote data hours ago and closed the tab: Go to <strong>File &gt; Version History &gt; See version history</strong>. Browse the chronological snapshot panel on the right and click <em>"Restore this version"</em> to restore yesterday's pristine midnight copy in 2 clicks.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Panic Simulator Widget -->
+        <div style="background-color: var(--surface-container); border: 1px solid var(--outline); padding: var(--space-md); border-radius: var(--rounded);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+            <div>
+              <span class="font-mono" style="font-weight: 700; color: var(--on-surface); font-size: 0.8rem;">INTERACTIVE SIMULATION LAB:</span>
+              <span style="font-size: 0.85rem; color: var(--on-surface-variant); margin-left: 0.5rem;">Test formula corruption and recovery without touching live files</span>
+            </div>
+            <span id="sim-status-badge" class="badge badge-stable font-mono"><i data-lucide="check-circle" style="width: 12px; height: 12px;"></i> System State: Pristine</span>
+          </div>
+
+          <!-- Simulated Table Row -->
+          <div class="cell-grid-container" style="margin-bottom: var(--space-md);">
+            <table class="spreadsheet-table">
+              <thead>
+                <tr>
+                  <th>Youth ID (White)</th>
+                  <th>Age (Formula)</th>
+                  <th>Housing Status</th>
+                  <th>Allocated Grant</th>
+                  <th>Formula Shield: Remaining Pool</th>
+                  <th>Milestone Age Gate Trigger</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family: var(--font-label); font-weight: 600;">YTH-001 (Marcus Vance)</td>
+                  <td id="sim-cell-age" class="font-mono">18 yrs, 3 mos</td>
+                  <td><span class="badge badge-stable">🟩 Stable / Independent</span></td>
+                  <td class="font-mono">$10,000.00</td>
+                  <td id="sim-cell-brokerage" style="background-color: var(--cell-grey-bg); font-family: var(--font-label); font-weight: 600; color: var(--secondary); transition: all 0.2s;">
+                    $8,750.00
+                  </td>
+                  <td id="sim-cell-milestone" style="background-color: var(--cell-grey-bg); transition: all 0.2s;">
+                    <span class="badge badge-due">🟨 Milestone Due (&lt;30 Days)</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Simulation Trigger Buttons -->
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center;">
+            <button type="button" class="btn btn-danger btn-sm" onclick="triggerPanicSimulation()">
+              <i data-lucide="zap-off" style="width: 14px; height: 14px;"></i> 1. Simulate Accidental Formula Overwrite
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-undo-ctrlz" onclick="restoreViaCtrlZ()" disabled>
+              <i data-lucide="undo" style="width: 14px; height: 14px;"></i> 2. Press Ctrl+Z (Instant Undo)
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-undo-history" onclick="restoreViaVersionHistory()" disabled>
+              <i data-lucide="history" style="width: 14px; height: 14px;"></i> 3. Restore via File &gt; Version History
+            </button>
+          </div>
+
+          <div id="sim-feedback-message" style="margin-top: var(--space-sm); font-size: 0.85rem; color: var(--on-surface-variant); min-height: 22px;">
+            <em>Click "Simulate Accidental Formula Overwrite" to see how the system behaves and how easily it recovers.</em>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 2: CELL SAFETY RULES (WHITE #FFFFFF VS GREY #F3F4F6)
+         ====================================================================== -->
+    <section id="sec-cells">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag">Data Architecture</span>
+            <h2 style="margin-top: var(--space-xs);">Cell Safety Rules: White Input vs. Grey Formula Shields</h2>
+          </div>
+          <span class="badge badge-neutral font-mono">Unbreakable Cell Protocol</span>
+        </div>
+
+        <p>
+          To maintain financial audit readiness and eliminate formula corruption across multi-practitioner teams, LEW CREATIONS templates employ a strict two-tone cell sovereignty discipline. Caseworkers and team leaders must follow one golden rule: <strong>Only type in pure white cells. Grey cells are locked shields.</strong>
+        </p>
+
+        <!-- Cell Rules Comparison Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0;">
+          <!-- White Cell Spec -->
+          <div style="border: 2px solid var(--outline); background-color: var(--cell-white-bg); padding: var(--space-md); border-radius: var(--rounded);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 18px; height: 18px; border: 1.5px solid #000; background: #ffffff; border-radius: 2px;"></span>
+                <h3 style="font-size: 1.05rem;">WHITE CELLS (<code style="font-family: var(--font-label); background: #eee; padding: 2px 4px;">#FFFFFF</code>)</h3>
+              </div>
+              <span class="badge font-mono" style="background-color: #e0f2fe; color: #0369a1; border-color: #bae6fd;">EDITABLE ZONE</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              <strong>Frontline Data Entry Territory:</strong> Type de-identified youth information, operational updates, and qualitative notes here.
+            </p>
+            <ul style="padding-left: 1.25rem; font-size: 0.825rem; margin: 0; color: var(--on-surface);">
+              <li>De-identified Youth ID (e.g., <code>YTH-001</code>, <code>YT-104</code>)</li>
+              <li>Participant Date of Birth (DOB)</li>
+              <li>Qualitative Yarning Summaries &amp; Goals Met</li>
+              <li>Brokerage Disbursed Dollar Amounts &amp; Invoices</li>
+              <li>Consulted Elder / Case Lead Names</li>
+            </ul>
+          </div>
+
+          <!-- Grey Cell Spec -->
+          <div style="border: 2px solid var(--cell-grey-border); background-color: var(--cell-grey-bg); padding: var(--space-md); border-radius: var(--rounded);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="display: inline-block; width: 18px; height: 18px; border: 1.5px solid #94a3b8; background: #f3f4f6; border-radius: 2px;"></span>
+                <h3 style="font-size: 1.05rem; color: var(--cell-grey-text);">GREY CELLS (<code style="font-family: var(--font-label); background: #e2e8f0; padding: 2px 4px;">#F3F4F6</code>)</h3>
+              </div>
+              <span class="badge font-mono" style="background-color: #f1f5f9; color: #475569; border-color: #cbd5e1;">LOCKED FORMULA SHIELD</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              <strong>Automated Intelligence Territory:</strong> Protected by formulas. Never overwrite or clear manually.
+            </p>
+            <ul style="padding-left: 1.25rem; font-size: 0.825rem; margin: 0; color: var(--cell-grey-text);">
+              <li>Automatic Age Calculations (Years &amp; Months from DOB)</li>
+              <li>Milestone Gate Alerts (18th / 21st Age Gate Flags)</li>
+              <li>Running Brokerage Remaining Balances</li>
+              <li>DFFH Acquittal Compliance Badges (Compliant / Action)</li>
+              <li>Executive Dashboard KPI Aggregations</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Interactive Sandbox Grid -->
+        <div style="margin-top: var(--space-md); background-color: var(--surface-container); padding: var(--space-md); border-radius: var(--rounded); border: 1px solid var(--outline-variant);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <span class="font-mono" style="font-weight: 700; color: var(--on-surface);">PRACTICE LAB: INTERACTIVE CELL TESTING</span>
+              <span style="font-size: 0.825rem; color: var(--on-surface-variant); margin-left: 0.5rem;">Click on any cell below to experience the safety protocol</span>
+            </div>
+            <span class="font-mono" style="font-size: 0.75rem; color: var(--secondary);">Click White to Edit &bull; Click Grey to test Shield Protection</span>
+          </div>
+
+          <div class="cell-grid-container">
+            <table class="spreadsheet-table">
+              <thead>
+                <tr>
+                  <th>Cell Coord</th>
+                  <th>Field Type</th>
+                  <th>Field Label</th>
+                  <th>Sample Value</th>
+                  <th>Cell Behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="inspectCell('A4')">
+                  <td class="font-mono">A4</td>
+                  <td><span class="cell-tag tag-white">WHITE #FFFFFF</span></td>
+                  <td><strong>Youth ID</strong></td>
+                  <td class="cell-editable-demo font-mono" id="cell-val-a4">YT-104 <i data-lucide="edit-3" style="width: 12px; height: 12px; display: inline;"></i></td>
+                  <td style="font-size: 0.8rem; color: var(--positive);">✓ Free editable text field (De-identified)</td>
+                </tr>
+                <tr onclick="inspectCell('C4')">
+                  <td class="font-mono">C4</td>
+                  <td><span class="cell-tag tag-white">WHITE #FFFFFF</span></td>
+                  <td><strong>Date of Birth</strong></td>
+                  <td class="cell-editable-demo font-mono" id="cell-val-c4">2008-04-12 <i data-lucide="calendar" style="width: 12px; height: 12px; display: inline;"></i></td>
+                  <td style="font-size: 0.8rem; color: var(--positive);">✓ Free editable date. Updates Age Formula automatically</td>
+                </tr>
+                <tr onclick="inspectCell('D4')">
+                  <td class="font-mono">D4</td>
+                  <td><span class="cell-tag tag-grey">GREY #F3F4F6</span></td>
+                  <td><strong>Current Age</strong></td>
+                  <td class="cell-shield-demo font-mono">17 yrs, 7 mos <i data-lucide="shield" style="width: 12px; height: 12px; display: inline;"></i></td>
+                  <td style="font-size: 0.8rem; color: var(--on-surface-variant); font-style: italic;">🛡️ Formula Locked. Recalculates dynamically from DOB</td>
+                </tr>
+                <tr onclick="inspectCell('H4')">
+                  <td class="font-mono">H4</td>
+                  <td><span class="cell-tag tag-grey">GREY #F3F4F6</span></td>
+                  <td><strong>Milestone Alert</strong></td>
+                  <td class="cell-shield-demo"><span class="badge badge-risk">🟥 18/21 Age Gate Action</span></td>
+                  <td style="font-size: 0.8rem; color: var(--on-surface-variant); font-style: italic;">🛡️ Formula Shield. Triggers statutory DFFH notification</td>
+                </tr>
+                <tr onclick="inspectCell('D12')">
+                  <td class="font-mono">D12</td>
+                  <td><span class="cell-tag tag-white">WHITE #FFFFFF</span></td>
+                  <td><strong>Amount Disbursed</strong></td>
+                  <td class="cell-editable-demo font-mono" id="cell-val-d12">$1,250.00 <i data-lucide="dollar-sign" style="width: 12px; height: 12px; display: inline;"></i></td>
+                  <td style="font-size: 0.8rem; color: var(--positive);">✓ Free currency entry. Deducts from remaining balance</td>
+                </tr>
+                <tr onclick="inspectCell('E12')">
+                  <td class="font-mono">E12</td>
+                  <td><span class="cell-tag tag-grey">GREY #F3F4F6</span></td>
+                  <td><strong>Remaining Balance</strong></td>
+                  <td class="cell-shield-demo font-mono" style="font-weight: 700; color: var(--secondary);">$8,750.00 <i data-lucide="shield" style="width: 12px; height: 12px; display: inline;"></i></td>
+                  <td style="font-size: 0.8rem; color: var(--on-surface-variant); font-style: italic;">🛡️ Formula Shield. Prevents accidental overspend of funding</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Cell Inspection Inspector Panel -->
+          <div id="cell-inspector-panel" style="margin-top: var(--space-md); padding: var(--space-md); background-color: var(--surface-container-low); border: 1px solid var(--outline); border-radius: var(--rounded); display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <h4 id="inspect-title" style="font-size: 0.95rem; margin: 0;">Inspecting Cell</h4>
+              <span id="inspect-tag" class="cell-tag tag-white">WHITE</span>
+            </div>
+            <p id="inspect-desc" style="font-size: 0.85rem; margin-bottom: var(--space-sm); color: var(--on-surface);"></p>
+            <div id="inspect-edit-box" style="display: none; align-items: center; gap: var(--space-sm);">
+              <input type="text" id="inspect-input" style="max-width: 250px;" aria-label="Cell edit input">
+              <button type="button" class="btn btn-primary btn-sm" onclick="saveCellDemoValue()">Update Cell</button>
+              <span style="font-size: 0.8rem; color: var(--positive);">Try typing a new value!</span>
+            </div>
+            <div id="inspect-shield-box" style="display: none; background-color: #fee2e2; border: 1px solid #f87171; padding: var(--space-sm); border-radius: var(--rounded);">
+              <div style="display: flex; align-items: center; gap: 0.4rem; color: #991b1b; font-weight: 700; font-size: 0.85rem;">
+                <i data-lucide="alert-triangle" style="width: 16px; height: 16px;"></i> FORMULA SHIELD INTERCEPTION: DO NOT OVERWRITE
+              </div>
+              <p style="font-size: 0.8rem; color: #7f1d1d; margin: 4px 0 0 0;">
+                This cell is automated. Overwriting will corrupt downstream Board acquittals and age milestone alerts. If you need to adjust this figure, update the corresponding white input cells.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 3: TAB-BY-TAB SCHEMA SPECIFICATIONS
+         ====================================================================== -->
+    <section id="sec-schemas">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag">Database Blueprint</span>
+            <h2 style="margin-top: var(--space-xs);">Tab-by-Tab Schema &amp; Field Specifications</h2>
+          </div>
+          <span class="badge badge-neutral font-mono">4-Tab Architecture</span>
+        </div>
+
+        <p>
+          The Hub is partitioned into 4 purpose-built tabs designed to transition young people seamlessly from intake through cultural mentoring to independent living and statutory DFFH acquittals.
+        </p>
+
+        <!-- Tab 1 Breakdown Card -->
+        <div style="border: 1px solid var(--outline); border-radius: var(--rounded); margin-bottom: var(--space-lg); overflow: hidden;">
+          <div style="background-color: var(--surface-container-high); padding: var(--space-md); border-bottom: 1px solid var(--outline); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <span class="font-mono" style="font-weight: 700; color: var(--secondary);">TAB 1:</span>
+              <h3 style="display: inline-block; font-size: 1.15rem; margin-left: 0.4rem;">Youth Roster &amp; Care Leaver Milestones</h3>
+            </div>
+            <span class="badge font-mono" style="background-color: #e0e7ff; color: #3730a3;">1. Youth Roster &amp; Milestones</span>
+          </div>
+          <div style="padding: var(--space-md); background-color: var(--surface-container-low);">
+            <p style="font-size: 0.88rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              <strong>Primary Purpose:</strong> Tracks participant onboarding, statutory age thresholds (15–21 care leavers), housing triage, and transition planning gates under Victorian Better Futures and Home Stretch.
+            </p>
+
+            <div class="kpi-grid" style="margin-bottom: var(--space-md);">
+              <div class="kpi-card" style="border-left-color: var(--secondary);">
+                <div class="kpi-label">SCORECARD 1</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">TOTAL ACTIVE YOUTH</div>
+                <div class="kpi-footnote">Active participants in intake roster</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--primary-container);">
+                <div class="kpi-label">SCORECARD 2</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">HOME STRETCH / BETTER FUTURES</div>
+                <div class="kpi-footnote">Extended care &amp; post-care transition</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--positive);">
+                <div class="kpi-label">SCORECARD 3</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">TRANSITION PLANS ACTIVE</div>
+                <div class="kpi-footnote">Formal CYFA 2005 plans approved</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--error);">
+                <div class="kpi-label">SCORECARD 4</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">HOUSING STABILITY RISKS</div>
+                <div class="kpi-footnote">Young people flagged At Risk or Crisis</div>
+              </div>
+            </div>
+
+            <!-- Exact Column Headers Tab 1 -->
+            <div class="cell-grid-container">
+              <table class="spreadsheet-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Col #</th>
+                    <th>Exact Column Header</th>
+                    <th>Cell Architecture</th>
+                    <th>Data Type / Validation Rule</th>
+                    <th>Frontline Operational Intent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-mono">1</td>
+                    <td><strong>Youth ID</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Text (e.g. YT-104, YTH-001)</td>
+                    <td>De-identified client code for data privacy sovereignty.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">2</td>
+                    <td><strong>Program Stream</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>Home Stretch</code>, <code>Better Futures</code>, <code>Youth Outreach</code>, <code>Adolescent Family Violence</code>, <code>Independent Living</code></td>
+                    <td>Segments statutory funding stream and DFFH contract deliverable.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">3</td>
+                    <td><strong>DOB / Age</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE DOB</span> + <span class="cell-tag tag-grey">GREY AGE</span></td>
+                    <td class="font-mono">Date + Formula: <code>=DATEDIF(DOB, TODAY(), "Y")</code></td>
+                    <td>Caseworker enters DOB; Grey formula shields compute age and identify milestone gates.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">4</td>
+                    <td><strong>Care Status</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>Active OOHC</code>, <code>Post-Care Transition (15-18)</code>, <code>Extended Care (18-21)</code>, <code>Community Referral</code></td>
+                    <td>Determines statutory legal status under Children, Youth and Families Act 2005.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">5</td>
+                    <td><strong>Housing Stability</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>🟩 Stable / Independent</code>, <code>🟨 Transitional / Supported</code>, <code>🟥 At Risk / Unstable</code>, <code>🚨 Crisis / Homeless</code></td>
+                    <td>Priority housing triage; instantly triggers executive alert if unstable.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">6</td>
+                    <td><strong>Transition Plan Status</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>Draft</code>, <code>Active</code>, <code>Under Review</code>, <code>Completed</code></td>
+                    <td>Monitors compliance with Better Futures 5-domain transition guidelines.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">7</td>
+                    <td><strong>Key Cultural Mentor / Case Lead</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Text (Staff / Mentor Name)</td>
+                    <td>Names responsible caseworker and ACCO cultural mentor / Elder.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">8</td>
+                    <td><strong>Milestone Alert</strong></td>
+                    <td><span class="cell-tag tag-grey">GREY FORMULA</span></td>
+                    <td>Formula Shield: <code>🟩 On Track</code>, <code>🟨 Milestone Due (&lt;30 Days)</code>, <code>🟥 18/21 Age Gate Action Required</code></td>
+                    <td>Automated statutory trigger warning when young person approaches 18th or 21st birthday.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2 Breakdown Card -->
+        <div style="border: 1px solid var(--outline); border-radius: var(--rounded); margin-bottom: var(--space-lg); overflow: hidden;">
+          <div style="background-color: var(--surface-container-high); padding: var(--space-md); border-bottom: 1px solid var(--outline); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <span class="font-mono" style="font-weight: 700; color: var(--acco-ochre);">TAB 2:</span>
+              <h3 style="display: inline-block; font-size: 1.15rem; margin-left: 0.4rem;">Engagement &amp; Goal Practice Log</h3>
+            </div>
+            <span class="badge font-mono" style="background-color: #fef3c7; color: #92400e;">2. Engagement &amp; Goal Log</span>
+          </div>
+          <div style="padding: var(--space-md); background-color: var(--surface-container-low);">
+            <p style="font-size: 0.88rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              <strong>Primary Purpose:</strong> Logs frontline yarning sessions, life-skills progress (education, employment, licensing), MARAM risk triage, and cultural mentoring engagements.
+            </p>
+
+            <div class="kpi-grid" style="margin-bottom: var(--space-md);">
+              <div class="kpi-card" style="border-left-color: var(--secondary);">
+                <div class="kpi-label">SCORECARD 1</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">SESSIONS LOGGED</div>
+                <div class="kpi-footnote">Cumulative frontline touchpoints</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--positive);">
+                <div class="kpi-label">SCORECARD 2</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">INDEPENDENT LIVING GOALS MET</div>
+                <div class="kpi-footnote">Licensing, leases &amp; course completions</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--acco-ochre);">
+                <div class="kpi-label">SCORECARD 3</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">CULTURAL MENTORING LOGS</div>
+                <div class="kpi-footnote">Elder &amp; Kinship yarning sessions</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--warning);">
+                <div class="kpi-label">SCORECARD 4</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">SAFETY SCREENS COMPLETE</div>
+                <div class="kpi-footnote">MARAM risk tools applied</div>
+              </div>
+            </div>
+
+            <!-- Exact Column Headers Tab 2 -->
+            <div class="cell-grid-container">
+              <table class="spreadsheet-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Col #</th>
+                    <th>Exact Column Header</th>
+                    <th>Cell Architecture</th>
+                    <th>Data Type / Validation Rule</th>
+                    <th>Frontline Operational Intent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-mono">1</td>
+                    <td><strong>Youth ID</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Data Validation Lookup / Text</td>
+                    <td>De-identified client ID matching Tab 1 roster.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">2</td>
+                    <td><strong>Session Date</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Date (YYYY-MM-DD)</td>
+                    <td>Timestamp of engagement for contract service delivery audits.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">3</td>
+                    <td><strong>Support Domain</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>Education &amp; Training</code>, <code>Housing Support</code>, <code>Life Skills Yarning</code>, <code>Cultural Mentoring</code>, <code>Health &amp; Wellbeing</code>, <code>Legal / Advocacy</code></td>
+                    <td>Classifies session according to Victorian Better Futures key domains.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">4</td>
+                    <td><strong>MARAM / Risk Triage Applied</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>Screening Applied</code>, <code>Comprehensive Assessment</code>, <code>N/A</code></td>
+                    <td>Statutory Family Violence Protection Act 2008 risk identification.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">5</td>
+                    <td><strong>Qualitative Engagement Notes</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE TEXT AREA</span></td>
+                    <td class="font-mono">Narrative Text</td>
+                    <td>Rich contextual summary of yarning, goals achieved, Elder guidance, or crisis plan.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">6</td>
+                    <td><strong>Cultural Mentor / Elder Consulted</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Text (Elder / Advisor Name)</td>
+                    <td>Records cultural consultation under Closing the Gap Reform 2 standards.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">7</td>
+                    <td><strong>Audit Evidence Ref</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Text (e.g. EV-YT-2026-12)</td>
+                    <td>Document index ID linking to signed case notes or client agreements.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3 Breakdown Card -->
+        <div style="border: 1px solid var(--outline); border-radius: var(--rounded); margin-bottom: var(--space-lg); overflow: hidden;">
+          <div style="background-color: var(--surface-container-high); padding: var(--space-md); border-bottom: 1px solid var(--outline); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <span class="font-mono" style="font-weight: 700; color: var(--positive);">TAB 3:</span>
+              <h3 style="display: inline-block; font-size: 1.15rem; margin-left: 0.4rem;">Flexible Brokerage &amp; Emergency Relief Ledger</h3>
+            </div>
+            <span class="badge font-mono" style="background-color: #dcfce7; color: #15803d;">3. Youth Brokerage Ledger</span>
+          </div>
+          <div style="padding: var(--space-md); background-color: var(--surface-container-low);">
+            <p style="font-size: 0.88rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              <strong>Primary Purpose:</strong> Tracks flexible grant funding and brokerage dollars (rent deposits, driving lessons, course fees, emergency food relief, cultural connection) allocated to each young person.
+            </p>
+
+            <div class="kpi-grid" style="margin-bottom: var(--space-md);">
+              <div class="kpi-card" style="border-left-color: var(--secondary);">
+                <div class="kpi-label">SCORECARD 1</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">TOTAL BROKERAGE POOL</div>
+                <div class="kpi-footnote">Contract grant pool allocation</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--tertiary);">
+                <div class="kpi-label">SCORECARD 2</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">FUNDS DISBURSED ($)</div>
+                <div class="kpi-footnote">Direct financial relief to youth</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--positive);">
+                <div class="kpi-label">SCORECARD 3</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">REMAINING BROKERAGE BALANCE</div>
+                <div class="kpi-footnote">Unspent funding buffer</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--primary-container);">
+                <div class="kpi-label">SCORECARD 4</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">AVERAGE PER YOUTH ($)</div>
+                <div class="kpi-footnote">Mean investment per care leaver</div>
+              </div>
+            </div>
+
+            <!-- Exact Column Headers Tab 3 -->
+            <div class="cell-grid-container">
+              <table class="spreadsheet-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Col #</th>
+                    <th>Exact Column Header</th>
+                    <th>Cell Architecture</th>
+                    <th>Data Type / Validation Rule</th>
+                    <th>Frontline Operational Intent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-mono">1</td>
+                    <td><strong>Youth ID</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Data Validation Dropdown looking up Tab 1</td>
+                    <td>Ensures every brokerage dollar is tied directly to a validated participant.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">2</td>
+                    <td><strong>Transaction Date</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Date (YYYY-MM-DD)</td>
+                    <td>Accounting timestamp for financial year acquittals.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">3</td>
+                    <td><strong>Brokerage Category</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>Housing &amp; Rent Support</code>, <code>Education &amp; Course Fees</code>, <code>Transport &amp; Licensing</code>, <code>Emergency Food/Relief</code>, <code>Cultural Connection</code></td>
+                    <td>DFFH acquittal categories for flexible care leaver spending.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">4</td>
+                    <td><strong>Amount Disbursed ($)</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Currency Value (e.g. $1,250.00)</td>
+                    <td>Actual dollar outlay expended for this youth item.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">5</td>
+                    <td><strong>Funding Source</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td>Dropdown: <code>DFFH Home Stretch Brokerage</code>, <code>DFFH Better Futures</code>, <code>Philanthropic Grant</code>, <code>Internal Relief</code></td>
+                    <td>Apportions spend to the correct funding contract to prevent grant co-mingling.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">6</td>
+                    <td><strong>Approval Lead</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Text (Team Leader Name)</td>
+                    <td>Financial delegation sign-off for audit tracking.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">7</td>
+                    <td><strong>Invoice / Receipt Ref</strong></td>
+                    <td><span class="cell-tag tag-white">WHITE INPUT</span></td>
+                    <td class="font-mono">Text (e.g. REC-2025-081)</td>
+                    <td>Accounts payable reference matching internal finance drive.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4 Breakdown Card -->
+        <div style="border: 1px solid var(--outline); border-radius: var(--rounded); overflow: hidden;">
+          <div style="background-color: var(--surface-container-high); padding: var(--space-md); border-bottom: 1px solid var(--outline); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <span class="font-mono" style="font-weight: 700; color: var(--secondary);">TAB 4:</span>
+              <h3 style="display: inline-block; font-size: 1.15rem; margin-left: 0.4rem;">Executive Youth Outcomes Dashboard</h3>
+            </div>
+            <span class="badge font-mono" style="background-color: #fed7aa; color: #9a3412;">4. Executive Youth Dashboard</span>
+          </div>
+          <div style="padding: var(--space-md); background-color: var(--surface-container-low);">
+            <p style="font-size: 0.88rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              <strong>Primary Purpose:</strong> Provides executive directors and Boards with automated summaries of care-leaver transition outcomes for DFFH contract reviews, Board papers, and statutory acquittals.
+            </p>
+
+            <div class="kpi-grid" style="margin-bottom: var(--space-md);">
+              <div class="kpi-card" style="border-left-color: var(--secondary);">
+                <div class="kpi-label">SCORECARD 1</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">TOTAL CARE LEAVERS SUPPORTED</div>
+                <div class="kpi-footnote">Active caseload across all streams</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--positive);">
+                <div class="kpi-label">SCORECARD 2</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">HOUSING STABILITY RATE %</div>
+                <div class="kpi-footnote">Proportion in stable private/community housing</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--tertiary);">
+                <div class="kpi-label">SCORECARD 3</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">EDUCATION / EMPLOYMENT %</div>
+                <div class="kpi-footnote">Participants enrolled in study or work</div>
+              </div>
+              <div class="kpi-card" style="border-left-color: var(--primary-container);">
+                <div class="kpi-label">SCORECARD 4</div>
+                <div class="kpi-value" style="font-size: 1.25rem;">BROKERAGE UTILISATION %</div>
+                <div class="kpi-footnote">Proportion of grant pool disbursed</div>
+              </div>
+            </div>
+
+            <!-- Exact Column Headers Tab 4 -->
+            <div class="cell-grid-container">
+              <table class="spreadsheet-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Col #</th>
+                    <th>Executive Metric / Column</th>
+                    <th>Cell Architecture</th>
+                    <th>Calculation Logic</th>
+                    <th>DFFH Acquittal &amp; Board Intent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-mono">1</td>
+                    <td><strong>Program Stream</strong></td>
+                    <td><span class="cell-tag tag-grey">GREY FORMULA</span></td>
+                    <td class="font-mono">Formula: Unique list from Tab 1</td>
+                    <td>Breakdown across Home Stretch, Better Futures, AFV, etc.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">2</td>
+                    <td><strong>Active Participants</strong></td>
+                    <td><span class="cell-tag tag-grey">GREY FORMULA</span></td>
+                    <td class="font-mono">Formula: <code>=COUNTIFS('Tab 1'!Stream, A2)</code></td>
+                    <td>Live active caseload volume per service line.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">3</td>
+                    <td><strong>Housing Stable Count</strong></td>
+                    <td><span class="cell-tag tag-grey">GREY FORMULA</span></td>
+                    <td class="font-mono">Formula: <code>=COUNTIFS(Stream, A2, Housing, "Stable*")</code></td>
+                    <td>Proportion of youth who have secured independent leases.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">4</td>
+                    <td><strong>Total Brokerage Expended ($)</strong></td>
+                    <td><span class="cell-tag tag-grey">GREY FORMULA</span></td>
+                    <td class="font-mono">Formula: <code>=SUMIFS('Tab 3'!Amount, 'Tab 3'!Stream, A2)</code></td>
+                    <td>Actual grant disbursement tied directly to this cohort.</td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono">5</td>
+                    <td><strong>DFFH Acquittal Status</strong></td>
+                    <td><span class="cell-tag tag-grey">GREY FORMULA</span></td>
+                    <td>Formula Shield: <code>🟩 Compliant</code>, <code>🟨 Review Required</code>, <code>🟥 Action Required</code></td>
+                    <td>Statutory benchmark compliance based on expenditure rate &amp; transition reviews.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 4: INTERACTIVE LIVE DATABASE EXPLORER
+         ====================================================================== -->
+    <section id="sec-database">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag">Live Demonstration</span>
+            <h2 style="margin-top: var(--space-xs);">Interactive Database &amp; Outcomes Explorer</h2>
+          </div>
+          <span class="badge badge-neutral font-mono">Sample Dataset Pre-Loaded</span>
+        </div>
+
+        <p>
+          Interact directly with the real-world sample data pre-loaded into the Youth Program &amp; Care Leaver Transition Hub. Switch between tabs, filter by program stream or housing risk, and see live KPI counters adapt.
+        </p>
+
+        <!-- Interactive Tab Navigation Header -->
+        <div class="tab-header" role="tablist">
+          <button type="button" class="tab-btn active" id="tabbtn-1" onclick="switchDbTab('tab1')">
+            <i data-lucide="users" style="width: 14px; height: 14px;"></i> 1. Youth Roster &amp; Milestones
+          </button>
+          <button type="button" class="tab-btn" id="tabbtn-2" onclick="switchDbTab('tab2')">
+            <i data-lucide="calendar-check" style="width: 14px; height: 14px;"></i> 2. Engagement &amp; Goal Log
+          </button>
+          <button type="button" class="tab-btn" id="tabbtn-3" onclick="switchDbTab('tab3')">
+            <i data-lucide="receipt" style="width: 14px; height: 14px;"></i> 3. Youth Brokerage Ledger
+          </button>
+          <button type="button" class="tab-btn" id="tabbtn-4" onclick="switchDbTab('tab4')">
+            <i data-lucide="bar-chart-3" style="width: 14px; height: 14px;"></i> 4. Executive Youth Dashboard
+          </button>
+        </div>
+
+        <!-- TAB 1 CONTENT: YOUTH ROSTER -->
+        <div id="tabpanel-1" class="tab-content active">
+          <!-- Filters Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md); background-color: var(--surface-container); padding: var(--space-sm); border-radius: var(--rounded);">
+            <div style="display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap;">
+              <span class="font-mono" style="font-weight: 700; font-size: 0.75rem;">FILTER ROSTER:</span>
+              <select id="filter-stream" onchange="applyRosterFilters()" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" aria-label="Filter by stream">
+                <option value="ALL">All Streams (8 Young People)</option>
+                <option value="Home Stretch">Home Stretch (2)</option>
+                <option value="Better Futures">Better Futures (2)</option>
+                <option value="Youth Outreach">Youth Outreach (2)</option>
+                <option value="Adolescent Family Violence">Adolescent Family Violence (1)</option>
+                <option value="Independent Living">Independent Living (1)</option>
+              </select>
+              <select id="filter-housing" onchange="applyRosterFilters()" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;" aria-label="Filter by housing">
+                <option value="ALL">All Housing Statuses</option>
+                <option value="Stable">🟩 Stable / Independent (3)</option>
+                <option value="Transitional">🟨 Transitional / Supported (2)</option>
+                <option value="At Risk">🟥 At Risk / Unstable (2)</option>
+                <option value="Crisis">🚨 Crisis / Homeless (1)</option>
+              </select>
+            </div>
+            <div class="font-mono" style="font-size: 0.8rem; color: var(--secondary);">
+              Showing <span id="roster-count" style="font-weight: 700;">8</span> of 8 Active Records
+            </div>
+          </div>
+
+          <!-- Roster Table -->
+          <div class="cell-grid-container">
+            <table class="spreadsheet-table" id="table-roster">
+              <thead>
+                <tr>
+                  <th>Youth ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Program Stream</th>
+                  <th>Housing Stability</th>
+                  <th>Active Status</th>
+                  <th>Milestone Gate Status</th>
+                </tr>
+              </thead>
+              <tbody id="roster-tbody">
+                <!-- Injected via JavaScript from canonical data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2 CONTENT: ENGAGEMENT & GOAL LOG -->
+        <div id="tabpanel-2" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md); background-color: var(--surface-container); padding: var(--space-sm); border-radius: var(--rounded);">
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <span class="font-mono" style="font-weight: 700; font-size: 0.75rem;">ENGAGEMENT DOMAIN:</span>
+              <span class="badge badge-acco font-mono">Closing the Gap Reform 2 Enabled</span>
+            </div>
+            <span class="font-mono" style="font-size: 0.8rem; color: var(--on-surface-variant);">8 Qualitative Yarning &amp; Casework Entries</span>
+          </div>
+
+          <div class="cell-grid-container">
+            <table class="spreadsheet-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Youth ID</th>
+                  <th>Engagement Type</th>
+                  <th>Qualitative Goal Progress &amp; Elder Yarning Notes</th>
+                  <th>Follow-up Required</th>
+                </tr>
+              </thead>
+              <tbody id="engagement-tbody">
+                <!-- Injected via JavaScript from canonical data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3 CONTENT: BROKERAGE LEDGER -->
+        <div id="tabpanel-3" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md); background-color: var(--surface-container); padding: var(--space-sm); border-radius: var(--rounded);">
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <span class="font-mono" style="font-weight: 700; font-size: 0.75rem;">TOTAL DISBURSED:</span>
+              <span class="font-mono" style="font-size: 1.1rem; font-weight: 700; color: var(--secondary);">$4,700.00</span>
+            </div>
+            <div class="font-mono" style="font-size: 0.8rem;">
+              Contract Pool: <span style="font-weight: 700;">$10,000.00</span> &bull; Remaining: <span style="font-weight: 700; color: var(--positive);">$5,300.00 (53.0%)</span>
+            </div>
+          </div>
+
+          <div class="cell-grid-container">
+            <table class="spreadsheet-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Youth ID</th>
+                  <th>Brokerage Category</th>
+                  <th>Amount Spent</th>
+                  <th>Running Ledger Total</th>
+                  <th>Acquittal Scope</th>
+                </tr>
+              </thead>
+              <tbody id="brokerage-tbody">
+                <!-- Injected via JavaScript from canonical data -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 4 CONTENT: EXECUTIVE DASHBOARD -->
+        <div id="tabpanel-4" class="tab-content">
+          <!-- Executive KPI Cards -->
+          <div class="kpi-grid" style="margin-bottom: var(--space-lg);">
+            <div class="kpi-card" style="border-left-color: var(--secondary);">
+              <div class="kpi-label">ACTIVE YOUTH CASELOAD</div>
+              <div class="kpi-value">8</div>
+              <div class="kpi-footnote">Currently active care leavers</div>
+            </div>
+            <div class="kpi-card" style="border-left-color: var(--positive);">
+              <div class="kpi-label">HOUSING STABILITY RATE</div>
+              <div class="kpi-value">37.5%</div>
+              <div class="kpi-footnote">3 of 8 in stable/independent homes</div>
+            </div>
+            <div class="kpi-card" style="border-left-color: var(--primary-container);">
+              <div class="kpi-label">TOTAL BROKERAGE SPENT</div>
+              <div class="kpi-value">$4,700.00</div>
+              <div class="kpi-footnote">Direct youth transition relief</div>
+            </div>
+            <div class="kpi-card" style="border-left-color: var(--error);">
+              <div class="kpi-label">CRISIS / HOUSING RISK</div>
+              <div class="kpi-value" style="color: var(--error);">37.5%</div>
+              <div class="kpi-footnote">3 youth At Risk or in Crisis Shelter</div>
+            </div>
+          </div>
+
+          <!-- Stream Breakdown & Category Aggregations -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md);">
+            <!-- Stream Breakdown Table -->
+            <div style="border: 1px solid var(--outline-variant); border-radius: var(--rounded); padding: var(--space-md); background-color: var(--surface-container-low);">
+              <h4 style="font-size: 0.95rem; margin-bottom: var(--space-sm);"><i data-lucide="layers" style="width: 14px; height: 14px; display: inline;"></i> Program Stream Caseloads</h4>
+              <table class="spreadsheet-table" style="font-size: 0.8rem;">
+                <thead>
+                  <tr>
+                    <th>Stream</th>
+                    <th>Caseload</th>
+                    <th>Acquittal Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Home Stretch</td>
+                    <td class="font-mono">2</td>
+                    <td><span class="badge badge-stable">🟩 Compliant</span></td>
+                  </tr>
+                  <tr>
+                    <td>Better Futures</td>
+                    <td class="font-mono">2</td>
+                    <td><span class="badge badge-stable">🟩 Compliant</span></td>
+                  </tr>
+                  <tr>
+                    <td>Youth Outreach</td>
+                    <td class="font-mono">2</td>
+                    <td><span class="badge badge-due">🟨 Review Required</span></td>
+                  </tr>
+                  <tr>
+                    <td>Adolescent Family Violence</td>
+                    <td class="font-mono">1</td>
+                    <td><span class="badge badge-risk">🟥 Action Required (MARAM)</span></td>
+                  </tr>
+                  <tr>
+                    <td>Independent Living</td>
+                    <td class="font-mono">1</td>
+                    <td><span class="badge badge-stable">🟩 Compliant</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Spend by Category Table -->
+            <div style="border: 1px solid var(--outline-variant); border-radius: var(--rounded); padding: var(--space-md); background-color: var(--surface-container-low);">
+              <h4 style="font-size: 0.95rem; margin-bottom: var(--space-sm);"><i data-lucide="pie-chart" style="width: 14px; height: 14px; display: inline;"></i> Brokerage Spend by Category</h4>
+              <table class="spreadsheet-table" style="font-size: 0.8rem;">
+                <thead>
+                  <tr>
+                    <th>Brokerage Category</th>
+                    <th>Total Disbursed</th>
+                    <th>Share</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Housing &amp; Rent Support</td>
+                    <td class="font-mono">$2,200.00</td>
+                    <td class="font-mono">46.8%</td>
+                  </tr>
+                  <tr>
+                    <td>Education &amp; Course Fees</td>
+                    <td class="font-mono">$1,100.00</td>
+                    <td class="font-mono">23.4%</td>
+                  </tr>
+                  <tr>
+                    <td>Transport &amp; Licensing</td>
+                    <td class="font-mono">$770.00</td>
+                    <td class="font-mono">16.4%</td>
+                  </tr>
+                  <tr>
+                    <td>Cultural Connection</td>
+                    <td class="font-mono">$380.00</td>
+                    <td class="font-mono">8.1%</td>
+                  </tr>
+                  <tr>
+                    <td>Emergency Food/Relief</td>
+                    <td class="font-mono">$250.00</td>
+                    <td class="font-mono">5.3%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 5: STATUTORY AGE GATE & TRANSITION CALCULATOR
+         ====================================================================== -->
+    <section id="sec-calculators">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag" style="background-color: var(--secondary); color: var(--on-secondary); border-color: var(--secondary);">Practice Engine</span>
+            <h2 style="margin-top: var(--space-xs);">Victorian Care Leaver Age-Gate &amp; Milestone Engine</h2>
+          </div>
+          <span class="badge badge-neutral font-mono">CYFA 2005 &bull; Ages 15–21 Thresholds</span>
+        </div>
+
+        <p>
+          Under Victorian statutory guidelines, the transition from care is defined by rigid age gates. Test the milestone calculation engine by selecting a young person or entering a birth date to simulate the automatic formula shield alerts generated in Tab 1.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <!-- Inputs Column -->
+          <div style="background-color: var(--surface-container); padding: var(--space-md); border-radius: var(--rounded);">
+            <div class="form-group">
+              <label for="calc-preset-select">Select Youth Case Roster Preset:</label>
+              <select id="calc-preset-select" onchange="loadPresetAge(this.value)">
+                <option value="custom">-- Custom Date of Birth --</option>
+                <option value="YTH-001">YTH-001 Marcus Vance (Age ~18.2 — Extended Care Gate)</option>
+                <option value="YTH-003">YTH-003 Liam Taylor (Age ~17.9 — 18th Birthday Imminent)</option>
+                <option value="YTH-004">YTH-004 Maya Patel (Age ~16.5 — Better Futures Intake)</option>
+                <option value="YTH-006">YTH-006 Aisha Al-Mansoor (Age ~20.9 — 21st Exit Transition)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="calc-dob-input">Enter Participant Date of Birth (DOB):</label>
+              <input type="date" id="calc-dob-input" value="2008-11-20" onchange="runAgeCalculation()">
+            </div>
+
+            <div class="form-group">
+              <label for="calc-status-select">Current Care Status:</label>
+              <select id="calc-status-select" onchange="runAgeCalculation()">
+                <option value="Post-Care Transition (15-18)">Post-Care Transition (15-18)</option>
+                <option value="Extended Care (18-21)">Extended Care (18-21) — Home Stretch</option>
+                <option value="Active OOHC">Active OOHC (Statutory Order)</option>
+                <option value="Community Referral">Community Referral</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-sm" onclick="runAgeCalculation()" style="width: 100%;">
+              <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Run Formula Shield Recalculation
+            </button>
+          </div>
+
+          <!-- Dynamic Output Shield Column -->
+          <div style="background-color: var(--surface-container-low); border: 2px solid var(--outline); padding: var(--space-md); border-radius: var(--rounded);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+              <span class="font-mono" style="font-weight: 700; color: var(--on-surface-variant);">AUTOMATED GREY FORMULA SHIELD (TAB 1 COL 8):</span>
+              <span id="output-badge" class="badge badge-due">🟨 Milestone Due (&lt;30 Days)</span>
+            </div>
+
+            <div style="margin-bottom: var(--space-sm);">
+              <span class="font-mono" style="font-size: 0.75rem; color: var(--on-surface-variant); display: block;">CALCULATED EXACT AGE:</span>
+              <div id="output-age-string" style="font-family: var(--font-headline); font-size: 1.75rem; font-weight: 700; color: var(--on-surface);">
+                17 yrs, 11 mos
+              </div>
+            </div>
+
+            <div style="margin-bottom: var(--space-sm);">
+              <span class="font-mono" style="font-size: 0.75rem; color: var(--on-surface-variant); display: block;">STATUTORY AGE THRESHOLD STAGE:</span>
+              <div id="output-stage-string" style="font-size: 0.95rem; font-weight: 600; color: var(--secondary);">
+                18th Birthday Transition Gate (Better Futures to Home Stretch)
+              </div>
+            </div>
+
+            <div id="output-guidance-box" style="background-color: var(--surface-container); border-left: 3px solid var(--warning); padding: var(--space-sm); font-size: 0.85rem; color: var(--on-surface);">
+              <strong>Frontline Action Required:</strong> The 18th birthday approaches. Case lead must submit the Home Stretch Housing Allowance application to DFFH and confirm transition plan endorsement before OOHC order lapses.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 6: STATUTORY & REGULATORY FRAMEWORKS MATRIX
+         ====================================================================== -->
+    <section id="sec-frameworks">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag">Regulatory Standard</span>
+            <h2 style="margin-top: var(--space-xs);">Statutory Compliance &amp; Regulatory Frameworks</h2>
+          </div>
+          <span class="badge badge-neutral font-mono">CYFA &bull; Home Stretch &bull; MARAM &bull; Reform 2</span>
+        </div>
+
+        <p>
+          Every record and formula in this Hub directly satisfies statutory obligations mandated by Victorian legislation and national closing the gap priority reforms.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <!-- 1. CYFA 2005 -->
+          <div style="border: 1px solid var(--outline-variant); border-top: 3px solid var(--secondary); border-radius: var(--rounded); padding: var(--space-md); background-color: var(--surface-container-low);">
+            <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: var(--space-xs);">
+              <i data-lucide="book-open" style="width: 16px; height: 16px; color: var(--secondary);"></i>
+              <h3 style="font-size: 0.95rem;">Children, Youth and Families Act 2005</h3>
+            </div>
+            <p style="font-size: 0.825rem; color: var(--on-surface-variant); margin-bottom: var(--space-xs);">
+              <strong>Statutory Threshold:</strong> Sections 16, 166 &amp; 167 govern transition planning beginning at age 15. Requires all young people leaving care to have an active, documented transition plan.
+            </p>
+            <div class="font-mono" style="font-size: 0.72rem; color: var(--secondary); background: var(--surface-container); padding: 4px; border-radius: 2px;">
+              Audit Evidence: Tab 1 Col 6 (Plan Status)
+            </div>
+          </div>
+
+          <!-- 2. Home Stretch & Better Futures -->
+          <div style="border: 1px solid var(--outline-variant); border-top: 3px solid var(--primary-container); border-radius: var(--rounded); padding: var(--space-md); background-color: var(--surface-container-low);">
+            <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: var(--space-xs);">
+              <i data-lucide="home" style="width: 16px; height: 16px; color: var(--tertiary);"></i>
+              <h3 style="font-size: 0.95rem;">Better Futures &amp; Home Stretch</h3>
+            </div>
+            <p style="font-size: 0.825rem; color: var(--on-surface-variant); margin-bottom: var(--space-xs);">
+              <strong>DFFH Operational Policy:</strong> Provides accommodation allowances and flexible youth brokerage up to age 21 across 5 core life domains: housing, learning, work, wellbeing, and community.
+            </p>
+            <div class="font-mono" style="font-size: 0.72rem; color: var(--secondary); background: var(--surface-container); padding: 4px; border-radius: 2px;">
+              Audit Evidence: Tab 3 (Brokerage Disbursals)
+            </div>
+          </div>
+
+          <!-- 3. MARAM Framework -->
+          <div style="border: 1px solid var(--outline-variant); border-top: 3px solid var(--error); border-radius: var(--rounded); padding: var(--space-md); background-color: var(--surface-container-low);">
+            <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: var(--space-xs);">
+              <i data-lucide="shield-alert" style="width: 16px; height: 16px; color: var(--error);"></i>
+              <h3 style="font-size: 0.95rem;">MARAM Framework (FVPA 2008)</h3>
+            </div>
+            <p style="font-size: 0.825rem; color: var(--on-surface-variant); margin-bottom: var(--space-xs);">
+              <strong>Family Violence Safety:</strong> Prescribes Multi-Agency Risk Assessment &amp; Management. Identifies adolescent family violence (AFV) dynamics and ensures safe housing triage.
+            </p>
+            <div class="font-mono" style="font-size: 0.72rem; color: var(--error); background: #fef2f2; padding: 4px; border-radius: 2px;">
+              Audit Evidence: Tab 2 Col 4 (MARAM Applied)
+            </div>
+          </div>
+
+          <!-- 4. Closing the Gap Reform 2 -->
+          <div style="border: 1px solid var(--outline-variant); border-top: 3px solid var(--acco-ochre); border-radius: var(--rounded); padding: var(--space-md); background-color: var(--surface-container-low);">
+            <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: var(--space-xs);">
+              <i data-lucide="feather" style="width: 16px; height: 16px; color: var(--acco-ochre);"></i>
+              <h3 style="font-size: 0.95rem; color: var(--acco-ochre);">Closing the Gap (Priority Reform 2)</h3>
+            </div>
+            <p style="font-size: 0.825rem; color: var(--on-surface-variant); margin-bottom: var(--space-xs);">
+              <strong>ACCO Cultural Governance:</strong> Fulfills national targets to grow community-controlled services. Validates Elder yarning circles, Kinship networks, and Connection to Country.
+            </p>
+            <div class="font-mono" style="font-size: 0.72rem; color: var(--acco-ochre); background: var(--acco-ochre-bg); padding: 4px; border-radius: 2px;">
+              Audit Evidence: Tab 2 Col 5-6 (Elder Notes)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 7: BUILT-IN CUSTOMER AI PROMPT COMPANION PACK
+         ====================================================================== -->
+    <section id="sec-prompts">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag" style="background-color: var(--primary-container); color: var(--on-primary-container);">AI Companion</span>
+            <h2 style="margin-top: var(--space-xs);">Built-In Customer AI Prompt Companion Pack</h2>
+          </div>
+          <span class="badge badge-neutral font-mono">4 Copy-and-Paste Prompts</span>
+        </div>
+
+        <p>
+          Casework leads, team leaders, and compliance managers can run Gemini or ChatGPT directly alongside their open Google Sheet. Use the tabs below to copy the four verified prompts, adjust custom variables, or preview sample executive syntheses.
+        </p>
+
+        <!-- Prompt Tab Switcher -->
+        <div class="tab-header" role="tablist" style="margin-top: var(--space-md);">
+          <button type="button" class="tab-btn active" id="prompt-tab-1" onclick="switchPromptTab(1)">
+            <i data-lucide="file-text" style="width: 14px; height: 14px;"></i> Prompt 1: Board Briefing
+          </button>
+          <button type="button" class="tab-btn" id="prompt-tab-2" onclick="switchPromptTab(2)">
+            <i data-lucide="feather" style="width: 14px; height: 14px;"></i> Prompt 2: Cultural Narrative
+          </button>
+          <button type="button" class="tab-btn" id="prompt-tab-3" onclick="switchPromptTab(3)">
+            <i data-lucide="alert-triangle" style="width: 14px; height: 14px;"></i> Prompt 3: High-Risk Housing Email
+          </button>
+          <button type="button" class="tab-btn" id="prompt-tab-4" onclick="switchPromptTab(4)">
+            <i data-lucide="filter" style="width: 14px; height: 14px;"></i> Prompt 4: Brokerage Filter Assistant
+          </button>
+        </div>
+
+        <!-- PROMPT 1 CONTAINER -->
+        <div id="prompt-view-1" class="tab-content active">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <h3 style="font-size: 1.05rem;">PROMPT 1: DFFH Better Futures / Home Stretch Board Briefing</h3>
+              <span style="font-size: 0.8rem; color: var(--on-surface-variant);">Target Role: Executive Director &bull; Source Tabs: Tab 1 (Roster) &amp; Tab 4 (Executive Dashboard)</span>
+            </div>
+            <button type="button" class="btn btn-gold btn-sm" onclick="copyPromptText('prompt-text-1')">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt to Clipboard
+            </button>
+          </div>
+
+          <div class="prompt-header">
+            <span>READY-TO-USE PROMPT TEMPLATE</span>
+            <span>GOOGLE SHEETS &bull; GEMINI / CHATGPT</span>
+          </div>
+          <div class="prompt-box" id="prompt-text-1">"Act as a Youth Services Executive Director in a Victorian community agency. Look at my open '1. Youth Roster &amp; Milestones' and '4. Executive Youth Dashboard' tabs. Synthesize our active care-leaver numbers (ages 15-21), housing stability percentages, and total brokerage utilisation into 3 executive bullet points formatted for a monthly Board paper or DFFH funding acquittal."</div>
+
+          <div style="margin-top: var(--space-md); background-color: var(--surface-container); padding: var(--space-md); border-radius: var(--rounded);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span class="font-mono" style="font-weight: 700; font-size: 0.75rem; color: var(--secondary);">SIMULATED AI OUTPUT PREVIEW:</span>
+              <span class="badge badge-stable font-mono">DFFH Acquittal Ready</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--on-surface); line-height: 1.6;">
+              &bull; <strong>Active Caseload &amp; Transition Scope:</strong> The agency currently supports 8 active care leavers across Home Stretch (25%), Better Futures (25%), Youth Outreach (25%), Adolescent Family Violence (12.5%), and Independent Living (12.5%), maintaining 100% compliance with CYFA 2005 age-gate milestones.<br>
+              &bull; <strong>Housing Stability Triage:</strong> 37.5% of participants (3/8) have secured stable, independent private or community tenancy. Transitional support is active for 25% (2/8), while high-priority intervention and crisis brokerage are mobilized for 37.5% (3/8) flagged with unstable or crisis housing risk under MARAM alignment.<br>
+              &bull; <strong>Brokerage Investment &amp; Fund Acquittal:</strong> Total flexible grant spend stands at $4,700.00 (47.0% of the $10,000.00 allocation), averaging $587.50 per youth. Capital has prioritized Housing &amp; Rent Support (46.8%) and Education/Accredited Course Fees (23.4%), with zero fund co-mingling across DFFH and philanthropic grants.
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT 2 CONTAINER -->
+        <div id="prompt-view-2" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <h3 style="font-size: 1.05rem;">PROMPT 2: Qualitative Cultural Mentoring Narrative</h3>
+              <span style="font-size: 0.8rem; color: var(--on-surface-variant);">Target Role: Senior Youth Cultural Lead &bull; Source Tab: Tab 2 (Engagement &amp; Goal Log)</span>
+            </div>
+            <button type="button" class="btn btn-gold btn-sm" onclick="copyPromptText('prompt-text-2')">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt to Clipboard
+            </button>
+          </div>
+
+          <div class="prompt-header">
+            <span>READY-TO-USE PROMPT TEMPLATE</span>
+            <span>CLOSING THE GAP REFORM 2 FOCUS</span>
+          </div>
+          <div class="prompt-box" id="prompt-text-2">"Act as a Senior Youth Cultural Lead. Look at the qualitative notes logged in my '2. Engagement &amp; Goal Log' for Youth IDs YT-100 through YT-125. Synthesise these yarning circle notes, Elder consultations, and cultural connection goals into a compelling 200-word qualitative outcomes report demonstrating how our youth program fulfills Closing the Gap Priority Reform 2 principles."</div>
+
+          <div style="margin-top: var(--space-md); background-color: var(--surface-container); padding: var(--space-md); border-radius: var(--rounded);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span class="font-mono" style="font-weight: 700; font-size: 0.75rem; color: var(--acco-ochre);">SIMULATED AI OUTPUT PREVIEW:</span>
+              <span class="badge badge-acco font-mono">Priority Reform 2 Aligned</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--on-surface); line-height: 1.6;">
+              <em>"Across recent reporting periods, our engagement records (covering Youth IDs YTH-001 through YTH-008) demonstrate how Aboriginal community-controlled governance transforms post-care transitions into grounded journeys of cultural strength. Frontline qualitative logs show that 100% of First Nations care leavers engaged in regular yarning circles led by community Elders and cultural mentors. These sessions moved beyond mainstream compliance, actively reconnecting young people to Country, mob, and cultural safety networks. For youth in supported accommodation, Elder consultations served as primary protective shields, providing the cultural authority needed to navigate housing stability, licensing hurdles, and employment apprenticeships. By placing decision-making and kinship protective factors directly in the hands of Community, our program delivers on the core promise of Closing the Gap Priority Reform 2: building an Indigenous-led community sector where our young people transition out of state care surrounded by culture, self-determination, and lifelong community belonging."</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT 3 CONTAINER -->
+        <div id="prompt-view-3" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <h3 style="font-size: 1.05rem;">PROMPT 3: High-Risk Youth Housing &amp; Age-Gate Action Email</h3>
+              <span style="font-size: 0.8rem; color: var(--on-surface-variant);">Target Role: Team Leader / Casework Supervisor &bull; Source Tab: Tab 1 (Youth Roster)</span>
+            </div>
+            <button type="button" class="btn btn-gold btn-sm" onclick="copyPromptText('prompt-text-3')">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt to Clipboard
+            </button>
+          </div>
+
+          <div class="prompt-header">
+            <span>READY-TO-USE PROMPT TEMPLATE</span>
+            <span>OPERATIONAL AUDIT TRIAGE EMAIL</span>
+          </div>
+          <div class="prompt-box" id="prompt-text-3">"Look at the '1. Youth Roster &amp; Milestones' tab in my open Google Sheet. Identify all young people flagged with 'At Risk / Unstable' housing or marked with '18/21 Age Gate Action Required'. Draft a supportive, professional 2-paragraph email to team leaders outlining the required priority housing and transition actions before our next contract audit."</div>
+
+          <div style="margin-top: var(--space-md); background-color: var(--surface-container); padding: var(--space-md); border-radius: var(--rounded);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span class="font-mono" style="font-weight: 700; font-size: 0.75rem; color: var(--error);">SIMULATED AI OUTPUT PREVIEW:</span>
+              <span class="badge badge-risk font-mono">Urgent Casework Action</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--on-surface); line-height: 1.6;">
+              <strong>Subject:</strong> Priority Action: Care Leaver Housing Triage &amp; Age-Gate Milestone Audit Readiness<br><br>
+              <em>Hi Team Leaders,<br><br>
+              In our weekly review of the Youth Roster &amp; Milestones tab, several participants have triggered statutory flags requiring immediate casework coordination ahead of our upcoming DFFH contract audit. Specifically, young people marked with 'At Risk / Unstable' housing (including Liam Taylor and Samantha Evans) and Maya Patel in crisis accommodation require updated MARAM comprehensive safety plans and fast-tracked applications for transitional housing subsidies. Please ensure that flexible brokerage vouchers for temporary emergency relief and rent bond guarantees are approved in Tab 3 by end of week.<br><br>
+              Additionally, for young people approaching critical age gates flagged with '18/21 Age Gate Action Required' (such as Marcus Vance and Liam Taylor reaching the 18-year threshold), please confirm that Home Stretch Extended Care agreements and transition living plans have been lodged with the Department. Let’s collaborate closely with our key cultural mentors to ensure every young person has an intact safety plan and stable accommodation before Friday’s clinical review. Thank you for your continued dedication to our young people."</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT 4 CONTAINER -->
+        <div id="prompt-view-4" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap; gap: var(--space-xs);">
+            <div>
+              <h3 style="font-size: 1.05rem;">PROMPT 4: Step-by-Step Brokerage &amp; Goal Filtering Assistant</h3>
+              <span style="font-size: 0.8rem; color: var(--on-surface-variant);">Target Role: Frontline Worker / Admin &bull; Source Tab: Tab 3 (Brokerage Ledger)</span>
+            </div>
+            <button type="button" class="btn btn-gold btn-sm" onclick="copyPromptText('prompt-text-4')">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt to Clipboard
+            </button>
+          </div>
+
+          <div class="prompt-header">
+            <span>READY-TO-USE PROMPT TEMPLATE</span>
+            <span>GOOGLE SHEETS NAVIGATION &bull; FORMULA-SAFE</span>
+          </div>
+          <div class="prompt-box" id="prompt-text-4">"I am using LEW CREATIONS' Youth Program &amp; Care Leaver Transition Hub. I need to filter the '3. Youth Brokerage Ledger' to show only transactions where Brokerage Category is 'Housing &amp; Rent Support' and the amount exceeds $500. Step-by-step, tell me exactly where to click in Google Sheets to create this temporary view without breaking any formulas."</div>
+
+          <div style="margin-top: var(--space-md); background-color: var(--surface-container); padding: var(--space-md); border-radius: var(--rounded);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+              <span class="font-mono" style="font-weight: 700; font-size: 0.75rem; color: var(--secondary);">SIMULATED AI OUTPUT PREVIEW:</span>
+              <span class="badge badge-neutral font-mono">Step-by-Step Tutorial</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--on-surface); line-height: 1.6;">
+              <strong>Step 1: Create a Personal Filter View (Safe Mode)</strong><br>
+              In Google Sheets, navigate to the <em>'3. Youth Brokerage Ledger'</em> tab. Click the top menu <strong>Data &gt; Filter views &gt; Create new filter view</strong>. (This turns your screen dark grey, ensuring your filtering does not disrupt colleagues or break formulas).<br><br>
+              <strong>Step 2: Filter Brokerage Category</strong><br>
+              Click the funnel icon in the header of <strong>Column C (Brokerage Category)</strong>. Click <em>'Clear'</em>, check only <code>Housing &amp; Rent Support</code>, then click <em>'OK'</em>.<br><br>
+              <strong>Step 3: Filter by Dollar Amount (&gt; $500)</strong><br>
+              Click the funnel icon on <strong>Column D (Amount Disbursed $)</strong>. Select <em>'Filter by condition'</em>, choose <em>'Greater than'</em> from the dropdown, type <code>500</code> into the text box, and click <em>'OK'</em>.<br><br>
+              <strong>Step 4: Exit Filter View</strong><br>
+              When finished reviewing the transactions (e.g. Marcus Vance $1,250 and Liam Taylor $950), simply click the <strong>'X'</strong> in the top-right black filter bar. Your sheet instantly returns to the normal full view!
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 8: ONBOARDING QUICK-START CHECKLIST
+         ====================================================================== -->
+    <section id="sec-checklist">
+      <div class="figure-card">
+        <div class="figure-card-header">
+          <div>
+            <span class="dossier-tag">Implementation</span>
+            <h2 style="margin-top: var(--space-xs);">Agency Onboarding &amp; Readiness Checklist</h2>
+          </div>
+          <span class="badge badge-stable font-mono">6 Simple Steps</span>
+        </div>
+
+        <p>
+          Follow this 6-step deployment checklist when provisioning the Youth Program &amp; Care Leaver Transition Hub for your agency:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-top: var(--space-md);">
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="font-family: var(--font-label); font-weight: 700; color: var(--secondary); margin-bottom: 0.2rem;">STEP 1: SECURE COPY</div>
+            <p style="font-size: 0.85rem; margin: 0; color: var(--on-surface-variant);">
+              Click <strong>File &gt; Make a copy</strong> into your agency's private Google Workspace drive. Never share public view links.
+            </p>
+          </div>
+
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="font-family: var(--font-label); font-weight: 700; color: var(--secondary); margin-bottom: 0.2rem;">STEP 2: STAFF PERMISSIONS</div>
+            <p style="font-size: 0.85rem; margin: 0; color: var(--on-surface-variant);">
+              Assign frontline casework leads Edit access to white cells. Restrict formula editing permissions on grey columns.
+            </p>
+          </div>
+
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="font-family: var(--font-label); font-weight: 700; color: var(--secondary); margin-bottom: 0.2rem;">STEP 3: POPULATE ROSTER</div>
+            <p style="font-size: 0.85rem; margin: 0; color: var(--on-surface-variant);">
+              Enter de-identified participant IDs (e.g. YTH-001) and birth dates into Tab 1. Verify grey age-gate formulas illuminate.
+            </p>
+          </div>
+
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="font-family: var(--font-label); font-weight: 700; color: var(--secondary); margin-bottom: 0.2rem;">STEP 4: LOG FRONT-LINE YARNING</div>
+            <p style="font-size: 0.85rem; margin: 0; color: var(--on-surface-variant);">
+              Log weekly mentoring touchpoints in Tab 2. Record MARAM screening outcomes and Elder consultation notes.
+            </p>
+          </div>
+
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="font-family: var(--font-label); font-weight: 700; color: var(--secondary); margin-bottom: 0.2rem;">STEP 5: DISBURSE BROKERAGE</div>
+            <p style="font-size: 0.85rem; margin: 0; color: var(--on-surface-variant);">
+              Log rent bonds, driving lessons, and emergency relief into Tab 3 with approval leads and invoice numbers.
+            </p>
+          </div>
+
+          <div style="border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: var(--rounded); background-color: var(--surface-container-low);">
+            <div style="font-family: var(--font-label); font-weight: 700; color: var(--secondary); margin-bottom: 0.2rem;">STEP 6: MONTHLY ACQUITTALS</div>
+            <p style="font-size: 0.85rem; margin: 0; color: var(--on-surface-variant);">
+              Check Tab 4 Executive Youth Dashboard for live DFFH compliance badges and Board paper synthesis figures.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: var(--space-xl); padding-top: var(--space-md); border-top: var(--section-rule); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+      <div style="font-size: 0.85rem; color: var(--on-surface-variant);">
+        <strong>LEW CREATIONS</strong> &bull; Youth Program &amp; Care Leaver Transition Hub Onboarding Portal
+      </div>
+      <div class="font-mono" style="font-size: 0.75rem; color: var(--on-surface-variant);">
+        Victorian Health Records Act &bull; Australian Privacy Act &bull; Zero-Data-Access Architecture
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Toast Notification Element -->
+  <div id="toast-notification" role="status" aria-live="polite">
+    <i data-lucide="check" style="width: 16px; height: 16px; color: var(--primary-container);"></i>
+    <span id="toast-message">Prompt copied to clipboard!</span>
+  </div>
+
+  <!-- NotebookOS API Shim Tag for Sandboxed State Persistence -->
+  <api-shim></api-shim>
+
+  <!-- ======================================================================
+       INTERACTIVE LOGIC (VANILLA JS, DEFENSIVE CODING)
+       ====================================================================== -->
+  <script>
+    /* Canonical Datasets from Source Specifications */
+    const CANONICAL_ROSTER = [
+      { id: `YTH-001`, first: `Marcus`, last: `Vance`, stream: `Home Stretch`, housing: `🟩 Stable / Independent`, housingKey: `Stable`, status: `Active`, gate: `🟩 On Track` },
+      { id: `YTH-002`, first: `Chloe`, last: `Nguyen`, stream: `Better Futures`, housing: `🟨 Transitional / Supported`, housingKey: `Transitional`, status: `Active`, gate: `🟩 On Track` },
+      { id: `YTH-003`, first: `Liam`, last: `Taylor`, stream: `Youth Outreach`, housing: `🟥 At Risk / Unstable`, housingKey: `At Risk`, status: `Active`, gate: `🟨 Milestone Due (<30 Days)` },
+      { id: `YTH-004`, first: `Maya`, last: `Patel`, stream: `Adolescent Family Violence`, housing: `🚨 Crisis / Homeless`, housingKey: `Crisis`, status: `Active`, gate: `🟥 18/21 Age Gate Action` },
+      { id: `YTH-005`, first: `Jordan`, last: `Brooks`, stream: `Independent Living`, housing: `🟩 Stable / Independent`, housingKey: `Stable`, status: `Active`, gate: `🟩 On Track` },
+      { id: `YTH-006`, first: `Aisha`, last: `Al-Mansoor`, stream: `Home Stretch`, housing: `🟨 Transitional / Supported`, housingKey: `Transitional`, status: `Active`, gate: `🟩 On Track` },
+      { id: `YTH-007`, first: `Tyler`, last: `Higgins`, stream: `Better Futures`, housing: `🟩 Stable / Independent`, housingKey: `Stable`, status: `Active`, gate: `🟩 On Track` },
+      { id: `YTH-008`, first: `Samantha`, last: `Evans`, stream: `Youth Outreach`, housing: `🟥 At Risk / Unstable`, housingKey: `At Risk`, status: `Active`, gate: `🟨 Milestone Due (<30 Days)` }
+    ];
+
+    const CANONICAL_ENGAGEMENT = [
+      { date: `2025-02-10`, id: `YTH-001`, type: `1-on-1 Mentoring`, notes: `Secured private rental lease agreement; setting up utilities with support lead.`, follow: `No` },
+      { date: `2025-02-12`, id: `YTH-002`, type: `Education Pathway Session`, notes: `Enrolled in Certificate IV Youth Work; attended course orientation.`, follow: `No` },
+      { date: `2025-02-14`, id: `YTH-003`, type: `Housing Inspection`, notes: `Applied for transitional supported housing; awaiting intake appointment.`, follow: `Yes` },
+      { date: `2025-02-15`, id: `YTH-004`, type: `Crisis Support`, notes: `MARAM comprehensive safety plan updated; temporary emergency shelter accessed.`, follow: `Yes` },
+      { date: `2025-02-17`, id: `YTH-005`, type: `Living Skills Workshop`, notes: `Independent budget plan established; full-time apprenticeship confirmed.`, follow: `No` },
+      { date: `2025-02-18`, id: `YTH-006`, type: `Transport & Licensing`, notes: `Driving lessons underway with cultural mentor; completed 25 logbook hours.`, follow: `No` },
+      { date: `2025-02-20`, id: `YTH-007`, type: `Case Review`, notes: `Resume finalized; submitted 3 local community job applications.`, follow: `Yes` },
+      { date: `2025-02-22`, id: `YTH-008`, type: `Crisis Support`, notes: `Referral made to youth mental health outreach team; check-in scheduled.`, follow: `Yes` }
+    ];
+
+    const CANONICAL_BROKERAGE = [
+      { date: `2025-02-05`, id: `YTH-001`, category: `Housing & Rent Support`, amount: `$1,250.00`, balance: `$1,250.00`, scope: `DFFH Home Stretch` },
+      { date: `2025-02-08`, id: `YTH-002`, category: `Education & Course Fees`, amount: `$480.00`, balance: `$1,730.00`, scope: `Better Futures Flexible` },
+      { date: `2025-02-11`, id: `YTH-006`, category: `Transport & Licensing`, amount: `$320.00`, balance: `$2,050.00`, scope: `Home Stretch Transport` },
+      { date: `2025-02-13`, id: `YTH-004`, category: `Emergency Food/Relief`, amount: `$250.00`, balance: `$2,300.00`, scope: `Internal Crisis Grant` },
+      { date: `2025-02-16`, id: `YTH-005`, category: `Transport & Licensing`, amount: `$450.00`, balance: `$2,750.00`, scope: `Better Futures Flexible` },
+      { date: `2025-02-18`, id: `YTH-003`, category: `Housing & Rent Support`, amount: `$950.00`, balance: `$3,700.00`, scope: `DFFH Home Stretch` },
+      { date: `2025-02-21`, id: `YTH-006`, category: `Cultural Connection`, amount: `$380.00`, balance: `$4,080.00`, scope: `Closing the Gap Grant` },
+      { date: `2025-02-24`, id: `YTH-007`, category: `Education & Course Fees`, amount: `$620.00`, balance: `$4,700.00`, scope: `Better Futures Flexible` }
+    ];
+
+    /* Persistent App State */
+    let appState = {
+      dbTab: 'tab1',
+      promptTab: 1,
+      streamFilter: 'ALL',
+      housingFilter: 'ALL',
+      selectedCell: null,
+      calcPreset: 'custom',
+      calcDob: '2008-11-20',
+      calcStatus: 'Post-Care Transition (15-18)',
+      panicSimulated: false
+    };
+
+    /* Hoisted Functions */
+    function scrollToSection(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function switchDbTab(tabKey) {
+      appState.dbTab = tabKey;
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`tabbtn-${i}`);
+        const panel = document.getElementById(`tabpanel-${i}`);
+        if (btn) btn.classList.remove('active');
+        if (panel) panel.classList.remove('active');
+      }
+
+      let index = 1;
+      if (tabKey === 'tab2') index = 2;
+      else if (tabKey === 'tab3') index = 3;
+      else if (tabKey === 'tab4') index = 4;
+
+      const activeBtn = document.getElementById(`tabbtn-${index}`);
+      const activePanel = document.getElementById(`tabpanel-${index}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activePanel) activePanel.classList.add('active');
+
+      saveAppState();
+    }
+
+    function switchPromptTab(tabIndex) {
+      appState.promptTab = tabIndex;
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`prompt-tab-${i}`);
+        const view = document.getElementById(`prompt-view-${i}`);
+        if (btn) btn.classList.remove('active');
+        if (view) view.classList.remove('active');
+      }
+
+      const activeBtn = document.getElementById(`prompt-tab-${tabIndex}`);
+      const activeView = document.getElementById(`prompt-view-${tabIndex}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activeView) activeView.classList.add('active');
+
+      saveAppState();
+    }
+
+    function renderRosterTable(items) {
+      const tbody = document.getElementById('roster-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      items.forEach(function(row) {
+        const tr = document.createElement('tr');
+        
+        let housingBadgeClass = 'badge-stable';
+        if (row.housingKey === 'Transitional') housingBadgeClass = 'badge-transitional';
+        else if (row.housingKey === 'At Risk') housingBadgeClass = 'badge-risk';
+        else if (row.housingKey === 'Crisis') housingBadgeClass = 'badge-crisis';
+
+        let gateBadgeClass = 'badge-stable';
+        if (row.gate.includes('Milestone Due')) gateBadgeClass = 'badge-due';
+        else if (row.gate.includes('Age Gate Action')) gateBadgeClass = 'badge-risk';
+
+        tr.innerHTML = `
+          <td class="font-mono" style="font-weight: 600;">${row.id}</td>
+          <td>${row.first}</td>
+          <td>${row.last}</td>
+          <td><span class="badge badge-neutral">${row.stream}</span></td>
+          <td><span class="badge ${housingBadgeClass}">${row.housing}</span></td>
+          <td><span class="badge badge-stable">${row.status}</span></td>
+          <td><span class="badge ${gateBadgeClass}">${row.gate}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderEngagementTable() {
+      const tbody = document.getElementById('engagement-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      CANONICAL_ENGAGEMENT.forEach(function(row) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="font-mono">${row.date}</td>
+          <td class="font-mono" style="font-weight: 600;">${row.id}</td>
+          <td><span class="badge badge-neutral">${row.type}</span></td>
+          <td>${row.notes}</td>
+          <td><span class="badge ${row.follow === 'Yes' ? 'badge-risk' : 'badge-stable'}">${row.follow}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderBrokerageTable() {
+      const tbody = document.getElementById('brokerage-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      CANONICAL_BROKERAGE.forEach(function(row) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="font-mono">${row.date}</td>
+          <td class="font-mono" style="font-weight: 600;">${row.id}</td>
+          <td><span class="badge badge-neutral">${row.category}</span></td>
+          <td class="font-mono" style="font-weight: 700; color: var(--on-surface);">${row.amount}</td>
+          <td class="font-mono" style="color: var(--secondary);">${row.balance}</td>
+          <td><span class="meta-tag">${row.scope}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function applyRosterFilters() {
+      const streamSelect = document.getElementById('filter-stream');
+      const housingSelect = document.getElementById('filter-housing');
+      const countEl = document.getElementById('roster-count');
+
+      const streamVal = streamSelect ? streamSelect.value : 'ALL';
+      const housingVal = housingSelect ? housingSelect.value : 'ALL';
+
+      appState.streamFilter = streamVal;
+      appState.housingFilter = housingVal;
+
+      const filtered = CANONICAL_ROSTER.filter(function(item) {
+        const streamMatch = (streamVal === 'ALL') || (item.stream === streamVal);
+        const housingMatch = (housingVal === 'ALL') || (item.housingKey === housingVal);
+        return streamMatch && housingMatch;
+      });
+
+      renderRosterTable(filtered);
+      if (countEl) countEl.textContent = filtered.length;
+      saveAppState();
+    }
+
+    /* Panic Simulator Logic */
+    function triggerPanicSimulation() {
+      appState.panicSimulated = true;
+      const ageCell = document.getElementById('sim-cell-age');
+      const brokerageCell = document.getElementById('sim-cell-brokerage');
+      const milestoneCell = document.getElementById('sim-cell-milestone');
+      const statusBadge = document.getElementById('sim-status-badge');
+      const feedback = document.getElementById('sim-feedback-message');
+      const undoBtn = document.getElementById('btn-undo-ctrlz');
+      const historyBtn = document.getElementById('btn-undo-history');
+
+      if (brokerageCell) {
+        brokerageCell.style.backgroundColor = '#fee2e2';
+        brokerageCell.style.color = '#b91c1c';
+        brokerageCell.textContent = '#REF! (FORMULA OVERWRITTEN)';
+      }
+      if (milestoneCell) {
+        milestoneCell.style.backgroundColor = '#fee2e2';
+        milestoneCell.innerHTML = '<span class="badge badge-risk">#ERROR! Formula Lost</span>';
+      }
+      if (statusBadge) {
+        statusBadge.className = 'badge badge-risk font-mono';
+        statusBadge.innerHTML = '<i data-lucide="alert-triangle" style="width: 12px; height: 12px;"></i> Error State: Formula Shield Corrupted';
+      }
+      if (feedback) {
+        feedback.innerHTML = '<span style="color: var(--error); font-weight: 600;">⚠️ Formula overwritten! Notice the red #REF! warning. Click "Press Ctrl+Z" or "Restore via File &gt; Version History" below to recover.</span>';
+      }
+      if (undoBtn) undoBtn.disabled = false;
+      if (historyBtn) historyBtn.disabled = false;
+
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      showToast('⚠️ Formula Overwritten! Test the Panic Button recovery options.');
+      saveAppState();
+    }
+
+    function restoreViaCtrlZ() {
+      appState.panicSimulated = false;
+      const brokerageCell = document.getElementById('sim-cell-brokerage');
+      const milestoneCell = document.getElementById('sim-cell-milestone');
+      const statusBadge = document.getElementById('sim-status-badge');
+      const feedback = document.getElementById('sim-feedback-message');
+      const undoBtn = document.getElementById('btn-undo-ctrlz');
+      const historyBtn = document.getElementById('btn-undo-history');
+
+      if (brokerageCell) {
+        brokerageCell.style.backgroundColor = 'var(--cell-grey-bg)';
+        brokerageCell.style.color = 'var(--secondary)';
+        brokerageCell.textContent = '$8,750.00';
+      }
+      if (milestoneCell) {
+        milestoneCell.style.backgroundColor = 'var(--cell-grey-bg)';
+        milestoneCell.innerHTML = '<span class="badge badge-due">🟨 Milestone Due (<30 Days)</span>';
+      }
+      if (statusBadge) {
+        statusBadge.className = 'badge badge-stable font-mono';
+        statusBadge.innerHTML = '<i data-lucide="check-circle" style="width: 12px; height: 12px;"></i> System State: Restored via Ctrl+Z';
+      }
+      if (feedback) {
+        feedback.innerHTML = '<span style="color: var(--positive); font-weight: 600;">✓ Restored in 1 second! Ctrl+Z instantly reversed the keystroke and re-armed the formula shield.</span>';
+      }
+      if (undoBtn) undoBtn.disabled = true;
+      if (historyBtn) historyBtn.disabled = true;
+
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      showToast('✓ Healed! Ctrl+Z restored formula shield.');
+      saveAppState();
+    }
+
+    function restoreViaVersionHistory() {
+      appState.panicSimulated = false;
+      const brokerageCell = document.getElementById('sim-cell-brokerage');
+      const milestoneCell = document.getElementById('sim-cell-milestone');
+      const statusBadge = document.getElementById('sim-status-badge');
+      const feedback = document.getElementById('sim-feedback-message');
+      const undoBtn = document.getElementById('btn-undo-ctrlz');
+      const historyBtn = document.getElementById('btn-undo-history');
+
+      if (brokerageCell) {
+        brokerageCell.style.backgroundColor = 'var(--cell-grey-bg)';
+        brokerageCell.style.color = 'var(--secondary)';
+        brokerageCell.textContent = '$8,750.00';
+      }
+      if (milestoneCell) {
+        milestoneCell.style.backgroundColor = 'var(--cell-grey-bg)';
+        milestoneCell.innerHTML = '<span class="badge badge-due">🟨 Milestone Due (<30 Days)</span>';
+      }
+      if (statusBadge) {
+        statusBadge.className = 'badge badge-stable font-mono';
+        statusBadge.innerHTML = '<i data-lucide="check-circle" style="width: 12px; height: 12px;"></i> System State: Restored from Version History';
+      }
+      if (feedback) {
+        feedback.innerHTML = '<span style="color: var(--positive); font-weight: 600;">✓ 2-Click Rollback complete! File &gt; Version History retrieved yesterday\'s 09:00 AM clean snapshot.</span>';
+      }
+      if (undoBtn) undoBtn.disabled = true;
+      if (historyBtn) historyBtn.disabled = true;
+
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      showToast('✓ Version History snapshot restored!');
+      saveAppState();
+    }
+
+    /* Cell Inspector Sandbox */
+    const CELL_REGISTRY = {
+      'A4': { type: 'WHITE', label: 'Youth ID', val: 'YT-104', desc: 'Direct Text Input' },
+      'C4': { type: 'WHITE', label: 'Date of Birth', val: '2008-04-12', desc: 'Date Picker — Updates Age automatically' },
+      'D4': { type: 'GREY', label: 'Current Age', val: '17 yrs, 7 mos', desc: 'DATEDIF formula based on DOB and today date' },
+      'H4': { type: 'GREY', label: 'Milestone Alert', val: '18/21 Age Gate Action Required', desc: 'IFS logic checking 18 and 21 threshold gates' },
+      'D12': { type: 'WHITE', label: 'Amount Disbursed', val: '$1,250.00', desc: 'Direct Numeric Currency Input' },
+      'E12': { type: 'GREY', label: 'Remaining Balance', val: '$8,750.00', desc: 'TotalGrant minus SUM of disbursed rows' }
+    };
+
+    let currentInspectedCellCoord = '';
+
+    function inspectCell(coord) {
+      const cellData = CELL_REGISTRY[coord];
+      if (!cellData) return;
+      currentInspectedCellCoord = coord;
+      const type = cellData.type;
+      const label = cellData.label;
+      const val = cellData.val;
+      const desc = cellData.desc;
+      const panel = document.getElementById('cell-inspector-panel');
+      const title = document.getElementById('inspect-title');
+      const tag = document.getElementById('inspect-tag');
+      const descEl = document.getElementById('inspect-desc');
+      const editBox = document.getElementById('inspect-edit-box');
+      const shieldBox = document.getElementById('inspect-shield-box');
+      const inputEl = document.getElementById('inspect-input');
+
+      if (!panel) return;
+      panel.style.display = 'block';
+
+      if (title) title.textContent = `Cell ${coord}: ${label}`;
+      if (descEl) descEl.textContent = `Behavior: ${desc}`;
+
+      if (type === 'WHITE') {
+        if (tag) {
+          tag.className = 'cell-tag tag-white';
+          tag.textContent = 'WHITE #FFFFFF (EDITABLE)';
+        }
+        if (editBox) editBox.style.display = 'flex';
+        if (shieldBox) shieldBox.style.display = 'none';
+        if (inputEl) inputEl.value = val;
+      } else {
+        if (tag) {
+          tag.className = 'cell-tag tag-grey';
+          tag.textContent = 'GREY #F3F4F6 (LOCKED SHIELD)';
+        }
+        if (editBox) editBox.style.display = 'none';
+        if (shieldBox) shieldBox.style.display = 'block';
+      }
+
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function saveCellDemoValue() {
+      const inputEl = document.getElementById('inspect-input');
+      if (!inputEl) return;
+      const newVal = inputEl.value.trim();
+
+      if (currentInspectedCellCoord === 'A4') {
+        const cell = document.getElementById('cell-val-a4');
+        if (cell) cell.innerHTML = `${newVal} <i data-lucide="edit-3" style="width: 12px; height: 12px; display: inline;"></i>`;
+      } else if (currentInspectedCellCoord === 'C4') {
+        const cell = document.getElementById('cell-val-c4');
+        if (cell) cell.innerHTML = `${newVal} <i data-lucide="calendar" style="width: 12px; height: 12px; display: inline;"></i>`;
+      } else if (currentInspectedCellCoord === 'D12') {
+        const cell = document.getElementById('cell-val-d12');
+        if (cell) cell.innerHTML = `${newVal} <i data-lucide="dollar-sign" style="width: 12px; height: 12px; display: inline;"></i>`;
+      }
+
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      showToast(`Cell ${currentInspectedCellCoord} updated to "${newVal}"`);
+    }
+
+    /* Age Gate Engine */
+    function loadPresetAge(presetKey) {
+      appState.calcPreset = presetKey;
+      const dobInput = document.getElementById('calc-dob-input');
+      const statusSelect = document.getElementById('calc-status-select');
+
+      if (presetKey === 'YTH-001') {
+        // Marcus Vance (~18.2)
+        if (dobInput) dobInput.value = '2008-08-15';
+        if (statusSelect) statusSelect.value = 'Extended Care (18-21)';
+      } else if (presetKey === 'YTH-003') {
+        // Liam Taylor (~17.9)
+        if (dobInput) dobInput.value = '2008-12-05';
+        if (statusSelect) statusSelect.value = 'Post-Care Transition (15-18)';
+      } else if (presetKey === 'YTH-004') {
+        // Maya Patel (~16.5)
+        if (dobInput) dobInput.value = '2010-05-10';
+        if (statusSelect) statusSelect.value = 'Post-Care Transition (15-18)';
+      } else if (presetKey === 'YTH-006') {
+        // Aisha Al-Mansoor (~20.9)
+        if (dobInput) dobInput.value = '2005-12-14';
+        if (statusSelect) statusSelect.value = 'Extended Care (18-21)';
+      }
+      runAgeCalculation();
+    }
+
+    function runAgeCalculation() {
+      const dobInput = document.getElementById('calc-dob-input');
+      const statusSelect = document.getElementById('calc-status-select');
+      const badgeEl = document.getElementById('output-badge');
+      const ageStrEl = document.getElementById('output-age-string');
+      const stageStrEl = document.getElementById('output-stage-string');
+      const guideEl = document.getElementById('output-guidance-box');
+
+      if (!dobInput || !dobInput.value) return;
+      const dob = new Date(dobInput.value);
+      // Fixed reference time for deterministic local testing
+      const today = new Date('2026-11-08');
+
+      appState.calcDob = dobInput.value;
+      if (statusSelect) appState.calcStatus = statusSelect.value;
+
+      let years = today.getFullYear() - dob.getFullYear();
+      let months = today.getMonth() - dob.getMonth();
+      if (today.getDate() < dob.getDate()) {
+        months--;
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      if (ageStrEl) {
+        ageStrEl.textContent = `${years} yrs, ${months} mos`;
+      }
+
+      // Statutory thresholds
+      if (years >= 21) {
+        if (badgeEl) {
+          badgeEl.className = 'badge badge-risk';
+          badgeEl.textContent = '🟥 18/21 Age Gate Action Required';
+        }
+        if (stageStrEl) {
+          stageStrEl.textContent = 'Exit Transition: 21st Birthday Milestone Reached';
+        }
+        if (guideEl) {
+          guideEl.style.borderLeftColor = 'var(--error)';
+          guideEl.style.backgroundColor = '#fef2f2';
+          guideEl.innerHTML = '<strong>Statutory Action:</strong> Home Stretch extended care concludes at 21. Ensure independent living tenancy transfer, bond handover, and community graduation exit pack are acquitted with DFFH.';
+        }
+      } else if (years === 20 && months >= 11) {
+        if (badgeEl) {
+          badgeEl.className = 'badge badge-due';
+          badgeEl.textContent = '🟨 Milestone Due (<30 Days)';
+        }
+        if (stageStrEl) {
+          stageStrEl.textContent = '21st Birthday Graduation Approaching (<30 Days)';
+        }
+        if (guideEl) {
+          guideEl.style.borderLeftColor = 'var(--warning)';
+          guideEl.style.backgroundColor = '#fefce8';
+          guideEl.innerHTML = '<strong>Transition Alert:</strong> Schedule final community exit review. Finalize ongoing NDIS or adult community mental health transfer and disburse remaining balance in Tab 3.';
+        }
+      } else if (years >= 18) {
+        if (badgeEl) {
+          badgeEl.className = 'badge badge-stable';
+          badgeEl.textContent = '🟩 On Track (Extended Care)';
+        }
+        if (stageStrEl) {
+          stageStrEl.textContent = 'Extended Care Active (Home Stretch Ages 18–21)';
+        }
+        if (guideEl) {
+          guideEl.style.borderLeftColor = 'var(--positive)';
+          guideEl.style.backgroundColor = '#f0fdf4';
+          guideEl.innerHTML = '<strong>Ongoing Support:</strong> Young person is supported under Home Stretch accommodation allowance and flexible life-skills brokerage. Conduct quarterly reviews in Tab 2.';
+        }
+      } else if (years === 17 && months >= 11) {
+        if (badgeEl) {
+          badgeEl.className = 'badge badge-due';
+          badgeEl.textContent = '🟨 Milestone Due (<30 Days)';
+        }
+        if (stageStrEl) {
+          stageStrEl.textContent = '18th Birthday Imminent: Legal Order Transition (<30 Days)';
+        }
+        if (guideEl) {
+          guideEl.style.borderLeftColor = 'var(--warning)';
+          guideEl.style.backgroundColor = '#fefce8';
+          guideEl.innerHTML = '<strong>Urgent Action:</strong> Prepare Home Stretch extension forms before statutory OOHC order expires on 18th birthday. Confirm ongoing housing allowance.';
+        }
+      } else {
+        if (badgeEl) {
+          badgeEl.className = 'badge badge-stable';
+          badgeEl.textContent = '🟩 On Track (Preparation)';
+        }
+        if (stageStrEl) {
+          stageStrEl.textContent = 'Better Futures Early Transition Preparation (Ages 15–17)';
+        }
+        if (guideEl) {
+          guideEl.style.borderLeftColor = 'var(--positive)';
+          guideEl.style.backgroundColor = '#f0fdf4';
+          guideEl.innerHTML = '<strong>CYFA 2005 Compliance:</strong> Active transition plan established. Focus on education retention, driver licensing logbook hours, and cultural mentoring sessions.';
+        }
+      }
+
+      saveAppState();
+    }
+
+    /* Clipboard Copy Utility */
+    function copyPromptText(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const text = el.innerText || el.textContent;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          showToast('✓ Copied prompt to clipboard!');
+        }).catch(function() {
+          fallbackCopyText(text);
+        });
+      } else {
+        fallbackCopyText(text);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('✓ Copied prompt to clipboard!');
+      } catch (err) {
+        showToast('Please manually highlight and copy text.');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast-notification');
+      const toastMsg = document.getElementById('toast-message');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.textContent = message;
+      toast.classList.add('show');
+      setTimeout(function() {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    /* State Persistence via Gemini Notebook Shim API */
+    async function restoreAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState = Object.assign({}, appState, saved);
+            
+            // Reapply UI state
+            if (appState.dbTab) switchDbTab(appState.dbTab);
+            if (appState.promptTab) switchPromptTab(appState.promptTab);
+            if (appState.streamFilter) {
+              const sf = document.getElementById('filter-stream');
+              if (sf) sf.value = appState.streamFilter;
+            }
+            if (appState.housingFilter) {
+              const hf = document.getElementById('filter-housing');
+              if (hf) hf.value = appState.housingFilter;
+            }
+            if (appState.calcDob) {
+              const dobInput = document.getElementById('calc-dob-input');
+              if (dobInput) dobInput.value = appState.calcDob;
+            }
+            if (appState.calcStatus) {
+              const statusSelect = document.getElementById('calc-status-select');
+              if (statusSelect) statusSelect.value = appState.calcStatus;
+            }
+            if (appState.calcPreset) {
+              const presetSelect = document.getElementById('calc-preset-select');
+              if (presetSelect) presetSelect.value = appState.calcPreset;
+            }
+            if (appState.panicSimulated) {
+              triggerPanicSimulation();
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Could not restore app state:', e);
+      }
+    }
+
+    async function saveAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        console.warn('Could not save app state:', e);
+      }
+    }
+
+    /* Initialization */
+    document.addEventListener('DOMContentLoaded', async function() {
+      // 1. Render all static tables from canonical data
+      renderRosterTable(CANONICAL_ROSTER);
+      renderEngagementTable();
+      renderBrokerageTable();
+
+      // 2. Run initial age calculation
+      runAgeCalculation();
+
+      // 3. Restore persisted state if available
+      await restoreAppState();
+
+      // 4. Initialize Lucide Icons
+      if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+      }
+
+      // 5. Notify Notebook App Ready
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+  </script>
+</body>
+</html>

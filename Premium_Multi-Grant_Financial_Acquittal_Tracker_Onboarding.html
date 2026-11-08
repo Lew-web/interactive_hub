@@ -1,0 +1,2527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="handbook">
+  <title>LEW CREATIONS — Premium Multi-Grant Financial Acquittal Tracker: Customer Onboarding & Governance Portal</title>
+  
+  <!-- Google Fonts: Public Sans (Style: Handbook) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Approved CDN) -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* -------------------------------------------------------------
+       DESIGN STYLE: HANDBOOK (Classic / Light)
+       "Plain, Direct, and Built for Everyone."
+       ------------------------------------------------------------- */
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;               /* plain white page */
+      --surface-container-low: #f3f2f1;    /* light grey: inset panels, key figures */
+      --surface-container: #e8e7e5;        /* filled panel, secondary surface */
+      --surface-container-high: #dbdad9;   /* pressed state of grey buttons */
+
+      /* Ink */
+      --on-surface: #0b0c0c;               /* near-black: all body text and headings */
+      --on-surface-variant: #505a5f;       /* grey: captions, hints, metadata */
+
+      /* Rules */
+      --outline: #0b0c0c;                  /* form field borders, 2px */
+      --outline-variant: #b1b4b6;          /* hairline dividers */
+
+      /* Accents */
+      --primary: #162e51;                  /* standard navy: top index rule, step badges, primary buttons */
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;        /* pale blue: status tags, notices */
+      --on-primary-container: #0c2d4a;     /* dark blue text on pale blue */
+      --secondary: #4c2c92;                /* visited-link purple */
+      --tertiary: #1a569e;                 /* link blue: links, inset rules, header rule */
+      --error: #d4351c;                    /* error red: text on white only */
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #1a569e;                   /* blue */
+      --data-2: #c75a0a;                   /* deep orange */
+      --data-3: #28a197;                   /* turquoise */
+      --data-4: #4c2c92;                   /* purple */
+      --data-context: #b1b4b6;             /* context series */
+
+      /* Shared semantic tokens */
+      --positive: #00703c;                 /* standard gov green */
+      --on-positive: #ffffff;
+      --positive-container: #d4f3e3;
+      --on-positive-container: #004d28;
+
+      --warning: #f47738;                  /* gov amber/orange */
+      --warning-container: #ffeedb;
+      --on-warning-container: #592200;
+
+      --focus: #162e51;
+      --focus-yellow: #ffdd00;             /* focus highlight; never text */
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Typography */
+      --font-headline: 'Public Sans', sans-serif;
+      --font-body: 'Public Sans', sans-serif;
+      --font-label: 'Public Sans', sans-serif;
+
+      /* Shape */
+      --rounded: 0px;
+      --rounded-lg: 0px;
+      --rounded-full: 0px;
+
+      /* Style effects */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Type scale (Narrative scale) */
+      --display-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+      --headline-size: clamp(1.4rem, 1.15rem + 1.2vw, 2.125rem);
+      --subhead-size: clamp(1.125rem, 1rem + 0.4vw, 1.35rem);
+      --body-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+      --label-size: 0.8125rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base Reset & Typography */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      overflow-x: clip;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      overflow-x: clip;
+      min-height: 100vh;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+    }
+
+    /* Container & Layout */
+    .portal-shell {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 var(--space-md) var(--space-3xl) var(--space-md);
+    }
+
+    .portal-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-2xl);
+    }
+
+    @media (min-width: 900px) {
+      .portal-grid-split {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1.15fr);
+        gap: var(--space-xl);
+        align-items: start;
+      }
+    }
+
+    /* Defining Treatment 1: Heavy top index rule & square step badges */
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm) 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--space-lg);
+    }
+
+    .index-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--surface-container-low);
+      padding: 2px 8px;
+      color: var(--primary);
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.875rem;
+      line-height: 1;
+      margin-right: var(--space-sm);
+    }
+
+    /* Defining Treatment 2: Inset blue rule */
+    .inset {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .inset--warning {
+      border-left: 5px solid var(--warning);
+      background: var(--warning-container);
+      color: var(--on-warning-container);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .inset--positive {
+      border-left: 5px solid var(--positive);
+      background: var(--positive-container);
+      color: var(--on-positive-container);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    /* Defining Treatment 3: Grounded action button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      font: 700 0.95rem/1.2 var(--font-label);
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+      min-height: 44px;
+    }
+
+    .btn:hover {
+      background: #112440;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .btn--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--button-ground-secondary);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .btn--secondary:hover {
+      background: var(--surface-container);
+    }
+
+    .btn--danger {
+      background: var(--error);
+      color: var(--on-error);
+      box-shadow: 0 2px 0 #8b1805;
+    }
+
+    .btn--danger:hover {
+      background: #b52912;
+    }
+
+    .btn--sm {
+      min-height: 36px;
+      padding: 6px 12px;
+      font-size: 0.8125rem;
+    }
+
+    /* Defining Treatment 4: Yellow focus */
+    .btn:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex="0"]:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    a:focus-visible {
+      outline: none;
+      background: var(--focus-yellow);
+      color: var(--on-surface);
+      text-decoration: none;
+      box-shadow: var(--focus-underline);
+    }
+
+    /* Typography Hierarchy (Handbook rules: plain words, no all caps in headings, no italics) */
+    h1, .h1 {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+      margin-bottom: var(--space-sm);
+    }
+
+    h2, .h2 {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--on-surface);
+      margin-bottom: var(--space-sm);
+    }
+
+    h3, .h3 {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--on-surface);
+      margin-bottom: var(--space-xs);
+    }
+
+    p {
+      margin-bottom: var(--space-md);
+      max-width: 72ch;
+    }
+
+    .lede {
+      font-size: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+      line-height: 1.5;
+      color: var(--on-surface);
+      font-weight: 400;
+      margin-bottom: var(--space-md);
+    }
+
+    .caption {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      line-height: 1.4;
+    }
+
+    .tabular-num {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Status Tags (The only uppercase in Handbook) */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      line-height: 1;
+      border: 1px solid var(--outline-variant);
+    }
+
+    .tag--primary {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-color: #a4c4e2;
+    }
+
+    .tag--positive {
+      background: var(--positive-container);
+      color: var(--on-positive-container);
+      border-color: #8ce0b3;
+    }
+
+    .tag--warning {
+      background: var(--warning-container);
+      color: var(--on-warning-container);
+      border-color: #f8c291;
+    }
+
+    .tag--error {
+      background: #fde8e8;
+      color: var(--error);
+      border-color: #f8b4b4;
+    }
+
+    /* Section Structure */
+    .section-block {
+      border-top: 2px solid var(--on-surface);
+      padding-top: var(--space-xl);
+      margin-top: var(--space-xl);
+    }
+
+    .section-block:first-of-type {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Cards & Panels */
+    .card {
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-md);
+    }
+
+    .card--grey {
+      background: var(--surface-container-low);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+
+    /* Interactive Cell Simulator / Visual Key */
+    .cell-key-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-md) 0;
+      font-size: 0.9375rem;
+    }
+
+    .cell-key-table th, .cell-key-table td {
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-sm) var(--space-md);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .cell-key-table th {
+      background: #1e1e24;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cell-demo {
+      display: inline-block;
+      padding: 6px 14px;
+      font-weight: 600;
+      font-family: var(--font-label);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .cell-demo--white {
+      background: #ffffff;
+      color: #0b0c0c;
+      border: 2px solid #0b0c0c;
+    }
+
+    .cell-demo--grey {
+      background: #e8e7e5;
+      color: #333333;
+      border: 2px dashed #858686;
+    }
+
+    .cell-demo--dark {
+      background: #1e1e24;
+      color: #ffffff;
+      border: 2px solid #1e1e24;
+    }
+
+    /* Interactive Click Cell Tester */
+    .sheet-mockup-wrapper {
+      background: #ffffff;
+      border: 2px solid var(--on-surface);
+      overflow-x: auto;
+      margin: var(--space-md) 0;
+    }
+
+    .sheet-mockup-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      min-width: 650px;
+    }
+
+    .sheet-mockup-table th {
+      background: #1e1e24;
+      color: #ffffff;
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 0.75rem;
+      letter-spacing: 0.03em;
+      border: 1px solid #333333;
+    }
+
+    .sheet-mockup-table td {
+      padding: 8px 10px;
+      border: 1px solid var(--outline-variant);
+      transition: background-color var(--dur-micro) var(--ease-out);
+      cursor: pointer;
+    }
+
+    .sheet-mockup-table td.cell-editable {
+      background: #ffffff;
+      color: #0b0c0c;
+    }
+
+    .sheet-mockup-table td.cell-editable:hover {
+      background: #f0f7ff;
+      outline: 2px solid var(--tertiary);
+    }
+
+    .sheet-mockup-table td.cell-shield {
+      background: #f3f2f1;
+      color: #444444;
+      font-weight: 600;
+    }
+
+    .sheet-mockup-table td.cell-shield:hover {
+      background: #e5e5e5;
+      outline: 2px solid var(--error);
+    }
+
+    .mockup-feedback-bar {
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border-top: 1px solid var(--outline-variant);
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      min-height: 48px;
+    }
+
+    /* Calculator & Form Controls */
+    .form-group {
+      margin-bottom: var(--space-md);
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      margin-bottom: var(--space-xs);
+      color: var(--on-surface);
+    }
+
+    .form-hint {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-xs);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--on-surface);
+      background: #ffffff;
+      border: 2px solid var(--outline);
+      border-radius: var(--rounded);
+      transition: border-color var(--dur-micro) var(--ease-out);
+    }
+
+    .form-input:hover, .form-select:hover, .form-textarea:hover {
+      border-color: var(--tertiary);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      align-items: end;
+    }
+
+    /* Range Sliders */
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .slider-input {
+      flex: 1;
+      accent-color: var(--primary);
+      height: 6px;
+      cursor: pointer;
+    }
+
+    .slider-val {
+      min-width: 55px;
+      font-weight: 800;
+      font-size: 1rem;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    /* Interactive Apportionment Simulator */
+    .calc-container {
+      background: var(--surface-container-low);
+      border: 2px solid var(--on-surface);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .calc-preset-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+
+    .allocation-meter {
+      height: 24px;
+      background: #dbdad9;
+      display: flex;
+      overflow: hidden;
+      margin: var(--space-md) 0 var(--space-xs) 0;
+      border: 1px solid var(--outline);
+    }
+
+    .meter-slice {
+      height: 100%;
+      transition: width var(--dur-short) var(--ease-out);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .meter-slice--1 { background: var(--data-1); }
+    .meter-slice--2 { background: var(--data-2); }
+    .meter-slice--3 { background: var(--data-3); }
+    .meter-slice--unallocated { background: #b1b4b6; color: #0b0c0c; }
+    .meter-slice--over { background: var(--error); color: #ffffff; }
+
+    .split-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border: 1px solid var(--outline-variant);
+      margin-top: var(--space-md);
+      font-size: 0.9375rem;
+    }
+
+    .split-summary-table th, .split-summary-table td {
+      border: 1px solid var(--outline-variant);
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    .split-summary-table th {
+      background: var(--surface-container-low);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Burn Rate Health Meter */
+    .burn-gauge-wrapper {
+      background: #ffffff;
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+
+    .burn-progress-bar {
+      height: 20px;
+      background: var(--surface-container);
+      border: 1px solid var(--outline);
+      margin: 6px 0 16px 0;
+      position: relative;
+    }
+
+    .burn-progress-fill {
+      height: 100%;
+      transition: width var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+
+    .burn-marker {
+      position: absolute;
+      top: -4px;
+      bottom: -4px;
+      width: 3px;
+      background: var(--on-surface);
+      z-index: 2;
+    }
+
+    .burn-marker-label {
+      position: absolute;
+      top: -22px;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+      color: var(--on-surface-variant);
+    }
+
+    /* Disaster Recovery Drill */
+    .panic-box {
+      border: 2px solid var(--outline);
+      background: #ffffff;
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .drill-screen {
+      background: #fdfdfd;
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      margin-top: var(--space-md);
+      position: relative;
+    }
+
+    .drill-status-banner {
+      padding: 10px 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Checklist Section */
+    .checklist {
+      list-style: none;
+      margin: var(--space-md) 0;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--surface-container);
+    }
+
+    .checklist-checkbox {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .checklist-text {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    .checklist-text strong {
+      display: block;
+      color: var(--on-surface);
+    }
+
+    /* Prompt Pack */
+    .prompt-card {
+      background: #ffffff;
+      border: 2px solid var(--outline);
+      margin-bottom: var(--space-lg);
+    }
+
+    .prompt-header {
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .prompt-body {
+      padding: var(--space-md);
+    }
+
+    .prompt-content-box {
+      background: #fafafa;
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-md);
+      font-family: monospace, monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: #222222;
+      white-space: pre-wrap;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    /* Toast Notification for Copy */
+    .toast-msg {
+      position: fixed;
+      bottom: var(--space-lg);
+      right: var(--space-lg);
+      background: #1e1e24;
+      color: #ffffff;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform var(--dur-short) var(--ease-out), opacity var(--dur-short) var(--ease-out);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Navigation / Table of Contents Anchor Strip */
+    .toc-strip {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      padding: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-xl);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      font-size: 0.875rem;
+    }
+
+    .toc-link {
+      color: var(--tertiary);
+      text-decoration: underline;
+      font-weight: 600;
+      padding: 4px 8px;
+    }
+
+    .toc-link:hover {
+      background: var(--surface-container);
+      color: var(--primary);
+    }
+
+    /* Utility */
+    .text-positive { color: var(--positive); }
+    .text-warning { color: var(--warning); }
+    .text-error { color: var(--error); }
+    .text-muted { color: var(--on-surface-variant); }
+    .fw-bold { font-weight: 700; }
+    .fw-heavy { font-weight: 800; }
+    .mt-sm { margin-top: var(--space-sm); }
+    .mt-md { margin-top: var(--space-md); }
+    .mb-0 { margin-bottom: 0; }
+
+    /* Print styles */
+    @media print {
+      .btn, .toc-strip, .calc-preset-bar, .slider-container {
+        display: none !important;
+      }
+      .portal-shell {
+        max-width: 100%;
+        padding: 0;
+      }
+      .card, .calc-container, .prompt-card {
+        border-color: #000;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-shell">
+    
+    <!-- Top Index Header (Handbook Treatment 1) -->
+    <header class="index-header" role="banner">
+      <div>
+        <span class="index-badge">LEW CREATIONS</span>
+        <span>• B2B Community Trackers & Systems</span>
+      </div>
+      <div>
+        <span class="tag tag--primary">AUDIT-COMPLIANT ARCHITECTURE</span>
+        <span class="tag tag--positive">GOOGLE WORKSPACE NATIVE</span>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+      <div class="mb-lg">
+        <h1>Premium Multi-Grant Financial Acquittal Tracker</h1>
+        <p class="lede">
+          The comprehensive operational onboarding handbook, formula safeguard protocol, multi-grant expense apportionment simulator, and copiable AI assistant prompt pack.
+        </p>
+
+        <!-- Inset Callout (Handbook Treatment 2) -->
+        <div class="inset">
+          <h3 class="mb-0 fw-heavy">Sector Context & Target Leadership</h3>
+          <p class="mb-0 mt-sm">
+            Specifically engineered for Australian non-profit finance coordinators, Victorian Aboriginal Community Controlled Organisation (ACCO) team leaders, and community program managers managing multi-funding pools (DFFH, NDIS, Federal DSS, and philanthropic awards). Designed to eliminate funding clawbacks, prevent broken spreadsheet formulas, and produce print-ready statutory acquittals.
+          </p>
+        </div>
+
+        <div class="inset inset--positive">
+          <div style="display: flex; gap: var(--space-sm); align-items: flex-start;">
+            <i data-lucide="shield-check" style="color: var(--positive); flex-shrink: 0; margin-top: 3px;"></i>
+            <div>
+              <strong style="color: var(--on-positive-container);">LEW CREATIONS Zero-Access Data Sovereignty Guarantee</strong>
+              <p class="mb-0 mt-xs" style="font-size: 0.9375rem;">
+                When you click <strong>File ➔ Make a copy</strong> in Google Sheets, the entire calculation engine operates 100% locally within your organisation's private Google Workspace. LEW CREATIONS never receives, stores, or views your confidential vendor invoices, staffing figures, or client grant files. Fully aligned with the <em>Australian Privacy Act 1988</em> and Victorian Health Records Act.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Navigation Anchor Strip -->
+      <nav class="toc-strip" aria-label="Portal Navigation">
+        <span class="fw-bold" style="text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: var(--on-surface-variant);">Jump to Guide Section:</span>
+        <a href="#quickstart" class="toc-link">1. Quick-Start Onboarding</a>
+        <a href="#color-key" class="toc-link">2. Cell Color Key & Formula Shields</a>
+        <a href="#three-step-engine" class="toc-link">3. The 3-Step Operating Architecture</a>
+        <a href="#split-simulator" class="toc-link">4. Multi-Grant Apportionment Simulator</a>
+        <a href="#burn-rate-alerts" class="toc-link">5. Burn-Rate Health Alerts</a>
+        <a href="#disaster-recovery" class="toc-link">6. 2-Click Version History Panic Button</a>
+        <a href="#ai-prompt-pack" class="toc-link">7. Customer AI Prompt Pack</a>
+        <a href="#statutory-notices" class="toc-link">8. Disclaimers & Governance</a>
+      </nav>
+
+      <!-- SECTION 1: QUICK-START ONBOARDING CHECKLIST -->
+      <section id="quickstart" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">1</span>
+            <h2 style="display: inline;">Quick-Start Setup Checklist</h2>
+          </div>
+          <span class="tag tag--primary" id="checklist-progress-tag">0 OF 6 COMPLETED</span>
+        </div>
+        <p>
+          Follow these verified handover steps to safely initialize your master template in under three minutes without IT department intervention:
+        </p>
+
+        <div class="card card--grey">
+          <ul class="checklist" id="onboarding-checklist">
+            <li class="checklist-item">
+              <input type="checkbox" id="chk-1" class="checklist-checkbox" onchange="handleChecklistUpdate()">
+              <label for="chk-1" class="checklist-text">
+                <strong>Step 01: Private Clone Creation</strong>
+                Open your master template access link from your delivery email. In Google Sheets, select <em>File ➔ Make a copy</em> (or use the <code>/copy</code> direct URL) to generate your isolated organizational master in your secure Google Drive.
+              </label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="chk-2" class="checklist-checkbox" onchange="handleChecklistUpdate()">
+              <label for="chk-2" class="checklist-text">
+                <strong>Step 02: Rename for Agency & Program Security</strong>
+                Rename your cloned file using your internal naming protocol (e.g., <code>[Agency]_MultiGrant_Acquittal_FY26</code>). Do <em>NOT</em> rename internal tabs like <code>1. Grant Setup</code> or <code>2. Expense Ledger</code>, as background formulas look for exact tab names.
+              </label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="chk-3" class="checklist-checkbox" onchange="handleChecklistUpdate()">
+              <label for="chk-3" class="checklist-text">
+                <strong>Step 03: Register Active Grants in Tab 1</strong>
+                Navigate to <code>1. Grant Setup</code>. Enter your unique Grant Short Codes (e.g., <code>DSS-2026-CH</code>, <code>NDIS-770</code>), funding bodies, total contract budgets, start/end dates, and hard acquittal milestone deadlines.
+              </label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="chk-4" class="checklist-checkbox" onchange="handleChecklistUpdate()">
+              <label for="chk-4" class="checklist-text">
+                <strong>Step 04: Train Accounts Staff on Cell Color Conventions</strong>
+                Brief caseworkers, program coordinators, and accounts payable officers on the visual color system: strictly enter data only into <strong>White Cells</strong>; never overwrite <strong>Grey Tint Formula Shields</strong>.
+              </label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="chk-5" class="checklist-checkbox" onchange="handleChecklistUpdate()">
+              <label for="chk-5" class="checklist-text">
+                <strong>Step 05: Verify 100% Split Rule in Tab 2</strong>
+                When recording shared operational expenses (facility rent, fleet fuel, program materials), utilize the 3-way split drop-downs and ensure column K confirms <code>✅ Perfect</code> before finalizing monthly accounts.
+              </label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="chk-6" class="checklist-checkbox" onchange="handleChecklistUpdate()">
+              <label for="chk-6" class="checklist-text">
+                <strong>Step 06: Test-Run 2-Click Version History Drill</strong>
+                Conduct a 30-second team drill on <em>File ➔ Version History</em> so every staff member knows how to instantly undo an accidental formula deletion with zero downtime or anxiety.
+              </label>
+            </li>
+          </ul>
+
+          <div style="display: flex; gap: var(--space-sm); align-items: center; justify-content: space-between; flex-wrap: wrap;">
+            <span class="caption" id="checklist-feedback">Check off each protocol as your team completes deployment. Progress is saved automatically.</span>
+            <button class="btn btn--secondary btn--sm" onclick="resetChecklist()">
+              <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Reset Checklist
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: VISUAL CELL COLOR KEY & SAFEGUARD ARCHITECTURE -->
+      <section id="color-key" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">2</span>
+            <h2 style="display: inline;">Visual Color Key & Safeguarded Formula Architecture</h2>
+          </div>
+          <span class="tag tag--primary">PROTECTION SYSTEM</span>
+        </div>
+        <p>
+          The number one cause of broken spreadsheets in community sector organisations is accidental deletion of automated calculation formulas. LEW CREATIONS trackers employ a strict, standardized visual color-coding convention that separates manual data entry from background programmatic shields:
+        </p>
+
+        <!-- Cell Key Breakdown Table -->
+        <table class="cell-key-table" aria-label="Cell Color Key Specification">
+          <thead>
+            <tr>
+              <th style="width: 20%;">Visual Indicator</th>
+              <th style="width: 22%;">Cell Classification</th>
+              <th style="width: 38%;">System Meaning & Logic</th>
+              <th style="width: 20%;">User Action Rule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="cell-demo cell-demo--white">WHITE CELLS</span></td>
+              <td><strong>Data Entry Zone</strong><br><code>#FFFFFF</code></td>
+              <td>Unrestricted user input fields: dates, invoice descriptions, receipt references, gross dollar values, and dropdown choices.</td>
+              <td><span class="tag tag--positive">SAFE TO TYPE</span></td>
+            </tr>
+            <tr>
+              <td><span class="cell-demo cell-demo--grey">GREY TINT CELLS</span></td>
+              <td><strong>Formula Shield Zone</strong><br><code>#F3F2F1</code> / <code>#E8E7E5</code></td>
+              <td>Active live calculation logic: apportionment dollar math, split status verification, cumulative expenditure, burn rate %, and remaining balance.</td>
+              <td><span class="tag tag--error">DO NOT OVERWRITE</span></td>
+            </tr>
+            <tr>
+              <td><span class="cell-demo cell-demo--dark">DARK SLATE BANNERS</span></td>
+              <td><strong>Structural Anchor</strong><br><code>#1E1E24</code> / <code>#333333</code></td>
+              <td>Defines module headers, organizational brand identification, and high-level KPI cards.</td>
+              <td><span class="tag">STRUCTURAL HEADER</span></td>
+            </tr>
+            <tr>
+              <td><span class="tag tag--primary">CHECKBOX / TOGGLES</span></td>
+              <td><strong>System Control Switches</strong></td>
+              <td>Boolean logic switches driving dynamic lookup queries, print-ready report filters, and audit lock flags.</td>
+              <td><span class="tag tag--primary">CLICK TO TOGGLE</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Interactive Cell Click Explorer -->
+        <h3 class="mt-lg">Interactive Cell Inspector: Test Your Understanding</h3>
+        <p class="caption">
+          Click any cell in the mock tracker below to test whether your staff should type into it or leave it protected:
+        </p>
+
+        <div class="sheet-mockup-wrapper">
+          <table class="sheet-mockup-table">
+            <thead>
+              <tr>
+                <th>Date (Col A)</th>
+                <th>Supplier / Description (Col B)</th>
+                <th>Invoice Ref (Col C)</th>
+                <th>Total Cost Inc GST (Col D)</th>
+                <th>Grant 1 Code (Col E)</th>
+                <th>Grant 1 Split (Col F)</th>
+                <th>Apportioned $ (Col G)</th>
+                <th>Split Status (Col K)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col A: Date', '2026-07-15')">2026-07-15</td>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col B: Supplier', 'Barwon Utilities - Power & Gas')">Barwon Utilities</td>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col C: Ref No.', 'INV-9902')">INV-9902</td>
+                <td class="cell-editable tabular-num" onclick="inspectCell('editable', 'Col D: Gross Cost', '$1,200.00')">$1,200.00</td>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col E: Grant 1', 'DSS-2026-CH')">DSS-2026-CH</td>
+                <td class="cell-editable tabular-num" onclick="inspectCell('editable', 'Col F: Split %', '60.0%')">60.0%</td>
+                <td class="cell-shield tabular-num" onclick="inspectCell('shield', 'Col G: Formula Apportioned $', 'math_g')">$720.00</td>
+                <td class="cell-shield" onclick="inspectCell('shield', 'Col K: Allocation Status', 'split_check')">✅ Perfect</td>
+              </tr>
+              <tr>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col A: Date', '2026-07-22')">2026-07-22</td>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col B: Supplier', 'Colac Fleet Fuels - Van Card')">Colac Fleet Fuels</td>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col C: Ref No.', 'INV-4410')">INV-4410</td>
+                <td class="cell-editable tabular-num" onclick="inspectCell('editable', 'Col D: Gross Cost', '$450.00')">$450.00</td>
+                <td class="cell-editable" onclick="inspectCell('editable', 'Col E: Grant 1', 'NDIS-770-TR')">NDIS-770-TR</td>
+                <td class="cell-editable tabular-num" onclick="inspectCell('editable', 'Col F: Split %', '100.0%')">100.0%</td>
+                <td class="cell-shield tabular-num" onclick="inspectCell('shield', 'Col G: Formula Apportioned $', 'math_g3')">$450.00</td>
+                <td class="cell-shield" onclick="inspectCell('shield', 'Col K: Allocation Status', 'split_check')">✅ Perfect</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mockup-feedback-bar" id="mockup-feedback">
+            <i data-lucide="info" style="color: var(--tertiary);"></i>
+            <span><em>Click any cell above</em> to inspect its formula shield rules and data governance status.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: THE 3-STEP OPERATING SYSTEM ARCHITECTURE -->
+      <section id="three-step-engine" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">3</span>
+            <h2 style="display: inline;">The 3-Step Operating Architecture</h2>
+          </div>
+          <span class="tag tag--primary">WORKFLOW ENGINE</span>
+        </div>
+        <p>
+          The tracker is organized into three interconnected operational phases that guide your finance team from raw grant agreements down to verified, audit-ready statements:
+        </p>
+
+        <div class="card-grid">
+          <!-- Step 1 Card -->
+          <div class="card">
+            <div style="display: flex; align-items: center; margin-bottom: var(--space-sm);">
+              <span class="step-badge">1</span>
+              <h3 class="mb-0">Tab 1: Grant Setup</h3>
+            </div>
+            <p style="font-size: 0.9375rem;">
+              <strong>Command Centre & Grant Registry:</strong> Register every active funding award, contract start/end dates, total approved funding budget, and critical acquittal submission deadlines.
+            </p>
+            <ul style="padding-left: var(--space-md); font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              <li>Assign short codes (e.g. <code>DSS-2026-CH</code>, <code>VIC-YJC-12</code>) that instantly feed all transaction drop-down menus.</li>
+              <li>Input total contract pools for automated burn rate denominators.</li>
+              <li>Tethers staff names from <code>MASTER_STAFF_RT</code> source of truth.</li>
+            </ul>
+            <span class="tag tag--primary">ONBOARDING PHASE</span>
+          </div>
+
+          <!-- Step 2 Card -->
+          <div class="card">
+            <div style="display: flex; align-items: center; margin-bottom: var(--space-sm);">
+              <span class="step-badge">2</span>
+              <h3 class="mb-0">Tab 2: Expense Ledger</h3>
+            </div>
+            <p style="font-size: 0.9375rem;">
+              <strong>Transactional Engine & Multi-Grant Splitting:</strong> Caseworkers and accounts payable record daily receipts, vendor invoices, and shared overheads with dynamic 3-grant apportionment.
+            </p>
+            <ul style="padding-left: var(--space-md); font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              <li>Split single invoices across up to 3 distinct grant codes.</li>
+              <li>Protected formula shields automatically calculate dollar shares.</li>
+              <li>Status validation alerts ensure allocations equal exactly 100%.</li>
+            </ul>
+            <span class="tag tag--primary">DAY-TO-DAY LOGGING</span>
+          </div>
+
+          <!-- Step 3 Card -->
+          <div class="card">
+            <div style="display: flex; align-items: center; margin-bottom: var(--space-sm);">
+              <span class="step-badge">3</span>
+              <h3 class="mb-0">Tabs 3 & 4: Acquittals</h3>
+            </div>
+            <p style="font-size: 0.9375rem;">
+              <strong>Executive Dashboards & PDF Export:</strong> Monitor real-time burn pacing across all grants and generate formal, single-grant statutory acquittal statements in one click.
+            </p>
+            <ul style="padding-left: var(--space-md); font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              <li>Visual burn pacing bars prevent underspend clawbacks.</li>
+              <li>Select any Grant ID dropdown to auto-filter and format an acquittal.</li>
+              <li>Export clean, board- and auditor-ready PDF statements.</li>
+            </ul>
+            <span class="tag tag--positive">AUDIT & BOARD REPORTING</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: MULTI-GRANT EXPENSE APPORTIONMENT ENGINE -->
+      <section id="split-simulator" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">4</span>
+            <h2 style="display: inline;">Multi-Grant Apportionment Rules & Interactive Simulator</h2>
+          </div>
+          <span class="tag tag--primary">INTERACTIVE TOOL</span>
+        </div>
+        <p>
+          In community services and ACCO environments, programs frequently share operational resources—such as office rent, regional outreach vehicles, internet lines, and shared casework coordinators. Billing 100% of these expenses to a single grant breaches statutory service agreements.
+        </p>
+
+        <div class="inset">
+          <h3 class="mb-0 fw-heavy">The 100% Split Rule & Verification Formula</h3>
+          <p class="mb-0 mt-sm" style="font-size: 0.9375rem;">
+            In <code>2. Expense Ledger</code>, columns E through J capture up to 3 grants with percentage splits. Column K runs the verification logic:
+            <code>=IF(ROUND(SUM(Split1, Split2, Split3), 2)=1.0, "✅ Perfect", "⚠️ Allocation Error")</code>.
+            Only expenses marked <strong>✅ Perfect</strong> will flow into the acquittal statement!
+          </p>
+        </div>
+
+        <!-- Interactive Split Calculator Component -->
+        <div class="calc-container">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div>
+              <h3 class="mb-0">Interactive 3-Way Expense Apportionment Simulator</h3>
+              <p class="caption mb-0">Test how shared invoices divide across funding codes and generate an audit-ready ledger string:</p>
+            </div>
+            <div class="calc-preset-bar">
+              <span class="caption" style="align-self: center; font-weight: 700;">Sector Presets:</span>
+              <button class="btn btn--secondary btn--sm" onclick="applySplitPreset('50-50')">50 / 50 Dual Core</button>
+              <button class="btn btn--secondary btn--sm" onclick="applySplitPreset('60-25-15')">60 / 25 / 15 Outreach Van</button>
+              <button class="btn btn--secondary btn--sm" onclick="applySplitPreset('70-30')">70 / 30 Salary Split</button>
+              <button class="btn btn--secondary btn--sm" onclick="applySplitPreset('100-0')">100% Single Grant</button>
+            </div>
+          </div>
+
+          <!-- Input Parameters -->
+          <div class="form-row">
+            <div class="form-group mb-0">
+              <label class="form-label" for="calc-invoice-amount">Total Invoice Amount (Gross AUD, Inc. GST)</label>
+              <input type="number" id="calc-invoice-amount" class="form-input tabular-num" value="2500" min="1" step="0.01" oninput="calculateSplitApportionment()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="calc-vendor-desc">Expense Description / Vendor</label>
+              <input type="text" id="calc-vendor-desc" class="form-input" value="Regional Outreach Van Lease & Fleet Card" oninput="calculateSplitApportionment()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="calc-invoice-ref">Invoice / Reference No.</label>
+              <input type="text" id="calc-invoice-ref" class="form-input" value="INV-2026-884" oninput="calculateSplitApportionment()">
+            </div>
+          </div>
+
+          <!-- Split Sliders & Grant Selectors -->
+          <div style="margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--outline-variant);">
+            <!-- Grant 1 -->
+            <div style="margin-bottom: var(--space-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label class="form-label mb-0" for="calc-grant-1" style="font-size: 0.875rem;">
+                  <strong style="color: var(--data-1);">Grant Stream 1:</strong>
+                </label>
+                <select id="calc-grant-1" class="form-select" style="width: auto; padding: 4px 8px; font-size: 0.8125rem;" onchange="calculateSplitApportionment()">
+                  <option value="DSS-2026-CH">DSS-2026-CH — Community Housing Outreach ($150,000)</option>
+                  <option value="NDIS-770-TR">NDIS-770-TR — Supported Community Transport ($45,000)</option>
+                  <option value="VIC-YJC-12">VIC-YJC-12 — Youth Justice Engagement ($60,000)</option>
+                  <option value="PHIL-TRUST-09">PHIL-TRUST-09 — Art Therapy & Wellbeing ($25,000)</option>
+                </select>
+              </div>
+              <div class="slider-container">
+                <input type="range" id="split-slider-1" class="slider-input" min="0" max="100" value="60" oninput="updateSplitSlider(1, this.value)">
+                <span class="slider-val" id="split-val-1" style="color: var(--data-1);">60%</span>
+              </div>
+            </div>
+
+            <!-- Grant 2 -->
+            <div style="margin-bottom: var(--space-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label class="form-label mb-0" for="calc-grant-2" style="font-size: 0.875rem;">
+                  <strong style="color: var(--data-2);">Grant Stream 2:</strong>
+                </label>
+                <select id="calc-grant-2" class="form-select" style="width: auto; padding: 4px 8px; font-size: 0.8125rem;" onchange="calculateSplitApportionment()">
+                  <option value="NDIS-770-TR">NDIS-770-TR — Supported Community Transport ($45,000)</option>
+                  <option value="DSS-2026-CH">DSS-2026-CH — Community Housing Outreach ($150,000)</option>
+                  <option value="VIC-YJC-12">VIC-YJC-12 — Youth Justice Engagement ($60,000)</option>
+                  <option value="PHIL-TRUST-09">PHIL-TRUST-09 — Art Therapy & Wellbeing ($25,000)</option>
+                </select>
+              </div>
+              <div class="slider-container">
+                <input type="range" id="split-slider-2" class="slider-input" min="0" max="100" value="25" oninput="updateSplitSlider(2, this.value)">
+                <span class="slider-val" id="split-val-2" style="color: var(--data-2);">25%</span>
+              </div>
+            </div>
+
+            <!-- Grant 3 -->
+            <div style="margin-bottom: var(--space-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label class="form-label mb-0" for="calc-grant-3" style="font-size: 0.875rem;">
+                  <strong style="color: var(--data-3);">Grant Stream 3:</strong>
+                </label>
+                <select id="calc-grant-3" class="form-select" style="width: auto; padding: 4px 8px; font-size: 0.8125rem;" onchange="calculateSplitApportionment()">
+                  <option value="VIC-YJC-12">VIC-YJC-12 — Youth Justice Engagement ($60,000)</option>
+                  <option value="PHIL-TRUST-09">PHIL-TRUST-09 — Art Therapy & Wellbeing ($25,000)</option>
+                  <option value="DSS-2026-CH">DSS-2026-CH — Community Housing Outreach ($150,000)</option>
+                  <option value="NDIS-770-TR">NDIS-770-TR — Supported Community Transport ($45,000)</option>
+                </select>
+              </div>
+              <div class="slider-container">
+                <input type="range" id="split-slider-3" class="slider-input" min="0" max="100" value="15" oninput="updateSplitSlider(3, this.value)">
+                <span class="slider-val" id="split-val-3" style="color: var(--data-3);">15%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Allocation Meter Visual -->
+          <div style="margin-top: var(--space-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="caption fw-bold">Live Apportionment Allocation:</span>
+              <span id="allocation-status-badge" class="tag tag--positive">✅ PERFECT (100.0%)</span>
+            </div>
+            <div class="allocation-meter" id="allocation-meter" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+              <div class="meter-slice meter-slice--1" id="meter-slice-1" style="width: 60%;">60%</div>
+              <div class="meter-slice meter-slice--2" id="meter-slice-2" style="width: 25%;">25%</div>
+              <div class="meter-slice meter-slice--3" id="meter-slice-3" style="width: 15%;">15%</div>
+              <div class="meter-slice meter-slice--unallocated" id="meter-slice-rem" style="width: 0%; display: none;">0%</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--on-surface-variant);">
+              <span>0%</span>
+              <span id="meter-total-text" class="fw-bold tabular-num">Total Split: 100.0%</span>
+              <span>100% Target</span>
+            </div>
+          </div>
+
+          <!-- Calculated Apportioned Output Table -->
+          <table class="split-summary-table" aria-label="Split Apportionment Calculations">
+            <thead>
+              <tr>
+                <th>Target Grant Stream</th>
+                <th>Split %</th>
+                <th>Calculated Dollar Share ($ AUD)</th>
+                <th>Acquittal Ledger Status</th>
+              </tr>
+            </thead>
+            <tbody id="split-calc-results">
+              <tr>
+                <td><strong style="color: var(--data-1);">DSS-2026-CH</strong></td>
+                <td class="tabular-num">60.0%</td>
+                <td class="tabular-num fw-bold">$1,500.00</td>
+                <td><span class="tag tag--positive">Apportioned & Verified</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--data-2);">NDIS-770-TR</strong></td>
+                <td class="tabular-num">25.0%</td>
+                <td class="tabular-num fw-bold">$625.00</td>
+                <td><span class="tag tag--positive">Apportioned & Verified</span></td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--data-3);">VIC-YJC-12</strong></td>
+                <td class="tabular-num">15.0%</td>
+                <td class="tabular-num fw-bold">$375.00</td>
+                <td><span class="tag tag--positive">Apportioned & Verified</span></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr style="background: var(--surface-container-low); font-weight: 700;">
+                <td>Total Invoice Apportioned:</td>
+                <td id="calc-sum-percent" class="tabular-num">100.0%</td>
+                <td id="calc-sum-dollars" class="tabular-num">$2,500.00</td>
+                <td id="calc-final-flag"><span class="tag tag--positive">✅ Ready for Ledger</span></td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div style="margin-top: var(--space-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm);">
+            <p class="caption mb-0" id="calc-guidance-note">
+              Copy this row directly into your Google Sheet's <code>2. Expense Ledger</code> tab.
+            </p>
+            <button class="btn btn--secondary btn--sm" onclick="copyApportionmentLedgerString()">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Ledger Row String
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: AUTOMATED BURN-RATE HEALTH ALERTS -->
+      <section id="burn-rate-alerts" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">5</span>
+            <h2 style="display: inline;">Automated Burn-Rate Health Alerts & Pacing Intelligence</h2>
+          </div>
+          <span class="tag tag--primary">PACING GOVERNANCE</span>
+        </div>
+        <p>
+          Funding bodies audit financial milestones rigorously. If a community organisation spends down funds too slowly, government bodies claw back unspent balances upon contract expiry. If funds are burned too rapidly, the agency faces an unbudgeted cash shortfall.
+        </p>
+
+        <div class="card-grid">
+          <div class="card">
+            <span class="tag tag--positive mb-xs">🟩 BUDGET SAFE</span>
+            <h3 class="mb-xs">Healthy Pacing</h3>
+            <p class="caption mb-0">
+              Financial burn rate tracks within ±10% of elapsed contract time. Operational activities and staffing are aligned with the approved schedule.
+            </p>
+          </div>
+          <div class="card">
+            <span class="tag tag--warning mb-xs">🟨 VARIANCE WATCH</span>
+            <h3 class="mb-xs">Burn Acceleration / Idle Funds</h3>
+            <p class="caption mb-0">
+              Expenditure is running > 15% ahead of timeline, or less than 60 days remain before acquittal due date with substantial uncommitted funds.
+            </p>
+          </div>
+          <div class="card">
+            <div style="margin-bottom: var(--space-xs);"><span class="tag tag--error">🟥 OVERSPEND ALERT</span></div>
+            <h3 class="mb-xs">Critical Overrun</h3>
+            <p class="caption mb-0">
+              Expenditure has exceeded 95% of approved budget pool prior to final project completion, or cumulative expenses exceed total funding.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Burn-Rate Pacing Simulator -->
+        <div class="burn-gauge-wrapper">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div>
+              <h3 class="mb-0">Interactive Grant Burn-Rate & Acquittal Health Calculator</h3>
+              <p class="caption mb-0">Test your contract parameters to preview the automated health status flag and board recommendations:</p>
+            </div>
+            <div>
+              <label for="burn-grant-preset" class="caption fw-bold" style="display: inline-block; margin-right: 6px;">Select Demo Grant:</label>
+              <select id="burn-grant-preset" class="form-select" style="width: auto; padding: 4px 8px; font-size: 0.8125rem; display: inline-block;" onchange="loadBurnPreset(this.value)">
+                <option value="dss">DSS Community Housing Outreach ($150k pool, 9 mos elapsed)</option>
+                <option value="ndis">NDIS Transport Subsidy ($45k pool, 11 mos elapsed, near deadline)</option>
+                <option value="youth">Youth Justice Community Support ($60k pool, 3 mos elapsed, fast burn)</option>
+                <option value="custom">Custom Parameters...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group mb-0">
+              <label class="form-label" for="sim-budget-pool">Approved Contract Budget ($ AUD)</label>
+              <input type="number" id="sim-budget-pool" class="form-input tabular-num" value="150000" min="1000" step="1000" oninput="calculateBurnHealth()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="sim-expended-funds">Total Expended to Date ($ AUD)</label>
+              <input type="number" id="sim-expended-funds" class="form-input tabular-num" value="112500" min="0" step="500" oninput="calculateBurnHealth()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="sim-contract-months">Contract Term (Months)</label>
+              <input type="number" id="sim-contract-months" class="form-input tabular-num" value="12" min="1" max="60" oninput="calculateBurnHealth()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="sim-elapsed-months">Months Elapsed to Date</label>
+              <input type="number" id="sim-elapsed-months" class="form-input tabular-num" value="9" min="0" max="60" oninput="calculateBurnHealth()">
+            </div>
+          </div>
+
+          <!-- Dynamic Pacing Comparison Bar -->
+          <div style="margin-top: var(--space-lg); padding: var(--space-md); background: var(--surface-container-low); border: 1px solid var(--outline-variant);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span class="caption fw-bold">Contract Timeline Elapsed:</span>
+              <span id="pacing-timeline-text" class="fw-bold tabular-num">9.0 of 12.0 Months (75.0%)</span>
+            </div>
+            <div class="burn-progress-bar">
+              <div id="pacing-timeline-fill" class="burn-progress-fill" style="width: 75%; background: var(--tertiary);"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+              <span class="caption fw-bold">Financial Budget Expended (Burn Rate %):</span>
+              <span id="pacing-burn-text" class="fw-bold tabular-num">$112,500.00 of $150,000.00 (75.0%)</span>
+            </div>
+            <div class="burn-progress-bar">
+              <div id="pacing-burn-fill" class="burn-progress-fill" style="width: 75%; background: var(--positive);"></div>
+            </div>
+
+            <!-- Health Status Output Banner -->
+            <div id="burn-health-alert-box" class="inset inset--positive" style="margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm);">
+                <div>
+                  <h3 class="mb-xs fw-heavy" id="burn-health-title">🟩 Status: Budget Safe (Perfect Pacing)</h3>
+                  <p class="mb-0" id="burn-health-desc" style="font-size: 0.9375rem;">
+                    Financial burn rate (75.0%) is running exactly in sync with elapsed contract time (75.0%). Remaining balance: $37,500.00. No corrective action required.
+                  </p>
+                </div>
+                <div style="text-align: right;">
+                  <span class="caption" style="display: block;">Remaining Funding Pool:</span>
+                  <span class="tabular-num fw-heavy" id="burn-remaining-cash" style="font-size: 1.25rem; color: var(--primary);">$37,500.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: 2-CLICK DISASTER RECOVERY (VERSION HISTORY PANIC BUTTON) -->
+      <section id="disaster-recovery" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">6</span>
+            <h2 style="display: inline;">2-Click Disaster Recovery Protocol ("The Panic Button")</h2>
+          </div>
+          <span class="tag tag--positive">ZERO ANXIETY</span>
+        </div>
+        <p>
+          <em>"Don't panic! Your data is safe."</em> In community services, staff occasionally delete an entire column, paste data over an active formula, or lose hours of work. Because this template runs natively inside Google Workspace, every single keystroke is logged continuously in the cloud.
+        </p>
+
+        <div class="card-grid">
+          <div class="card">
+            <h3 class="mb-xs">Option A: Instant 2-Click Restore</h3>
+            <p class="caption mb-sm">Use Google Sheets' native version audit trail to revert any error in 10 seconds:</p>
+            <ol style="padding-left: var(--space-md); font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              <li>Click <strong>File ➔ Version History ➔ See version history</strong> (Shortcut: <code>Ctrl+Alt+Shift+H</code> or <code>Cmd+Option+Shift+H</code>).</li>
+              <li>Browse timestamps in the right sidebar.</li>
+              <li>Click the version from earlier today before the error occurred.</li>
+              <li>Click the green <strong>"Restore this version"</strong> button at the top of the screen.</li>
+            </ol>
+            <span class="tag tag--positive">RESTORES 100% OF FORMULAS</span>
+          </div>
+
+          <div class="card">
+            <h3 class="mb-xs">Option B: Fresh Master Template Re-download</h3>
+            <p class="caption mb-sm">If a file is ever corrupted beyond recovery or accidentally deleted from Drive:</p>
+            <ol style="padding-left: var(--space-md); font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              <li>Log into your Gumroad account library or open your original purchase confirmation email.</li>
+              <li>Click your master link containing the <code>/copy</code> command.</li>
+              <li>Google Drive immediately spins up a pristine, untouched master file at zero additional cost.</li>
+              <li>You own lifetime permanent master access under your license.</li>
+            </ol>
+            <span class="tag tag--primary">LIFETIME ACCESS INCLUDED</span>
+          </div>
+        </div>
+
+        <!-- Interactive Disaster Recovery Simulation Drill -->
+        <div class="panic-box">
+          <h3 class="mb-xs">Simulate Accidental Formula Overwrite & 2-Click Recovery</h3>
+          <p class="caption">
+            Experience the panic-free recovery drill right now. Click "Simulate Overwrite" to see a formula break, then click "Trigger 2-Click Restore" to watch the sheet self-heal:
+          </p>
+
+          <div class="drill-screen">
+            <div id="drill-status" class="drill-status-banner tag--positive">
+              <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
+              <span>SYSTEM STATE: Healthy. Formula shields locked and active.</span>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid var(--outline-variant); padding: var(--space-md); margin-bottom: var(--space-md);">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md);">
+                <div>
+                  <span class="caption" style="display: block;">Cell D14 (Grant Pool Total):</span>
+                  <span id="drill-cell-formula" class="tabular-num fw-heavy" style="font-size: 1.125rem; font-family: monospace;">=SUM(D2:D13) ➔ $150,000.00</span>
+                </div>
+                <div>
+                  <span class="caption" style="display: block;">Formula Shield Status:</span>
+                  <span id="drill-shield-flag" class="tag tag--positive">LOCKED FORMULA</span>
+                </div>
+                <div>
+                  <span class="caption" style="display: block;">Acquittal PDF Generation:</span>
+                  <span id="drill-pdf-flag" class="tag tag--positive">READY TO EXPORT</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+              <button id="btn-simulate-break" class="btn btn--danger btn--sm" onclick="simulateSpreadsheetBreak()">
+                <i data-lucide="alert-triangle" style="width: 14px; height: 14px;"></i> 1. Simulate Accidental Formula Overwrite
+              </button>
+              <button id="btn-simulate-restore" class="btn btn--secondary btn--sm" onclick="simulateSpreadsheetRestore()" disabled>
+                <i data-lucide="history" style="width: 14px; height: 14px;"></i> 2. Trigger 2-Click Version History Restore
+              </button>
+            </div>
+            <p id="drill-narrative" class="caption mt-sm mb-0">
+              Click step 1 to simulate a coworker typing plain text into a formula cell.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7: CUSTOMER AI PROMPT PACK (GEMINI & CHATGPT) -->
+      <section id="ai-prompt-pack" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">7</span>
+            <h2 style="display: inline;">Customer AI Prompt Companion Pack</h2>
+          </div>
+          <span class="tag tag--primary">AI ACCELERATOR</span>
+        </div>
+        <p>
+          Run Google Gemini or ChatGPT directly alongside your tracker. Non-profit finance managers spend dozens of hours writing qualitative acquittal justifications, drafting budget variation requests, and preparing board reports. These tailored sector prompts turn raw spreadsheet data into formal statutory prose.
+        </p>
+
+        <!-- Prompt Customization Panel -->
+        <div class="card card--grey">
+          <h3 class="mb-xs">Customize Your Organization Details</h3>
+          <p class="caption mb-md">Enter your agency parameters once below; all five prompt scripts will update automatically:</p>
+          <div class="form-row">
+            <div class="form-group mb-0">
+              <label class="form-label" for="ai-org-name">Organisation Name</label>
+              <input type="text" id="ai-org-name" class="form-input" value="Balliang Community Support Network" oninput="updateAllPrompts()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="ai-program-name">Program Title</label>
+              <input type="text" id="ai-program-name" class="form-input" value="Regional Outreach & Housing Support Program" oninput="updateAllPrompts()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="ai-funding-body">Funding Body / Department</label>
+              <input type="text" id="ai-funding-body" class="form-input" value="Department of Families, Fairness and Housing (DFFH)" oninput="updateAllPrompts()">
+            </div>
+            <div class="form-group mb-0">
+              <label class="form-label" for="ai-grant-id">Grant Short Code</label>
+              <input type="text" id="ai-grant-id" class="form-input" value="DSS-2026-CH" oninput="updateAllPrompts()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Prompt 1: Board Variance Briefing -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div>
+              <span class="tag tag--primary">PROMPT 01</span>
+              <strong style="margin-left: 6px;">Executive Board Briefing: Burn-Rate & Variance Analysis</strong>
+            </div>
+            <button class="btn btn--sm" onclick="copyPrompt('prompt-text-1', this)">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt
+            </button>
+          </div>
+          <div class="prompt-body">
+            <p class="caption">Best for: Preparing monthly executive committee or board financial review summaries.</p>
+            <div class="prompt-content-box" id="prompt-text-1"></div>
+          </div>
+        </div>
+
+        <!-- Prompt 2: Statutory Acquittal Narrative Generator -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div>
+              <span class="tag tag--primary">PROMPT 02</span>
+              <strong style="margin-left: 6px;">Statutory Acquittal Narrative Generator (DFFH / NDIS)</strong>
+            </div>
+            <button class="btn btn--sm" onclick="copyPrompt('prompt-text-2', this)">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt
+            </button>
+          </div>
+          <div class="prompt-body">
+            <p class="caption">Best for: Transforming Tab 4 print-ready figures into professional statutory acquittal commentary.</p>
+            <div class="prompt-content-box" id="prompt-text-2"></div>
+          </div>
+        </div>
+
+        <!-- Prompt 3: Shared Cost Apportionment Rationale -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div>
+              <span class="tag tag--primary">PROMPT 03</span>
+              <strong style="margin-left: 6px;">Multi-Grant Apportionment Rationale & Audit Justification</strong>
+            </div>
+            <button class="btn btn--sm" onclick="copyPrompt('prompt-text-3', this)">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt
+            </button>
+          </div>
+          <div class="prompt-body">
+            <p class="caption">Best for: Defending 3-way split percentages (rent, utilities, outreach fuel) during formal financial audits.</p>
+            <div class="prompt-content-box" id="prompt-text-3"></div>
+          </div>
+        </div>
+
+        <!-- Prompt 4: Budget Reallocation Request -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div>
+              <span class="tag tag--primary">PROMPT 04</span>
+              <strong style="margin-left: 6px;">Grant Budget Variation & Line-Item Reallocation Request</strong>
+            </div>
+            <button class="btn btn--sm" onclick="copyPrompt('prompt-text-4', this)">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt
+            </button>
+          </div>
+          <div class="prompt-body">
+            <p class="caption">Best for: Requesting departmental approval to move underspent operational funds into frontline service delivery.</p>
+            <div class="prompt-content-box" id="prompt-text-4"></div>
+          </div>
+        </div>
+
+        <!-- Prompt 5: Reconciliation & Invoice Audit Checker -->
+        <div class="prompt-card">
+          <div class="prompt-header">
+            <div>
+              <span class="tag tag--primary">PROMPT 05</span>
+              <strong style="margin-left: 6px;">Expense Ledger Data Hygiene & Duplicate Invoice Audit</strong>
+            </div>
+            <button class="btn btn--sm" onclick="copyPrompt('prompt-text-5', this)">
+              <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy Prompt
+            </button>
+          </div>
+          <div class="prompt-body">
+            <p class="caption">Best for: Detecting duplicate invoices, GST math discrepancies, or missing grant allocations in raw ledger exports.</p>
+            <div class="prompt-content-box" id="prompt-text-5"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8: STATUTORY NOTICES, LICENSING & DATA SOVEREIGNTY -->
+      <section id="statutory-notices" class="section-block">
+        <div class="section-header-row">
+          <div>
+            <span class="step-badge">8</span>
+            <h2 style="display: inline;">Statutory Notices, Licensing & Governance Disclaimers</h2>
+          </div>
+          <span class="tag tag--primary">LEGAL SAFEGUARD</span>
+        </div>
+        <p>
+          To maintain strict governance boundaries while supporting community empowerment, please review the operational terms below:
+        </p>
+
+        <div class="card">
+          <h3 class="mb-xs">LEW CREATIONS Legal & Operational Disclaimer</h3>
+          <p class="caption" style="line-height: 1.6; color: var(--on-surface);">
+            This template (MAIN COPY Premium Multi-Grant Financial Acquittal Tracker) is provided by LEW CREATIONS strictly as an administrative, operational, and organisational aid. LEW CREATIONS does not provide formal legal, financial, accounting, or taxation advice, and does not guarantee grant funding approval, successful external audit outcomes, or regulatory compliance with any Commonwealth, State, or philanthropic funding agency. The purchasing or utilizing organisation retains 100% legal, statutory, and fiscal responsibility for all grant acquittals, expense allocations, budgeting, record-keeping, and statutory financial reporting. Users are solely responsible for ensuring their financial practices comply with all applicable Australian legislation, grant guidelines, and accounting standards.
+          </p>
+        </div>
+
+        <div class="card card--grey">
+          <h3 class="mb-xs">Licensing Tiers & Ecosystem Upgradability</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-sm);">
+            <div>
+              <strong>Solo Practitioner License ($49 AUD)</strong>
+              <p class="caption mb-0">Single-user deployment rights for independent grant writers, evaluators, and sole contractors. Standalone file operation.</p>
+            </div>
+            <div>
+              <strong>Organisational License ($299 AUD)</strong>
+              <p class="caption mb-0">Full deployment rights across a single program team or site (up to 25 staff). Pre-configured to stream high-level KPIs via <code>=IMPORTRANGE()</code> into the central Executive Master Hub (<code>MASTER_STAFF_RT</code>).</p>
+            </div>
+            <div>
+              <strong>Managed Setup & Enterprise ($99 / $1,500+ AUD)</strong>
+              <p class="caption mb-0">Optional managed 15-minute integration service ($99 AUD per connection) or comprehensive multi-site enterprise mapping.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery & Support Footnote -->
+        <div style="margin-top: var(--space-xl); padding-top: var(--space-md); border-top: 1px solid var(--outline-variant); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+          <div>
+            <p class="caption mb-0">
+              <strong>LEW CREATIONS</strong> — Louise Warner • Balliang East VIC 3024 • Australia-Wide WFH<br>
+              Former Manager — Out of Home Care & Family Services (Victorian Aboriginal Organisations)<br>
+              Support & Documentation: Available via your Gumroad Account Library
+            </p>
+          </div>
+          <button class="btn btn--secondary btn--sm" onclick="window.print()">
+            <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Print / Save as PDF Reference
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Toast Notification element -->
+  <div id="toast" class="toast-msg" role="status" aria-live="polite">
+    <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+    <span id="toast-text">Content copied to clipboard!</span>
+  </div>
+
+  <!-- State persistence shim required by platform -->
+  <api-shim></api-shim>
+
+  <script>
+    /* -------------------------------------------------------------
+       STATE MANAGEMENT & DEFENSIVE JAVASCRIPT
+       ------------------------------------------------------------- */
+    
+    // Default initial state
+    let portalState = {
+      checklist: [false, false, false, false, false, false],
+      invoiceAmount: 2500,
+      invoiceVendor: "Regional Outreach Van Lease & Fleet Card",
+      invoiceRef: "INV-2026-884",
+      splitG1: "DSS-2026-CH",
+      splitG2: "NDIS-770-TR",
+      splitG3: "VIC-YJC-12",
+      splitPct1: 60,
+      splitPct2: 25,
+      splitPct3: 15,
+      burnBudget: 150000,
+      burnExpended: 112500,
+      burnMonthsTotal: 12,
+      burnMonthsElapsed: 9,
+      aiOrg: "Balliang Community Support Network",
+      aiProg: "Regional Outreach & Housing Support Program",
+      aiFunding: "Department of Families, Fairness and Housing (DFFH)",
+      aiGrantId: "DSS-2026-CH"
+    };
+
+    // Initialize application on DOM ready
+    document.addEventListener("DOMContentLoaded", async function() {
+      // Initialize Lucide icons
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      // Restore persisted state if available via shim
+      await loadPersistedState();
+
+      // Run initial computations
+      calculateSplitApportionment();
+      calculateBurnHealth();
+      updateAllPrompts();
+      renderChecklistUI();
+
+      // Notify host environment
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+
+    async function loadPersistedState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const savedState = await window.notebookAppApi.getAppState();
+          if (savedState && typeof savedState === 'object') {
+            portalState = Object.assign({}, portalState, savedState);
+            
+            // Populate form elements from saved state
+            if (Array.isArray(portalState.checklist)) {
+              for (let i = 0; i < 6; i++) {
+                const el = document.getElementById(`chk-${i+1}`);
+                if (el) el.checked = Boolean(portalState.checklist[i]);
+              }
+            }
+
+            const invEl = document.getElementById("calc-invoice-amount");
+            if (invEl && portalState.invoiceAmount) invEl.value = portalState.invoiceAmount;
+
+            const venEl = document.getElementById("calc-vendor-desc");
+            if (venEl && portalState.invoiceVendor) venEl.value = portalState.invoiceVendor;
+
+            const refEl = document.getElementById("calc-invoice-ref");
+            if (refEl && portalState.invoiceRef) refEl.value = portalState.invoiceRef;
+
+            const s1 = document.getElementById("split-slider-1");
+            if (s1 && portalState.splitPct1 !== undefined) s1.value = portalState.splitPct1;
+            const s2 = document.getElementById("split-slider-2");
+            if (s2 && portalState.splitPct2 !== undefined) s2.value = portalState.splitPct2;
+            const s3 = document.getElementById("split-slider-3");
+            if (s3 && portalState.splitPct3 !== undefined) s3.value = portalState.splitPct3;
+
+            const orgEl = document.getElementById("ai-org-name");
+            if (orgEl && portalState.aiOrg) orgEl.value = portalState.aiOrg;
+            const progEl = document.getElementById("ai-program-name");
+            if (progEl && portalState.aiProg) progEl.value = portalState.aiProg;
+            const fundEl = document.getElementById("ai-funding-body");
+            if (fundEl && portalState.aiFunding) fundEl.value = portalState.aiFunding;
+            const gidEl = document.getElementById("ai-grant-id");
+            if (gidEl && portalState.aiGrantId) gidEl.value = portalState.aiGrantId;
+          }
+        }
+      } catch (err) {
+        console.warn("Could not retrieve state from notebookAppApi:", err);
+      }
+    }
+
+    async function saveState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(portalState);
+        }
+      } catch (err) {
+        console.warn("Could not save state to notebookAppApi:", err);
+      }
+    }
+
+    /* -------------------------------------------------------------
+       SECTION 1: CHECKLIST HANDLERS
+       ------------------------------------------------------------- */
+    function handleChecklistUpdate() {
+      const arr = [];
+      let completedCount = 0;
+      for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`chk-${i}`);
+        const isChecked = el ? el.checked : false;
+        arr.push(isChecked);
+        if (isChecked) completedCount++;
+      }
+      portalState.checklist = arr;
+      saveState();
+
+      renderChecklistUI();
+    }
+
+    function renderChecklistUI() {
+      let completedCount = 0;
+      if (Array.isArray(portalState.checklist)) {
+        portalState.checklist.forEach(val => { if (val) completedCount++; });
+      }
+
+      const tagEl = document.getElementById("checklist-progress-tag");
+      if (tagEl) {
+        tagEl.textContent = `${completedCount} OF 6 COMPLETED`;
+        if (completedCount === 6) {
+          tagEl.className = "tag tag--positive";
+          tagEl.textContent = "✅ ONBOARDING VERIFIED (6/6)";
+        } else if (completedCount > 0) {
+          tagEl.className = "tag tag--primary";
+        } else {
+          tagEl.className = "tag";
+        }
+      }
+
+      const feedbackEl = document.getElementById("checklist-feedback");
+      if (feedbackEl) {
+        if (completedCount === 6) {
+          feedbackEl.innerHTML = "<strong style='color: var(--positive);'>🎉 All onboarding steps complete! Your team is fully primed for audit-safe operations.</strong>";
+        } else {
+          feedbackEl.textContent = `Completed ${completedCount} of 6 onboarding protocols. Progress saves automatically.`;
+        }
+      }
+    }
+
+    function resetChecklist() {
+      for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`chk-${i}`);
+        if (el) el.checked = false;
+      }
+      handleChecklistUpdate();
+      showToast("Checklist reset to default state.");
+    }
+
+    /* -------------------------------------------------------------
+       SECTION 2: CELL INSPECTOR HANDLER
+       ------------------------------------------------------------- */
+    function inspectCell(type, colName, sampleVal) {
+      const bar = document.getElementById("mockup-feedback");
+      if (!bar) return;
+
+      if (type === 'editable') {
+        bar.className = "mockup-feedback-bar";
+        bar.style.backgroundColor = "var(--positive-container)";
+        bar.style.color = "var(--on-positive-container)";
+        bar.innerHTML = `<i data-lucide="check-circle" style="color: var(--positive); flex-shrink: 0;"></i>
+          <span><strong>✅ WHITE CELL (${colName}):</strong> Unlocked Data Entry Zone. Caseworkers, coordinators, and accounts staff may type values (Current: <em>"${sampleVal}"</em>). No background calculation broken.</span>`;
+      } else {
+        bar.className = "mockup-feedback-bar";
+        bar.style.backgroundColor = "#fde8e8";
+        bar.style.color = "var(--error)";
+        let formulaDisplay = sampleVal;
+        if (sampleVal === 'math_g') formulaDisplay = '=D2*F2';
+        else if (sampleVal === 'math_g3') formulaDisplay = '=D3*F3';
+        else if (sampleVal === 'split_check') formulaDisplay = '=IF(ROUND(SUM(F2,H2,J2),2)=1.0, "✅ Perfect", "⚠️ Error")';
+        
+        bar.innerHTML = `<i data-lucide="alert-octagon" style="color: var(--error); flex-shrink: 0;"></i>
+          <span><strong>🛡️ GREY TINT CELL (${colName}):</strong> Locked Formula Shield! Active programmatic logic (<code>${formulaDisplay}</code>). <strong>DO NOT TYPE HERE</strong> or you will break the acquittal reporting engine!</span>`;
+      }
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    /* -------------------------------------------------------------
+       SECTION 4: MULTI-GRANT SPLIT CALCULATOR
+       ------------------------------------------------------------- */
+    function updateSplitSlider(sliderNum, val) {
+      const numVal = parseInt(val, 10) || 0;
+      if (sliderNum === 1) portalState.splitPct1 = numVal;
+      if (sliderNum === 2) portalState.splitPct2 = numVal;
+      if (sliderNum === 3) portalState.splitPct3 = numVal;
+      
+      calculateSplitApportionment();
+    }
+
+    function applySplitPreset(preset) {
+      const s1 = document.getElementById("split-slider-1");
+      const s2 = document.getElementById("split-slider-2");
+      const s3 = document.getElementById("split-slider-3");
+      const ven = document.getElementById("calc-vendor-desc");
+      const inv = document.getElementById("calc-invoice-amount");
+
+      if (preset === '50-50') {
+        portalState.splitPct1 = 50;
+        portalState.splitPct2 = 50;
+        portalState.splitPct3 = 0;
+        if (ven) ven.value = "Central Hub Shared Office Rent & Connectivity";
+        if (inv) inv.value = 3600;
+      } else if (preset === '60-25-15') {
+        portalState.splitPct1 = 60;
+        portalState.splitPct2 = 25;
+        portalState.splitPct3 = 15;
+        if (ven) ven.value = "Regional Outreach Van Lease & Fuel Card";
+        if (inv) inv.value = 2500;
+      } else if (preset === '70-30') {
+        portalState.splitPct1 = 70;
+        portalState.splitPct2 = 30;
+        portalState.splitPct3 = 0;
+        if (ven) ven.value = "Senior Case Practice Lead Monthly Apportionment";
+        if (inv) inv.value = 7800;
+      } else if (preset === '100-0') {
+        portalState.splitPct1 = 100;
+        portalState.splitPct2 = 0;
+        portalState.splitPct3 = 0;
+        if (ven) ven.value = "NDIS Specialized Wheelchair Transport Subsidy";
+        if (inv) inv.value = 850;
+      }
+
+      if (s1) s1.value = portalState.splitPct1;
+      if (s2) s2.value = portalState.splitPct2;
+      if (s3) s3.value = portalState.splitPct3;
+
+      calculateSplitApportionment();
+      showToast(`Loaded "${preset}" apportionment preset.`);
+    }
+
+    function calculateSplitApportionment() {
+      const invInput = document.getElementById("calc-invoice-amount");
+      const totalAmount = parseFloat(invInput ? invInput.value : 2500) || 0;
+      portalState.invoiceAmount = totalAmount;
+
+      const venInput = document.getElementById("calc-vendor-desc");
+      if (venInput) portalState.invoiceVendor = venInput.value;
+
+      const refInput = document.getElementById("calc-invoice-ref");
+      if (refInput) portalState.invoiceRef = refInput.value;
+
+      const s1 = document.getElementById("split-slider-1");
+      const s2 = document.getElementById("split-slider-2");
+      const s3 = document.getElementById("split-slider-3");
+
+      const p1 = s1 ? parseInt(s1.value, 10) : portalState.splitPct1;
+      const p2 = s2 ? parseInt(s2.value, 10) : portalState.splitPct2;
+      const p3 = s3 ? parseInt(s3.value, 10) : portalState.splitPct3;
+
+      portalState.splitPct1 = p1;
+      portalState.splitPct2 = p2;
+      portalState.splitPct3 = p3;
+
+      const val1 = document.getElementById("split-val-1");
+      const val2 = document.getElementById("split-val-2");
+      const val3 = document.getElementById("split-val-3");
+      if (val1) val1.textContent = `${p1}%`;
+      if (val2) val2.textContent = `${p2}%`;
+      if (val3) val3.textContent = `${p3}%`;
+
+      const g1Select = document.getElementById("calc-grant-1");
+      const g2Select = document.getElementById("calc-grant-2");
+      const g3Select = document.getElementById("calc-grant-3");
+      const g1Code = g1Select ? g1Select.value : "DSS-2026-CH";
+      const g2Code = g2Select ? g2Select.value : "NDIS-770-TR";
+      const g3Code = g3Select ? g3Select.value : "VIC-YJC-12";
+
+      const sumPercent = p1 + p2 + p3;
+      const share1 = (totalAmount * (p1 / 100));
+      const share2 = (totalAmount * (p2 / 100));
+      const share3 = (totalAmount * (p3 / 100));
+      const sumDollars = share1 + share2 + share3;
+
+      // Update Allocation Meter
+      const m1 = document.getElementById("meter-slice-1");
+      const m2 = document.getElementById("meter-slice-2");
+      const m3 = document.getElementById("meter-slice-3");
+      const mRem = document.getElementById("meter-slice-rem");
+
+      if (m1) {
+        m1.style.width = `${Math.min(p1, 100)}%`;
+        m1.textContent = p1 > 5 ? `${p1}%` : '';
+      }
+      if (m2) {
+        m2.style.width = `${Math.min(p2, 100)}%`;
+        m2.textContent = p2 > 5 ? `${p2}%` : '';
+      }
+      if (m3) {
+        m3.style.width = `${Math.min(p3, 100)}%`;
+        m3.textContent = p3 > 5 ? `${p3}%` : '';
+      }
+
+      const badge = document.getElementById("allocation-status-badge");
+      const finalFlag = document.getElementById("calc-final-flag");
+      const meterTotalText = document.getElementById("meter-total-text");
+      const guidance = document.getElementById("calc-guidance-note");
+
+      if (meterTotalText) meterTotalText.textContent = `Total Split: ${sumPercent.toFixed(1)}%`;
+
+      if (sumPercent === 100) {
+        if (mRem) mRem.style.display = "none";
+        if (badge) {
+          badge.className = "tag tag--positive";
+          badge.textContent = "✅ PERFECT (100.0%)";
+        }
+        if (finalFlag) finalFlag.innerHTML = `<span class="tag tag--positive">✅ Ready for Ledger (Valid)</span>`;
+        if (guidance) guidance.innerHTML = `<strong>Allocation is 100% compliant:</strong> All $${formatCurrency(totalAmount)} accounted for across grants.`;
+      } else if (sumPercent < 100) {
+        const remainingPct = 100 - sumPercent;
+        if (mRem) {
+          mRem.style.display = "flex";
+          mRem.style.width = `${remainingPct}%`;
+          mRem.className = "meter-slice meter-slice--unallocated";
+          mRem.textContent = remainingPct > 8 ? `+${remainingPct}% Unallocated` : '';
+        }
+        if (badge) {
+          badge.className = "tag tag--warning";
+          badge.textContent = `⚠️ UNDER-ALLOCATED (${sumPercent.toFixed(1)}% / -${remainingPct.toFixed(1)}%)`;
+        }
+        if (finalFlag) finalFlag.innerHTML = `<span class="tag tag--warning">⚠️ Incomplete Split</span>`;
+        if (guidance) guidance.innerHTML = `<strong style="color: var(--warning);">Warning:</strong> ${remainingPct.toFixed(1)}% ($${formatCurrency(totalAmount * (remainingPct/100))}) is unallocated. Google Sheets will flag <code>⚠️ Under-allocated</code>.`;
+      } else {
+        const overPct = sumPercent - 100;
+        if (mRem) {
+          mRem.style.display = "flex";
+          mRem.style.width = "10%";
+          mRem.className = "meter-slice meter-slice--over";
+          mRem.textContent = `OVER +${overPct}%`;
+        }
+        if (badge) {
+          badge.className = "tag tag--error";
+          badge.textContent = `❌ OVER-ALLOCATED (${sumPercent.toFixed(1)}% / +${overPct.toFixed(1)}%)`;
+        }
+        if (finalFlag) finalFlag.innerHTML = `<span class="tag tag--error">❌ Math Error (>100%)</span>`;
+        if (guidance) guidance.innerHTML = `<strong style="color: var(--error);">Error:</strong> Total split exceeds 100% by ${overPct.toFixed(1)}%. Google Sheets formula shield blocks this from acquittal statements.`;
+      }
+
+      // Update Breakdown Table Rows
+      const tbody = document.getElementById("split-calc-results");
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr>
+            <td><strong style="color: var(--data-1);">${escapeHtml(g1Code)}</strong></td>
+            <td class="tabular-num">${p1.toFixed(1)}%</td>
+            <td class="tabular-num fw-bold">$${formatCurrency(share1)}</td>
+            <td>${p1 > 0 ? '<span class="tag tag--primary">Apportioned</span>' : '<span class="tag">Zero Allocation</span>'}</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--data-2);">${escapeHtml(g2Code)}</strong></td>
+            <td class="tabular-num">${p2.toFixed(1)}%</td>
+            <td class="tabular-num fw-bold">$${formatCurrency(share2)}</td>
+            <td>${p2 > 0 ? '<span class="tag tag--primary">Apportioned</span>' : '<span class="tag">Zero Allocation</span>'}</td>
+          </tr>
+          <tr>
+            <td><strong style="color: var(--data-3);">${escapeHtml(g3Code)}</strong></td>
+            <td class="tabular-num">${p3.toFixed(1)}%</td>
+            <td class="tabular-num fw-bold">$${formatCurrency(share3)}</td>
+            <td>${p3 > 0 ? '<span class="tag tag--primary">Apportioned</span>' : '<span class="tag">Zero Allocation</span>'}</td>
+          </tr>
+        `;
+      }
+
+      const sumPercentEl = document.getElementById("calc-sum-percent");
+      if (sumPercentEl) sumPercentEl.textContent = `${sumPercent.toFixed(1)}%`;
+      const sumDollarsEl = document.getElementById("calc-sum-dollars");
+      if (sumDollarsEl) sumDollarsEl.textContent = `$${formatCurrency(sumDollars)}`;
+
+      saveState();
+    }
+
+    function copyApportionmentLedgerString() {
+      const dateStr = new Date().toISOString().split('T')[0];
+      const ven = portalState.invoiceVendor || "Shared Program Expense";
+      const ref = portalState.invoiceRef || "INV-001";
+      const tot = (portalState.invoiceAmount || 0).toFixed(2);
+      
+      const g1 = document.getElementById("calc-grant-1") ? document.getElementById("calc-grant-1").value : "DSS-2026-CH";
+      const g2 = document.getElementById("calc-grant-2") ? document.getElementById("calc-grant-2").value : "NDIS-770-TR";
+      const g3 = document.getElementById("calc-grant-3") ? document.getElementById("calc-grant-3").value : "VIC-YJC-12";
+      
+      const s1 = (portalState.splitPct1 / 100).toFixed(2);
+      const s2 = (portalState.splitPct2 / 100).toFixed(2);
+      const s3 = (portalState.splitPct3 / 100).toFixed(2);
+
+      // Tab-separated values matching sheet columns A through K
+      const tsv = `${dateStr}\t${ven}\t${ref}\t$${tot}\t${g1}\t${s1}\t${g2}\t${s2}\t${g3}\t${s3}`;
+      
+      navigator.clipboard.writeText(tsv).then(() => {
+        showToast("Copied TSV row to clipboard! Paste directly into row in Tab 2.");
+      }).catch(() => {
+        showToast("Error copying to clipboard. Please copy manually.");
+      });
+    }
+
+    /* -------------------------------------------------------------
+       SECTION 5: BURN RATE HEALTH CALCULATOR
+       ------------------------------------------------------------- */
+    function loadBurnPreset(presetKey) {
+      if (presetKey === 'dss') {
+        portalState.burnBudget = 150000;
+        portalState.burnExpended = 112500;
+        portalState.burnMonthsTotal = 12;
+        portalState.burnMonthsElapsed = 9;
+      } else if (presetKey === 'ndis') {
+        portalState.burnBudget = 45000;
+        portalState.burnExpended = 22000;
+        portalState.burnMonthsTotal = 12;
+        portalState.burnMonthsElapsed = 11;
+      } else if (presetKey === 'youth') {
+        portalState.burnBudget = 60000;
+        portalState.burnExpended = 39000;
+        portalState.burnMonthsTotal = 12;
+        portalState.burnMonthsElapsed = 4;
+      }
+
+      const bInput = document.getElementById("sim-budget-pool");
+      const eInput = document.getElementById("sim-expended-funds");
+      const tmInput = document.getElementById("sim-contract-months");
+      const emInput = document.getElementById("sim-elapsed-months");
+
+      if (bInput) bInput.value = portalState.burnBudget;
+      if (eInput) eInput.value = portalState.burnExpended;
+      if (tmInput) tmInput.value = portalState.burnMonthsTotal;
+      if (emInput) emInput.value = portalState.burnMonthsElapsed;
+
+      calculateBurnHealth();
+      showToast(`Loaded ${presetKey.toUpperCase()} burn-rate preset.`);
+    }
+
+    function calculateBurnHealth() {
+      const bInput = document.getElementById("sim-budget-pool");
+      const eInput = document.getElementById("sim-expended-funds");
+      const tmInput = document.getElementById("sim-contract-months");
+      const emInput = document.getElementById("sim-elapsed-months");
+
+      const budget = parseFloat(bInput ? bInput.value : 150000) || 1;
+      const expended = parseFloat(eInput ? eInput.value : 0) || 0;
+      const totalMonths = parseFloat(tmInput ? tmInput.value : 12) || 1;
+      const elapsedMonths = parseFloat(emInput ? emInput.value : 0) || 0;
+
+      portalState.burnBudget = budget;
+      portalState.burnExpended = expended;
+      portalState.burnMonthsTotal = totalMonths;
+      portalState.burnMonthsElapsed = elapsedMonths;
+
+      const burnRatePct = (expended / budget) * 100;
+      const timeElapsedPct = (elapsedMonths / totalMonths) * 100;
+      const remainingFunds = budget - expended;
+      const varianceDelta = burnRatePct - timeElapsedPct;
+
+      // Update text and progress bars
+      const tText = document.getElementById("pacing-timeline-text");
+      const tFill = document.getElementById("pacing-timeline-fill");
+      if (tText) tText.textContent = `${elapsedMonths.toFixed(1)} of ${totalMonths.toFixed(1)} Months (${Math.min(timeElapsedPct, 100).toFixed(1)}%)`;
+      if (tFill) tFill.style.width = `${Math.min(Math.max(timeElapsedPct, 0), 100)}%`;
+
+      const bText = document.getElementById("pacing-burn-text");
+      const bFill = document.getElementById("pacing-burn-fill");
+      if (bText) bText.textContent = `$${formatCurrency(expended)} of $${formatCurrency(budget)} (${burnRatePct.toFixed(1)}%)`;
+      if (bFill) bFill.style.width = `${Math.min(Math.max(burnRatePct, 0), 100)}%`;
+
+      const alertBox = document.getElementById("burn-health-alert-box");
+      const alertTitle = document.getElementById("burn-health-title");
+      const alertDesc = document.getElementById("burn-health-desc");
+      const remCash = document.getElementById("burn-remaining-cash");
+
+      if (remCash) remCash.textContent = `$${formatCurrency(remainingFunds)}`;
+
+      // Evaluate Health Logic
+      if (burnRatePct > 100) {
+        if (bFill) bFill.style.backgroundColor = "var(--error)";
+        if (alertBox) alertBox.className = "inset inset--warning";
+        if (alertTitle) {
+          alertTitle.textContent = "🟥 OVERSPEND CRITICAL ALERT: Budget Deficit!";
+          alertTitle.style.color = "var(--error)";
+        }
+        if (alertDesc) {
+          alertDesc.innerHTML = `<strong>Immediate Action Required:</strong> Funds expended ($${formatCurrency(expended)}) exceed total contract ceiling by <strong>$${formatCurrency(Math.abs(remainingFunds))}</strong> (${burnRatePct.toFixed(1)}% spent). Trigger emergency leadership review and freeze discretionary allocations.`;
+        }
+      } else if (varianceDelta > 15) {
+        if (bFill) bFill.style.backgroundColor = "var(--warning)";
+        if (alertBox) alertBox.className = "inset inset--warning";
+        if (alertTitle) {
+          alertTitle.textContent = "🟨 VARIANCE WATCH: Burn Acceleration Detected";
+          alertTitle.style.color = "var(--on-warning-container)";
+        }
+        if (alertDesc) {
+          alertDesc.innerHTML = `Expenditure (${burnRatePct.toFixed(1)}%) is running <strong>${varianceDelta.toFixed(1)}% ahead</strong> of contract timeline (${timeElapsedPct.toFixed(1)}%). At this rate, funds will exhaust in month ${(totalMonths * (100 / burnRatePct)).toFixed(1)}. Submit formal variation or repace frontline delivery.`;
+        }
+      } else if (timeElapsedPct > 75 && burnRatePct < 50) {
+        if (bFill) bFill.style.backgroundColor = "var(--warning)";
+        if (alertBox) alertBox.className = "inset inset--warning";
+        if (alertTitle) {
+          alertTitle.textContent = "🟨 VARIANCE WATCH: Underspend / Clawback Risk";
+          alertTitle.style.color = "var(--on-warning-container)";
+        }
+        if (alertDesc) {
+          alertDesc.innerHTML = `Contract is ${timeElapsedPct.toFixed(1)}% elapsed, but only ${burnRatePct.toFixed(1)}% of funding has been utilized. Unspent balance of <strong>$${formatCurrency(remainingFunds)}</strong> may be subject to DFFH/NDIS funding clawback at year-end. Initiate mid-term variation or boost community outreach.`;
+        }
+      } else {
+        if (bFill) bFill.style.backgroundColor = "var(--positive)";
+        if (alertBox) alertBox.className = "inset inset--positive";
+        if (alertTitle) {
+          alertTitle.textContent = "🟩 BUDGET SAFE: Pacing Fully On Track";
+          alertTitle.style.color = "var(--on-positive-container)";
+        }
+        if (alertDesc) {
+          alertDesc.innerHTML = `Financial burn rate (${burnRatePct.toFixed(1)}%) is pacing cleanly with contract duration (${timeElapsedPct.toFixed(1)}%). Uncommitted balance is <strong>$${formatCurrency(remainingFunds)}</strong>. Audit readiness status is optimal.`;
+        }
+      }
+
+      saveState();
+    }
+
+    /* -------------------------------------------------------------
+       SECTION 6: DISASTER RECOVERY DRILL
+       ------------------------------------------------------------- */
+    function simulateSpreadsheetBreak() {
+      const banner = document.getElementById("drill-status");
+      const cellFormula = document.getElementById("drill-cell-formula");
+      const shieldFlag = document.getElementById("drill-shield-flag");
+      const pdfFlag = document.getElementById("drill-pdf-flag");
+      const btnBreak = document.getElementById("btn-simulate-break");
+      const btnRestore = document.getElementById("btn-simulate-restore");
+      const narrative = document.getElementById("drill-narrative");
+
+      if (banner) {
+        banner.className = "drill-status-banner tag--error";
+        banner.style.backgroundColor = "#fde8e8";
+        banner.style.color = "var(--error)";
+        banner.innerHTML = `<i data-lucide="alert-octagon" style="width: 18px; height: 18px;"></i>
+          <span>ALERT: Cell Formula Overwritten by User Entry! Calculations broken (#REF!).</span>`;
+      }
+
+      if (cellFormula) {
+        cellFormula.textContent = `"Oops entered plain text" ➔ #VALUE!`;
+        cellFormula.style.color = "var(--error)";
+      }
+
+      if (shieldFlag) {
+        shieldFlag.className = "tag tag--error";
+        shieldFlag.textContent = "SHIELD BROKEN";
+      }
+
+      if (pdfFlag) {
+        pdfFlag.className = "tag tag--error";
+        pdfFlag.textContent = "BLOCKED (CALC ERROR)";
+      }
+
+      if (btnBreak) btnBreak.disabled = true;
+      if (btnRestore) btnRestore.disabled = false;
+
+      if (narrative) {
+        narrative.innerHTML = `<strong style="color: var(--error);">Don't panic!</strong> The sheet logic was overwritten. Now click the green "Trigger 2-Click Version History Restore" button to execute the recovery drill.`;
+      }
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    function simulateSpreadsheetRestore() {
+      const banner = document.getElementById("drill-status");
+      const cellFormula = document.getElementById("drill-cell-formula");
+      const shieldFlag = document.getElementById("drill-shield-flag");
+      const pdfFlag = document.getElementById("drill-pdf-flag");
+      const btnBreak = document.getElementById("btn-simulate-break");
+      const btnRestore = document.getElementById("btn-simulate-restore");
+      const narrative = document.getElementById("drill-narrative");
+
+      if (banner) {
+        banner.className = "drill-status-banner tag--positive";
+        banner.style.backgroundColor = "var(--positive-container)";
+        banner.style.color = "var(--on-positive-container)";
+        banner.innerHTML = `<i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
+          <span>SUCCESS: Google Sheets Keystroke History restored version from 09:14 AM. All formulas re-locked!</span>`;
+      }
+
+      if (cellFormula) {
+        cellFormula.textContent = `=SUM(D2:D13) ➔ $150,000.00`;
+        cellFormula.style.color = "var(--on-surface)";
+      }
+
+      if (shieldFlag) {
+        shieldFlag.className = "tag tag--positive";
+        shieldFlag.textContent = "LOCKED FORMULA";
+      }
+
+      if (pdfFlag) {
+        pdfFlag.className = "tag tag--positive";
+        pdfFlag.textContent = "READY TO EXPORT";
+      }
+
+      if (btnBreak) btnBreak.disabled = false;
+      if (btnRestore) btnRestore.disabled = true;
+
+      if (narrative) {
+        narrative.innerHTML = `<strong style="color: var(--positive);">Drill Complete:</strong> In real Google Sheets, selecting <em>File ➔ Version History ➔ Restore this version</em> undoes any user mistake in 10 seconds. You cannot permanently break the tracker!`;
+      }
+
+      showToast("Spreadsheet successfully restored to 100% working order!");
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    /* -------------------------------------------------------------
+       SECTION 7: CUSTOMER AI PROMPT PACK GENERATOR
+       ------------------------------------------------------------- */
+    function updateAllPrompts() {
+      const org = document.getElementById("ai-org-name") ? document.getElementById("ai-org-name").value : "Balliang Community Support Network";
+      const prog = document.getElementById("ai-program-name") ? document.getElementById("ai-program-name").value : "Regional Outreach Program";
+      const funding = document.getElementById("ai-funding-body") ? document.getElementById("ai-funding-body").value : "DFFH";
+      const grantId = document.getElementById("ai-grant-id") ? document.getElementById("ai-grant-id").value : "DSS-2026-CH";
+
+      portalState.aiOrg = org;
+      portalState.aiProg = prog;
+      portalState.aiFunding = funding;
+      portalState.aiGrantId = grantId;
+
+      // Prompt 1: Board Variance Briefing
+      const p1 = `You are a specialist community services financial officer and governance advisor for Australian non-profits. 
+I am using the LEW CREATIONS Premium Multi-Grant Financial Acquittal Tracker to manage our programs at "${org}".
+
+Please draft a 1-page Executive Board Financial Briefing analyzing our grant burn rate and timeline variance based on the following metrics:
+- Organisation: ${org}
+- Program Name: ${prog}
+- Primary Funding Body: ${funding}
+- Active Grant ID: ${grantId}
+- Total Approved Budget Pool: $${formatCurrency(portalState.burnBudget || 150000)}
+- Expended to Date: $${formatCurrency(portalState.burnExpended || 112500)}
+- Contract Duration: ${portalState.burnMonthsTotal || 12} Months
+- Months Elapsed: ${portalState.burnMonthsElapsed || 9} Months
+
+Please structure the briefing with:
+1. Executive Health Summary (Current Burn Rate % vs Contract Elapsed %, Remaining Balance).
+2. Risk Analysis (Highlight any underspend clawback risk or acceleration overrun risk).
+3. Strategic Allocation Recommendations for the remaining contract term.
+4. Compliance Confirmation regarding alignment with our departmental Service Agreement.`;
+
+      // Prompt 2: Acquittal Narrative
+      const p2 = `Act as an expert non-profit compliance writer preparing a formal statutory grant acquittal submission for ${funding}.
+We are submitting our acquittal for grant "${grantId}" (${prog}) delivered by ${org}.
+
+Here is our aggregated financial data exported from Tab 4 (Print-Ready Acquittal) of our LEW CREATIONS tracker:
+- Grant ID: ${grantId}
+- Grant Pool Total: $${formatCurrency(portalState.burnBudget || 150000)}
+- Total Funds Apportioned & Expended: $${formatCurrency(portalState.burnExpended || 112500)}
+- Balance Remaining: $${formatCurrency((portalState.burnBudget || 150000) - (portalState.burnExpended || 112500))}
+- Core Operational Expense Categories: Casework Staffing (60%), Outreach Fleet Vehicle & Fuel (25%), Client Welfare & Crisis Supplies (15%).
+
+Please generate:
+1. A formal acquittal narrative explaining how every apportioned expense directly achieved the approved program objectives.
+2. A statement on cost-effectiveness and dual-sector stewardship (specifically mentioning shared resource optimization under Victorian community standards).
+3. A formal declaration paragraph confirming that all expenditure records and tax invoices are preserved for the statutory 7-year audit retention period.`;
+
+      // Prompt 3: Apportionment Rationale
+      const p3 = `You are an auditor and community services CFO. I need an official, defensible "Cost Allocation & Apportionment Policy Statement" to attach to our auditor file for "${org}".
+We operate multi-funded programs and split shared operational invoices (facility lease, utilities, vehicle maintenance, supervision salaries) across up to three grants using the LEW CREATIONS 3-Way Apportionment formula in Google Sheets.
+
+Please draft an audit justification note that:
+1. Explains why apportioning shared operational overhead across grant streams (e.g. ${grantId} and secondary grants) accurately reflects true service delivery costs rather than double-dipping.
+2. Details the mathematical validation rule: confirming that all split allocations are governed by the strict formula '=IF(ROUND(SUM(Split1:Split3),2)=1.0, "Perfect", "Error")', ensuring exactly 100% of gross invoice cost is distributed with zero unassigned or duplicated dollars.
+3. Affirms adherence to Australian Accounting Standards (AASB 1058 / AASB 15) and Commonwealth/State grant acquittal rules.`;
+
+      // Prompt 4: Budget Variation Request
+      const p4 = `Please draft a formal, professional "Grant Budget Variation Request Letter" addressed to the Program Contract Officer at ${funding}.
+
+Context:
+- Organisation: ${org}
+- Contract Reference / Grant ID: ${grantId}
+- Project Title: ${prog}
+- Contract Period: ${portalState.burnMonthsTotal || 12} Months (Currently at Month ${portalState.burnMonthsElapsed || 9})
+- Issue: Due to operational efficiencies in travel and shared facility costs, we have identified a projected underspend of $${formatCurrency(((portalState.burnBudget || 150000) - (portalState.burnExpended || 112500)) * 0.4)} in our operational supplies budget line.
+- Proposed Variation: We request approval to reallocate this unspent operational funding into frontline direct service delivery, specifically dedicated youth outreach sessions and expanded participant emergency relief.
+
+Ensure the tone is respectful, partnership-oriented, grounded, and clearly articulates how this reallocation directly improves community outcomes while maintaining full fiscal accountability.`;
+
+      // Prompt 5: Audit Data Hygiene
+      const p5 = `Act as an expert forensic data auditor for Google Sheets. I am reviewing the raw CSV extract from our "2. Expense Ledger" tab in the LEW CREATIONS tracker for ${org}.
+
+Please inspect the ledger text I will paste below and check for:
+1. Duplicate invoice numbers or reference codes across different suppliers.
+2. Math discrepancies between Total Invoice Cost (inc GST) and the apportioned dollar shares.
+3. Allocation rows that do not sum to 100% (where Split Status flag != "✅ Perfect").
+4. Out-of-bounds invoice dates that fall outside our contractual start date and acquittal end date for grant ${grantId}.
+5. Missing supplier names or vague descriptions (e.g. "supplies", "misc") that could trigger audit queries.
+
+Please format your findings in a clear, prioritized checklist table indicating: Severity (High/Med/Low), Row ID, Issue Description, and Corrective Action.`;
+
+      const t1 = document.getElementById("prompt-text-1");
+      const t2 = document.getElementById("prompt-text-2");
+      const t3 = document.getElementById("prompt-text-3");
+      const t4 = document.getElementById("prompt-text-4");
+      const t5 = document.getElementById("prompt-text-5");
+
+      if (t1) t1.textContent = p1;
+      if (t2) t2.textContent = p2;
+      if (t3) t3.textContent = p3;
+      if (t4) t4.textContent = p4;
+      if (t5) t5.textContent = p5;
+
+      saveState();
+    }
+
+    function copyPrompt(elementId, btn) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      const text = el.textContent || el.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Prompt copied to clipboard! Paste into Gemini or ChatGPT.");
+        if (btn) {
+          const originalHtml = btn.innerHTML;
+          btn.innerHTML = `<i data-lucide="check" style="width: 14px; height: 14px;"></i> Copied!`;
+          setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+              window.lucide.createIcons();
+            }
+          }, 2000);
+        }
+      }).catch(() => {
+        showToast("Please copy prompt text manually.");
+      });
+    }
+
+    /* -------------------------------------------------------------
+       UTILITIES & HELPERS
+       ------------------------------------------------------------- */
+    function formatCurrency(val) {
+      return (Number(val) || 0).toLocaleString("en-AU", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      const text = document.getElementById("toast-text");
+      if (!toast || !text) return;
+
+      text.textContent = msg;
+      toast.classList.add("show");
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
